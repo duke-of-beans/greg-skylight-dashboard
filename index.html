@@ -57,6 +57,13 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .greg-voice{font-family:var(--fg);font-style:italic;font-size:16px;line-height:1.55;color:var(--tx)}
 .greg-attr{font-size:12px;color:var(--greg);margin-top:12px}
 
+/* ═══ Media card ═══ */
+.media-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.media-btn{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:8px 4px;border-radius:10px;transition:background 0.2s}
+.media-btn:active{background:rgba(255,255,255,0.08)}
+.media-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;font-family:var(--fu)}
+.media-name{font-size:10px;color:var(--tx2);text-align:center;white-space:nowrap}
+
 /* ═══ Spotify card ═══ */
 .spotify-player{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2);align-items:center}
 .spotify-player:last-child{border-bottom:none}
@@ -216,6 +223,22 @@ var CFG = {
     <div class="greg-voice" id="gregVoice">Thinking about what matters today…</div>
     <div class="greg-attr">— Greg</div>
   </div>
+  <!-- Media launcher -->
+  <div class="interleave-card" id="mediaCard" style="pointer-events:auto">
+    <div class="card-label">WATCH</div>
+    <div class="media-grid" id="mediaGrid">
+      <div class="media-btn" onclick="Greg.launchApp('com.netflix.mediaclient')"><div class="media-icon" style="background:#E50914">N</div><div class="media-name">Netflix</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.disney.disneyplus')"><div class="media-icon" style="background:#113CCF">D+</div><div class="media-name">Disney+</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.cbs.app')"><div class="media-icon" style="background:#0064FF">P+</div><div class="media-name">Paramount+</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.amazon.avod.thirdpartyclient')"><div class="media-icon" style="background:#00A8E1">Prime</div><div class="media-name">Prime Video</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.tubitv')"><div class="media-icon" style="background:#FA382F">T</div><div class="media-name">Tubi</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('tv.pluto.android')"><div class="media-icon" style="background:#262626">P</div><div class="media-name">Pluto</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('org.smarttube.stable')"><div class="media-icon" style="background:#FF0000">YT</div><div class="media-name">YouTube</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.peacocktv.peacockandroid')"><div class="media-icon" style="background:#000">🦚</div><div class="media-name">Peacock</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.tribtv.ktla2')"><div class="media-icon" style="background:#0055A5">5</div><div class="media-name">KTLA</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.google.android.apps.youtube.kids')"><div class="media-icon" style="background:#FF4444">YK</div><div class="media-name">YT Kids</div></div>
+    </div>
+  </div>
   <!-- Now Playing (Spotify) -->
   <div class="interleave-card" id="spotifyCard">
     <div class="card-label" style="color:#1DB954">NOW PLAYING</div>
@@ -329,7 +352,7 @@ pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visi
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','spotifyCard','commuteCard','suggestionCard','groceryCard'];
+var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard'];
 var cardIdx = 0, activeCard = null;
 
 function showCard(id){
