@@ -21,7 +21,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .photo-gradient-top{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(30,26,22,0.5) 0%,transparent 100%);z-index:2;pointer-events:none}
 
 /* ═══ Persistent overlay ═══ */
-.persistent-overlay{position:absolute;bottom:0;left:0;right:0;padding:28px 40px;z-index:10;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
+.persistent-overlay{position:absolute;bottom:56px;left:0;right:0;padding:28px 40px;z-index:10;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
 .time-block{text-shadow:0 2px 16px rgba(30,26,22,0.6)}
 .time-display{font-family:var(--fu);font-weight:400;font-size:72px;line-height:1;letter-spacing:-2px;color:var(--tx)}
 .date-display{font-family:var(--fu);font-weight:400;font-size:16px;color:var(--tx2);margin-top:6px}
@@ -30,8 +30,8 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .weather-desc{font-family:var(--fu);font-weight:400;font-size:14px;color:var(--tx2);margin-top:6px}
 
 /* ═══ Interleave cards ═══ */
-.card-layer{position:absolute;top:0;right:0;bottom:0;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
-.interleave-card{width:380px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:auto}
+.card-layer{position:absolute;top:0;right:0;bottom:80px;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
+.interleave-card{position:absolute;right:32px;width:380px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:auto}
 .interleave-card.active{opacity:1;transform:translateX(0)}
 .interleave-card::-webkit-scrollbar{display:none}
 .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.05em;margin-bottom:12px}
@@ -104,7 +104,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .pause-text{font-size:12px;color:var(--tx2)}
 
 /* ═══ Mode indicators ═══ */
-.nav-bar{position:absolute;bottom:0;left:0;right:0;z-index:15;display:flex;justify-content:center;gap:4px;padding:12px 20px;pointer-events:auto;opacity:0.3;transition:opacity 0.4s}
+.nav-bar{position:absolute;bottom:12px;left:0;right:0;z-index:15;display:flex;justify-content:center;gap:4px;padding:12px 20px;pointer-events:auto;opacity:0.3;transition:opacity 0.4s}
 .nav-bar:hover,.nav-bar:active,.nav-bar.touched{opacity:1}
 .nav-btn{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--fu);font-size:10px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all 0.2s;border:1px solid transparent;letter-spacing:0.02em}
 .nav-btn:active,.nav-btn.active{background:var(--card);border-color:var(--card-b);color:var(--tx);backdrop-filter:blur(16px)}
@@ -316,9 +316,13 @@ var cur = 0, paused = false;
 
 function nextSlide(){
   if(paused) return;
-  slides[cur].classList.remove('active');
+  var prev = slides[cur];
+  prev.classList.remove('active');
+  if(prev.tagName === 'VIDEO') prev.pause();
   cur = (cur+1) % slides.length;
-  slides[cur].classList.add('active');
+  var next = slides[cur];
+  next.classList.add('active');
+  if(next.tagName === 'VIDEO'){next.currentTime=0;next.play();}
 }
 setInterval(nextSlide, CFG.PHOTO_INTERVAL);
 
@@ -327,16 +331,32 @@ function fetchPhotos(){
   fetch(CFG.SUPABASE_URL+'/functions/v1/photos-proxy')
   .then(function(r){return r.json()}).then(function(d){
     if(!d.photos || !d.photos.length) return;
-    photoUrls = d.photos;
     var layer = document.getElementById('photoLayer');
     layer.innerHTML = '';
-    photoUrls.forEach(function(url, i){
-      var div = document.createElement('div');
-      div.className = 'photo-slide' + (i===0?' active':'');
-      div.style.backgroundImage = 'url('+url+')';
-      layer.appendChild(div);
+    d.photos.forEach(function(item, i){
+      var url = typeof item === 'string' ? item : item.url;
+      var type = typeof item === 'string' ? 'photo' : (item.type || 'photo');
+      if(type === 'video'){
+        var vid = document.createElement('video');
+        vid.className = 'photo-slide' + (i===0?' active':'');
+        vid.src = url;
+        vid.muted = true;
+        vid.autoplay = false;
+        vid.loop = true;
+        vid.playsInline = true;
+        vid.setAttribute('playsinline','');
+        vid.style.objectFit = 'cover';
+        vid.style.width = '100%';
+        vid.style.height = '100%';
+        layer.appendChild(vid);
+      } else {
+        var div = document.createElement('div');
+        div.className = 'photo-slide' + (i===0?' active':'');
+        div.style.backgroundImage = 'url('+url+')';
+        layer.appendChild(div);
+      }
     });
-    slides = document.querySelectorAll('.photo-slide');
+    slides = layer.querySelectorAll('.photo-slide');
     cur = 0;
   }).catch(function(e){console.log('Photo fetch failed:',e)});
 }
@@ -354,9 +374,17 @@ setTimeout(goFull,3000);
 // ═══════════════════════════════════════════
 // PAUSE ON TOUCH (photo layer only)
 // ═══════════════════════════════════════════
-var pl=document.getElementById('photoLayer'),pi=document.getElementById('pauseIndicator');
-pl.addEventListener('touchstart',function(){paused=true;pi.classList.add('visible')},{passive:true});
-pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visible')});
+// Touch-to-pause: listen on the whole document, but not on nav or cards
+var pi=document.getElementById('pauseIndicator');
+document.addEventListener('touchstart',function(e){
+  // Don't pause if touching nav bar or cards
+  if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
+  paused=true;pi.classList.add('visible');
+},{passive:true});
+document.addEventListener('touchend',function(e){
+  if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
+  paused=false;pi.classList.remove('visible');
+});
 
 // ═══════════════════════════════════════════
 // CARD CYCLING
