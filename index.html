@@ -109,10 +109,13 @@ var CFG = {
   
   // Google Calendar API — set these to activate
   GOOGLE_API_KEY: 'AIzaSyCL3iB71IqdG4ndiwcbz3toX1HslmyXjgs',  // AIza... key with Calendar + Drive APIs enabled
-  CALENDAR_IDS: [],    // ['primary', 'family@group.calendar.google.com', ...]
+  CALENDAR_IDS: ['dwasnwk@gmail.com', 'angelacelestecone@gmail.com', 'bubbadwighty@gmail.com'],    // ['primary', 'family@group.calendar.google.com', ...]
   
   // Google Drive (photos) — set folder ID to activate slideshow
-  DRIVE_FOLDER_ID: '', // folder ID from drive.google.com/drive/folders/{ID}
+  PHOTO_ALBUMS: [
+    'https://photos.google.com/share/AF1QipOquZzqaGj3R9aaYovL7J6Uvfc-nTzP8Y2Qh0Z2s4RoCOzMTPk5K8XGKbQgDtOv5w?key=UlM4ZWcycUxnOTlBSUR5OXNkdVN1c1IyV1FNLVN3',
+    'https://photos.google.com/share/AF1QipOknVr-zc2V_QZJyLTU9oZO5s6P7bRPmgzxgQaATtk9rNT7Sq33H3M896KQFzrbOQ?key=Q3BfMmdPbFQtb3NzZ05BeWhMRkVIMmtsUDRhMDJn'
+  ],
   
   // CORTEX (Greg suggestions)
   CORTEX_URL: 'https://cortex-production-d0d7.up.railway.app',
@@ -243,16 +246,12 @@ function nextSlide(){
 }
 setInterval(nextSlide, CFG.PHOTO_INTERVAL);
 
-// Google Drive photos
+// Google Photos from shared albums (via Supabase proxy)
 function fetchPhotos(){
-  if(!CFG.GOOGLE_API_KEY || !CFG.DRIVE_FOLDER_ID) return;
-  var url = 'https://www.googleapis.com/drive/v3/files?q=%27'+CFG.DRIVE_FOLDER_ID+'%27+in+parents+and+mimeType+contains+%27image%27&fields=files(id,name,thumbnailLink)&pageSize=50&key='+CFG.GOOGLE_API_KEY;
-  fetch(url).then(function(r){return r.json()}).then(function(d){
-    if(!d.files || !d.files.length) return;
-    photoUrls = d.files.map(function(f){
-      return 'https://lh3.googleusercontent.com/d/'+f.id+'=w1280-h800-c';
-    });
-    // Replace gradient slides with real photos
+  fetch(CFG.SUPABASE_URL+'/functions/v1/photos-proxy')
+  .then(function(r){return r.json()}).then(function(d){
+    if(!d.photos || !d.photos.length) return;
+    photoUrls = d.photos;
     var layer = document.getElementById('photoLayer');
     layer.innerHTML = '';
     photoUrls.forEach(function(url, i){
@@ -263,9 +262,9 @@ function fetchPhotos(){
     });
     slides = document.querySelectorAll('.photo-slide');
     cur = 0;
-  }).catch(function(){});
+  }).catch(function(e){console.log('Photo fetch failed:',e)});
 }
-fetchPhotos(); if(CFG.DRIVE_FOLDER_ID) setInterval(fetchPhotos, CFG.PHOTO_REFRESH);
+fetchPhotos(); setInterval(fetchPhotos, CFG.PHOTO_REFRESH);
 
 // ═══════════════════════════════════════════
 // FULLSCREEN
