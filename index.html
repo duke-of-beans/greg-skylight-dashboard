@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=800">
+<title>Skylight — Greg's Family Wall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,16..72,400;0,16..72,500;1,16..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg-primary:#1E1A16;--bg-secondary:#28231D;--bg-tertiary:#3A332B;--bg-elevated:#332C24;--border-primary:#4D4438;--border-secondary:#3A332B;--text-primary:#F0EBE4;--text-secondary:#A89882;--text-tertiary:#7A6E5D;--text-muted:#4D4438;--accent-greg:#B09AD4;--accent-greg-bg:#2A2340;--david-color:#5B8DEF;--angela-color:#D4A84B;--mom-color:#7BC9A0;--lilly-color:#E8A0BF;--son-color:#5BB8C9;--card-bg:rgba(30,26,22,0.88);--card-border:rgba(77,68,56,0.5);--font-greg:'Newsreader',Georgia,serif;--font-ui:'Inter',system-ui,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-ui);font-weight:400;background:var(--bg-primary);color:var(--text-primary);width:100vw;height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none}
+.photo-layer{position:absolute;inset:0;z-index:1}
+.photo-slide{position:absolute;inset:0;opacity:0;transition:opacity 2.5s ease-in-out;background-size:cover;background-position:center}
+.photo-slide.active{opacity:1}
+.photo-slide:nth-child(1){background:linear-gradient(135deg,#1E1A16 0%,#3D2B1F 25%,#5C4F3E 50%,#8B7A62 75%,#C4A878 100%)}
+.photo-slide:nth-child(2){background:linear-gradient(160deg,#1A1E20 0%,#2A3838 30%,#4A6868 60%,#78A0A0 80%,#B0D0C8 100%)}
+.photo-slide:nth-child(3){background:linear-gradient(140deg,#1E1A22 0%,#2A2340 25%,#4A3868 55%,#7B6BA0 80%,#B09AD4 100%)}
+.photo-slide:nth-child(4){background:linear-gradient(125deg,#1A2018 0%,#2D4020 30%,#4A6838 55%,#7A9858 80%,#A8C878 100%)}
+.photo-slide:nth-child(5){background:linear-gradient(150deg,#1E1A16 0%,#3D2B1F 25%,#6B4A38 50%,#A07850 75%,#D4A84B 100%)}
+.photo-gradient{position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,rgba(30,26,22,0.75) 0%,rgba(30,26,22,0.30) 50%,transparent 100%);z-index:2;pointer-events:none}
+.persistent-overlay{position:absolute;bottom:0;left:0;right:0;padding:32px 44px;z-index:10;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
+.time-block{text-shadow:0 2px 16px rgba(30,26,22,0.6)}
+.time-display{font-family:var(--font-ui);font-weight:400;font-size:72px;line-height:1;letter-spacing:-2px;color:var(--text-primary)}
+.date-display{font-family:var(--font-ui);font-weight:400;font-size:16px;color:var(--text-secondary);margin-top:6px}
+.weather-block{text-align:right;text-shadow:0 2px 16px rgba(30,26,22,0.6)}
+.weather-temp{font-family:var(--font-ui);font-weight:400;font-size:48px;line-height:1;color:var(--text-primary)}
+.weather-desc{font-family:var(--font-ui);font-weight:400;font-size:14px;color:var(--text-secondary);margin-top:6px}
+.pause-indicator{position:absolute;top:32px;right:40px;z-index:20;opacity:0;transition:opacity 0.4s ease;display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:100px;backdrop-filter:blur(16px)}
+.pause-indicator.visible{opacity:1}
+.pause-bars{display:flex;gap:3px}
+.pause-bar{width:3px;height:14px;background:var(--text-secondary);border-radius:2px}
+.pause-label{font-size:13px;font-weight:500;color:var(--text-secondary)}
+.interleave-layer{position:absolute;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity 1.2s ease-in-out}
+.interleave-layer.active{opacity:1}
+.interleave-card{background:var(--card-bg);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--card-border);border-radius:20px;padding:36px 44px;max-width:660px;width:88%}
+.card-eyebrow{font-family:var(--font-ui);font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:20px}
+.cal-event{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border-secondary)}
+.cal-event:last-child{border-bottom:none}
+.cal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cal-time{font-size:14px;color:var(--text-tertiary);width:80px;flex-shrink:0}
+.cal-title{font-size:18px;color:var(--text-primary)}
+.cal-person{font-size:13px;color:var(--text-secondary);margin-left:auto;flex-shrink:0}
+.weather-detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:8px}
+.weather-day{text-align:center}
+.weather-day-name{font-size:13px;font-weight:500;color:var(--text-secondary);margin-bottom:12px}
+.weather-day-temp{font-size:36px;font-weight:400;color:var(--text-primary);line-height:1}
+.weather-day-desc{font-size:13px;color:var(--text-tertiary);margin-top:8px}
+.weather-day-range{font-size:12px;color:var(--text-tertiary);margin-top:4px}
+.greg-suggestion{display:flex;align-items:flex-start;gap:20px}
+.greg-mark{width:32px;height:32px;border-radius:50%;background:var(--accent-greg);opacity:0.5;flex-shrink:0;margin-top:6px}
+.greg-text{font-family:var(--font-greg);font-size:22px;font-weight:400;line-height:1.6;color:var(--text-primary)}
+.greg-subtext{font-family:var(--font-ui);font-size:14px;color:var(--text-tertiary);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="photo-layer" id="photoLayer">
+<div class="photo-slide active"></div><div class="photo-slide"></div><div class="photo-slide"></div><div class="photo-slide"></div><div class="photo-slide"></div>
+<div class="photo-gradient"></div>
+</div>
+<div class="persistent-overlay">
+<div class="time-block"><div class="time-display" id="timeDisplay">9:42</div><div class="date-display" id="dateDisplay">Saturday, September 5</div></div>
+<div class="weather-block"><div class="weather-desc">Clear</div><div class="weather-temp">78°</div></div>
+</div>
+<div class="pause-indicator" id="pauseIndicator"><div class="pause-bars"><div class="pause-bar"></div><div class="pause-bar"></div></div><span class="pause-label">Paused</span></div>
+<div class="interleave-layer" id="calendarCard"><div class="interleave-card"><div class="card-eyebrow">Today</div>
+<div class="cal-event"><div class="cal-dot" style="background:var(--angela-color)"></div><div class="cal-time">8:30 AM</div><div class="cal-title">Staff meeting</div><div class="cal-person">Angela</div></div>
+<div class="cal-event"><div class="cal-dot" style="background:var(--son-color)"></div><div class="cal-time">10:00 AM</div><div class="cal-title">Soccer practice</div><div class="cal-person"></div></div>
+<div class="cal-event"><div class="cal-dot" style="background:var(--mom-color)"></div><div class="cal-time">2:00 PM</div><div class="cal-title">Doctor appointment</div><div class="cal-person">Mom</div></div>
+<div class="cal-event"><div class="cal-dot" style="background:var(--david-color)"></div><div class="cal-time">6:00 PM</div><div class="cal-title">Grocery run</div><div class="cal-person">David</div></div>
+</div></div>
+<div class="interleave-layer" id="weatherCard"><div class="interleave-card"><div class="card-eyebrow">This week</div>
+<div class="weather-detail-grid">
+<div class="weather-day"><div class="weather-day-name">Today</div><div class="weather-day-temp">78°</div><div class="weather-day-desc">Clear</div><div class="weather-day-range">62° / 81°</div></div>
+<div class="weather-day"><div class="weather-day-name">Sun</div><div class="weather-day-temp">82°</div><div class="weather-day-desc">Sunny</div><div class="weather-day-range">64° / 85°</div></div>
+<div class="weather-day"><div class="weather-day-name">Mon</div><div class="weather-day-temp">76°</div><div class="weather-day-desc">Partly cloudy</div><div class="weather-day-range">60° / 78°</div></div>
+</div></div></div>
+<div class="interleave-layer" id="suggestionCard"><div class="interleave-card"><div class="card-eyebrow" style="color:var(--accent-greg)">Greg</div>
+<div class="greg-suggestion"><div class="greg-mark"></div><div>
+<div class="greg-text">It's been a couple weeks since the last Lego night. Maybe tonight?</div>
+<div class="greg-subtext">Everyone's home by 6. No school tomorrow.</div>
+</div></div></div></div>
+<script>
+function updateTime(){var n=new Date(),h=n.getHours()%12||12,m=n.getMinutes().toString().padStart(2,'0');document.getElementById('timeDisplay').textContent=h+':'+m;var d=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],mo=['January','February','March','April','May','June','July','August','September','October','November','December'];document.getElementById('dateDisplay').textContent=d[n.getDay()]+', '+mo[n.getMonth()]+' '+n.getDate()}
+updateTime();setInterval(updateTime,10000);
+var slides=document.querySelectorAll('.photo-slide'),cur=0,paused=false;
+function nextSlide(){if(paused)return;slides[cur].classList.remove('active');cur=(cur+1)%slides.length;slides[cur].classList.add('active')}
+setInterval(nextSlide,15000);
+var pl=document.getElementById('photoLayer'),pi=document.getElementById('pauseIndicator');
+// Auto-fullscreen on first touch — kills browser chrome
+var gone=false;
+function goFull(){if(gone)return;gone=true;var d=document.documentElement;(d.requestFullscreen||d.webkitRequestFullscreen||d.mozRequestFullScreen||d.msRequestFullscreen).call(d);}
+document.addEventListener('touchstart',function(){goFull()},{once:true,passive:true});
+document.addEventListener('click',function(){goFull()},{once:true});
+// Also try auto-fullscreen after 3 seconds (some WebViews allow it)
+setTimeout(function(){goFull()},3000);
+pl.addEventListener('touchstart',function(e){if(!gone){goFull();return;}paused=true;pi.classList.add('visible')},{passive:true});
+pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visible')});
+var cards={calendar:document.getElementById('calendarCard'),weather:document.getElementById('weatherCard'),suggestion:document.getElementById('suggestionCard')},ac=null,seq=['calendar','weather','suggestion'],ci=0;
+function showI(n){if(ac&&cards[ac])cards[ac].classList.remove('active');if(n&&cards[n]){cards[n].classList.add('active');ac=n}else ac=null}
+function loop(){showI(seq[ci]);setTimeout(function(){showI(null);ci=(ci+1)%seq.length},8000)}
+setInterval(loop,28000);setTimeout(loop,10000);
+// ═══ Live weather from Open-Meteo (free, no key, CORS-friendly) ═══
+var WMO={0:'Clear',1:'Mostly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm'};
+function fetchWeather(){fetch('https://api.open-meteo.com/v1/forecast?latitude=34.27&longitude=-118.78&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=America/Los_Angeles&forecast_days=4').then(function(r){return r.json()}).then(function(d){
+var c=d.current,days=d.daily,DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var pTemp=document.querySelector('.weather-temp'),pDesc=document.querySelector('.weather-desc');
+if(pTemp)pTemp.textContent=Math.round(c.temperature_2m)+'°';
+if(pDesc)pDesc.textContent=WMO[c.weather_code]||'Clear';
+var grid=document.querySelector('.weather-detail-grid');
+if(grid&&days.time.length>=3){var html='';for(var i=1;i<4;i++){var dt=new Date(days.time[i]+'T12:00:00');html+='<div class="weather-day"><div class="weather-day-name">'+(i===1?'Today':DOW[dt.getDay()])+'</div><div class="weather-day-temp">'+Math.round(days.temperature_2m_max[i])+'°</div><div class="weather-day-desc">'+(WMO[days.weather_code[i]]||'Clear')+'</div><div class="weather-day-range">'+Math.round(days.temperature_2m_min[i])+' / '+Math.round(days.temperature_2m_max[i])+'°</div></div>';}grid.innerHTML=html;}
+}).catch(function(){})}
+fetchWeather();setInterval(fetchWeather,1800000);
+</script>
+</body>
+</html>
