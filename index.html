@@ -57,6 +57,14 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .greg-voice{font-family:var(--fg);font-style:italic;font-size:16px;line-height:1.55;color:var(--tx)}
 .greg-attr{font-size:12px;color:var(--greg);margin-top:12px}
 
+/* ═══ Commute card ═══ */
+.commute-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.commute-row:last-child{border-bottom:none}
+.commute-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.commute-name{font-size:14px;color:var(--tx);flex:1}
+.commute-time{font-size:18px;color:var(--tx);font-weight:500;text-align:right}
+.commute-dist{font-size:11px;color:var(--tx3);text-align:right}
+
 /* ═══ Grocery card ═══ */
 .grocery-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
 .grocery-item:last-child{border-bottom:none}
@@ -116,6 +124,19 @@ var CFG = {
     'https://photos.google.com/share/AF1QipOquZzqaGj3R9aaYovL7J6Uvfc-nTzP8Y2Qh0Z2s4RoCOzMTPk5K8XGKbQgDtOv5w?key=UlM4ZWcycUxnOTlBSUR5OXNkdVN1c1IyV1FNLVN3',
     'https://photos.google.com/share/AF1QipOknVr-zc2V_QZJyLTU9oZO5s6P7bRPmgzxgQaATtk9rNT7Sq33H3M896KQFzrbOQ?key=Q3BfMmdPbFQtb3NzZ05BeWhMRkVIMmtsUDRhMDJn'
   ],
+  
+  // Commute destinations
+  DESTINATIONS: [
+    {name: 'School', address: 'WHPS School Woodland Hills CA', icon: '🏫'},
+    {name: 'Beach', address: 'Silverstrand Beach Oxnard CA', icon: '🏖️'}
+  ],
+  COMMUTE_REFRESH: 600000, // 10 min
+  
+  // Roku (local network via Sentinel proxy)
+  ROKU_PROXY_URL: '', // e.g. https://sentinel.tail3f6996.ts.net/roku
+  
+  // Spotify (via Supabase Edge Function)
+  SPOTIFY_PROXY_URL: '', // e.g. https://zdmxqzkqutizehynqojk.supabase.co/functions/v1/spotify-proxy
   
   // CORTEX (Greg suggestions)
   CORTEX_URL: 'https://cortex-production-d0d7.up.railway.app',
@@ -181,6 +202,11 @@ var CFG = {
     <div class="card-label" style="color:var(--greg)">GREG</div>
     <div class="greg-voice" id="gregVoice">Thinking about what matters today…</div>
     <div class="greg-attr">— Greg</div>
+  </div>
+  <!-- Commute times -->
+  <div class="interleave-card" id="commuteCard">
+    <div class="card-label">COMMUTE</div>
+    <div id="commuteItems"><div class="grocery-empty">Loading travel times…</div></div>
   </div>
   <!-- Grocery list -->
   <div class="interleave-card" id="groceryCard">
@@ -285,7 +311,7 @@ pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visi
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','suggestionCard','groceryCard'];
+var cardIds = ['calendarCard','weatherCard','commuteCard','suggestionCard','groceryCard'];
 var cardIdx = 0, activeCard = null;
 
 function showCard(id){
@@ -463,6 +489,29 @@ function saveNewItem(){
 document.getElementById('newItemText').addEventListener('keydown',function(e){if(e.key==='Enter')saveNewItem()});
 
 fetchGrocery(); setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
+
+// ═══════════════════════════════════════════
+// COMMUTE TIMES (Distance Matrix API)
+// ═══════════════════════════════════════════
+function fetchCommute(){
+  if(!CFG.GOOGLE_API_KEY || !CFG.DESTINATIONS.length){
+    document.getElementById('commuteItems').innerHTML='<div class="grocery-empty">No destinations configured</div>';
+    return;
+  }
+  var dests = CFG.DESTINATIONS.map(function(d){return encodeURIComponent(d.address)}).join('|');
+  var url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='+encodeURIComponent('Simi Valley CA')+'&destinations='+dests+'&departure_time=now&key='+CFG.GOOGLE_API_KEY;
+  fetch(url).then(function(r){return r.json()}).then(function(d){
+    if(d.status!=='OK') return;
+    var container = document.getElementById('commuteItems');
+    container.innerHTML = d.rows[0].elements.map(function(el,i){
+      var dest = CFG.DESTINATIONS[i];
+      var dur = (el.duration_in_traffic||el.duration||{}).text||'--';
+      var dist = (el.distance||{}).text||'';
+      return '<div class="commute-row"><div class="commute-icon">'+dest.icon+'</div><div class="commute-name">'+dest.name+'</div><div><div class="commute-time">'+dur+'</div><div class="commute-dist">'+dist+'</div></div></div>';
+    }).join('');
+  }).catch(function(){});
+}
+fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
 // ═══════════════════════════════════════════
 // GREG SUGGESTIONS (CORTEX)
