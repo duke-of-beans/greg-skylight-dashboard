@@ -57,6 +57,17 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .greg-voice{font-family:var(--fg);font-style:italic;font-size:16px;line-height:1.55;color:var(--tx)}
 .greg-attr{font-size:12px;color:var(--greg);margin-top:12px}
 
+/* ═══ Spotify card ═══ */
+.spotify-player{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2);align-items:center}
+.spotify-player:last-child{border-bottom:none}
+.spotify-art{width:56px;height:56px;border-radius:8px;background:var(--bg3);flex-shrink:0;background-size:cover;background-position:center}
+.spotify-info{flex:1;min-width:0}
+.spotify-track{font-size:14px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spotify-artist{font-size:12px;color:var(--tx2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spotify-user{font-size:10px;padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px}
+.spotify-bar{height:3px;border-radius:2px;background:var(--bg3);margin-top:6px;overflow:hidden}
+.spotify-progress{height:100%;background:#1DB954;border-radius:2px;transition:width 1s linear}
+
 /* ═══ Commute card ═══ */
 .commute-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
 .commute-row:last-child{border-bottom:none}
@@ -136,7 +147,9 @@ var CFG = {
   ROKU_PROXY_URL: '', // e.g. https://sentinel.tail3f6996.ts.net/roku
   
   // Spotify (via Supabase Edge Function)
-  SPOTIFY_PROXY_URL: '', // e.g. https://zdmxqzkqutizehynqojk.supabase.co/functions/v1/spotify-proxy
+  SPOTIFY_PROXY_URL: 'https://zdmxqzkqutizehynqojk.supabase.co/functions/v1/spotify-proxy',
+  
+  SPOTIFY_REFRESH: 15000, // 15 sec
   
   // CORTEX (Greg suggestions)
   CORTEX_URL: 'https://cortex-production-d0d7.up.railway.app',
@@ -202,6 +215,11 @@ var CFG = {
     <div class="card-label" style="color:var(--greg)">GREG</div>
     <div class="greg-voice" id="gregVoice">Thinking about what matters today…</div>
     <div class="greg-attr">— Greg</div>
+  </div>
+  <!-- Now Playing (Spotify) -->
+  <div class="interleave-card" id="spotifyCard">
+    <div class="card-label" style="color:#1DB954">NOW PLAYING</div>
+    <div id="spotifyPlayers"><div class="grocery-empty">No one is listening</div></div>
   </div>
   <!-- Commute times -->
   <div class="interleave-card" id="commuteCard">
@@ -311,7 +329,7 @@ pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visi
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','commuteCard','suggestionCard','groceryCard'];
+var cardIds = ['calendarCard','weatherCard','spotifyCard','commuteCard','suggestionCard','groceryCard'];
 var cardIdx = 0, activeCard = null;
 
 function showCard(id){
@@ -489,6 +507,33 @@ function saveNewItem(){
 document.getElementById('newItemText').addEventListener('keydown',function(e){if(e.key==='Enter')saveNewItem()});
 
 fetchGrocery(); setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
+
+// ═══════════════════════════════════════════
+// SPOTIFY NOW PLAYING
+// ═══════════════════════════════════════════
+function fetchSpotify(){
+  if(!CFG.SPOTIFY_PROXY_URL) return;
+  fetch(CFG.SPOTIFY_PROXY_URL).then(function(r){return r.json()}).then(function(d){
+    var container = document.getElementById('spotifyPlayers');
+    if(!d.players || !d.players.length || !d.players.some(function(p){return p.nowPlaying})){
+      container.innerHTML='<div class="grocery-empty">No one is listening right now</div>';
+      return;
+    }
+    container.innerHTML = d.players.filter(function(p){return p.nowPlaying}).map(function(p){
+      var np = p.nowPlaying;
+      var pct = np.duration ? Math.round((np.progress/np.duration)*100) : 0;
+      return '<div class="spotify-player">'
+        +'<div class="spotify-art" style="background-image:url('+np.albumArt+')"></div>'
+        +'<div class="spotify-info">'
+        +'<div class="spotify-track">'+(np.isPlaying?'♪ ':'')+np.track+'</div>'
+        +'<div class="spotify-artist">'+np.artist+'</div>'
+        +'<div class="spotify-user" style="background:'+p.color+'22;color:'+p.color+'">'+p.displayName+'</div>'
+        +'<div class="spotify-bar"><div class="spotify-progress" style="width:'+pct+'%;background:'+p.color+'"></div></div>'
+        +'</div></div>';
+    }).join('');
+  }).catch(function(){});
+}
+fetchSpotify(); setInterval(fetchSpotify, CFG.SPOTIFY_REFRESH);
 
 // ═══════════════════════════════════════════
 // COMMUTE TIMES (Distance Matrix API)
