@@ -17,7 +17,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .photo-slide{position:absolute;inset:0;opacity:0;transition:opacity 2.5s ease-in-out;background-size:cover;background-position:center}
 .photo-slide.active{opacity:1}
 .photo-slide.gradient{background-size:cover}
-.photo-gradient{position:absolute;bottom:0;left:0;right:0;height:260px;background:linear-gradient(to top,rgba(30,26,22,0.82) 0%,rgba(30,26,22,0.35) 50%,transparent 100%);z-index:2;pointer-events:none}
+.photo-gradient{position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,rgba(30,26,22,0.92) 0%,rgba(30,26,22,0.5) 40%,transparent 100%);z-index:2;pointer-events:none}
 .photo-gradient-top{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(30,26,22,0.5) 0%,transparent 100%);z-index:2;pointer-events:none}
 
 /* ═══ Persistent overlay ═══ */
@@ -78,7 +78,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 /* ═══ Commute card ═══ */
 .commute-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
 .commute-row:last-child{border-bottom:none}
-.commute-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.commute-icon{font-size:11px;font-weight:500;width:32px;height:32px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--tx2);font-family:var(--fu);letter-spacing:0.02em}
 .commute-name{font-size:14px;color:var(--tx);flex:1}
 .commute-time{font-size:18px;color:var(--tx);font-weight:500;text-align:right}
 .commute-dist{font-size:11px;color:var(--tx3);text-align:right}
@@ -94,7 +94,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .grocery-cat{font-size:10px;color:var(--tx3);padding:2px 6px;background:var(--bg3);border-radius:4px}
 .grocery-empty{font-size:14px;color:var(--tx3);font-style:italic;padding:16px 0}
 .grocery-footer{margin-top:12px;padding-top:12px;border-top:1px solid var(--border2);display:flex;gap:8px}
-.grocery-add-btn{font-size:12px;color:var(--greg);cursor:pointer;padding:6px 12px;border:1px solid var(--greg);border-radius:8px;background:transparent}
+.grocery-add-btn{font-size:12px;color:var(--greg);cursor:pointer;padding:8px 16px;border:1px solid var(--greg);border-radius:100px;background:transparent}
 .grocery-add-btn:active{background:var(--greg-bg)}
 
 /* ═══ Pause indicator ═══ */
@@ -104,9 +104,10 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .pause-text{font-size:12px;color:var(--tx2)}
 
 /* ═══ Mode indicators ═══ */
-.mode-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:15;display:flex;gap:6px}
-.mode-dot{width:6px;height:6px;border-radius:50%;background:var(--tx-m);transition:all 0.3s}
-.mode-dot.active{background:var(--tx2);width:18px;border-radius:3px}
+.nav-bar{position:absolute;bottom:0;left:0;right:0;z-index:15;display:flex;justify-content:center;gap:4px;padding:12px 20px;pointer-events:auto;opacity:0.3;transition:opacity 0.4s}
+.nav-bar:hover,.nav-bar:active,.nav-bar.touched{opacity:1}
+.nav-btn{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--fu);font-size:10px;font-weight:500;color:var(--tx3);cursor:pointer;transition:all 0.2s;border:1px solid transparent;letter-spacing:0.02em}
+.nav-btn:active,.nav-btn.active{background:var(--card);border-color:var(--card-b);color:var(--tx);backdrop-filter:blur(16px)}
 
 /* ═══ Add item modal ═══ */
 .modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center}
@@ -120,8 +121,8 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .modal-cat.sel{border-color:var(--greg);color:var(--greg);background:var(--greg-bg)}
 .modal-btns{display:flex;gap:8px;justify-content:flex-end}
 .modal-btn{padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;border:none;font-family:var(--fu)}
-.modal-btn.cancel{background:var(--bg3);color:var(--tx2)}
-.modal-btn.save{background:var(--greg);color:var(--bg)}
+.modal-btn.cancel{background:var(--bg3);color:var(--tx2);border-radius:8px}
+.modal-btn.save{background:var(--greg);color:var(--bg);border-radius:100px}
 </style>
 </head>
 <body>
@@ -145,8 +146,8 @@ var CFG = {
   
   // Commute destinations
   DESTINATIONS: [
-    {name: 'School', address: 'WHPS School Woodland Hills CA', icon: '🏫'},
-    {name: 'Beach', address: 'Silverstrand Beach Oxnard CA', icon: '🏖️'}
+    {name: 'School', address: 'WHPS School Woodland Hills CA', icon: 'SCH'},
+    {name: 'Beach', address: 'Silverstrand Beach Oxnard CA', icon: 'BCH'}
   ],
   COMMUTE_REFRESH: 600000, // 10 min
   
@@ -201,7 +202,15 @@ var CFG = {
 </div>
 
 <!-- ═══ Mode dots ═══ -->
-<div class="mode-dots" id="modeDots"></div>
+<div class="nav-bar" id="navBar">
+  <div class="nav-btn" data-card="calendarCard" onclick="toggleCard('calendarCard')">CAL</div>
+  <div class="nav-btn" data-card="weatherCard" onclick="toggleCard('weatherCard')">WX</div>
+  <div class="nav-btn" data-card="mediaCard" onclick="toggleCard('mediaCard')">TV</div>
+  <div class="nav-btn" data-card="spotifyCard" onclick="toggleCard('spotifyCard')">♪</div>
+  <div class="nav-btn" data-card="commuteCard" onclick="toggleCard('commuteCard')">GO</div>
+  <div class="nav-btn" data-card="suggestionCard" onclick="toggleCard('suggestionCard')">G</div>
+  <div class="nav-btn" data-card="groceryCard" onclick="toggleCard('groceryCard')">LIST</div>
+</div>
 
 <!-- ═══ Card layer ═══ -->
 <div class="card-layer">
@@ -227,16 +236,16 @@ var CFG = {
   <div class="interleave-card" id="mediaCard" style="pointer-events:auto">
     <div class="card-label">WATCH</div>
     <div class="media-grid" id="mediaGrid">
-      <div class="media-btn" onclick="Greg.launchApp('com.netflix.mediaclient')"><div class="media-icon" style="background:#E50914">N</div><div class="media-name">Netflix</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.disney.disneyplus')"><div class="media-icon" style="background:#113CCF">D+</div><div class="media-name">Disney+</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.cbs.app')"><div class="media-icon" style="background:#0064FF">P+</div><div class="media-name">Paramount+</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.amazon.avod.thirdpartyclient')"><div class="media-icon" style="background:#00A8E1">Prime</div><div class="media-name">Prime Video</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.tubitv')"><div class="media-icon" style="background:#FA382F">T</div><div class="media-name">Tubi</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('tv.pluto.android')"><div class="media-icon" style="background:#262626">P</div><div class="media-name">Pluto</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('org.smarttube.stable')"><div class="media-icon" style="background:#FF0000">YT</div><div class="media-name">YouTube</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.netflix.mediaclient')"><div class="media-icon" style="background:#5C3A3A">N</div><div class="media-name">Netflix</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.disney.disneyplus')"><div class="media-icon" style="background:#3A4060">D+</div><div class="media-name">Disney+</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.cbs.app')"><div class="media-icon" style="background:#3A4A60">P+</div><div class="media-name">Paramount+</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.amazon.avod.thirdpartyclient')"><div class="media-icon" style="background:#3A5560">Pr</div><div class="media-name">Prime Video</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.tubitv')"><div class="media-icon" style="background:#5C3A3A">T</div><div class="media-name">Tubi</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('tv.pluto.android')"><div class="media-icon" style="background:#3A3A3A">P</div><div class="media-name">Pluto</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('org.smarttube.stable')"><div class="media-icon" style="background:#5C3A3A">YT</div><div class="media-name">YouTube</div></div>
       <div class="media-btn" onclick="Greg.launchApp('com.peacocktv.peacockandroid')"><div class="media-icon" style="background:#000">🦚</div><div class="media-name">Peacock</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.tribtv.ktla2')"><div class="media-icon" style="background:#0055A5">5</div><div class="media-name">KTLA</div></div>
-      <div class="media-btn" onclick="Greg.launchApp('com.google.android.apps.youtube.kids')"><div class="media-icon" style="background:#FF4444">YK</div><div class="media-name">YT Kids</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.tribtv.ktla2')"><div class="media-icon" style="background:#3A4560">5</div><div class="media-name">KTLA</div></div>
+      <div class="media-btn" onclick="Greg.launchApp('com.google.android.apps.youtube.kids')"><div class="media-icon" style="background:#5C4040">YK</div><div class="media-name">YT Kids</div></div>
     </div>
   </div>
   <!-- Now Playing (Spotify) -->
@@ -353,31 +362,35 @@ pl.addEventListener('touchend',function(){paused=false;pi.classList.remove('visi
 // CARD CYCLING
 // ═══════════════════════════════════════════
 var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard'];
-var cardIdx = 0, activeCard = null;
+var activeCard = null;
+var cardTimeout = null;
 
 function showCard(id){
   if(activeCard && document.getElementById(activeCard)) document.getElementById(activeCard).classList.remove('active');
-  if(id && document.getElementById(id)){document.getElementById(id).classList.add('active'); activeCard=id;}
-  else activeCard=null;
-  // Update dots
-  var dots = document.getElementById('modeDots');
-  dots.innerHTML = '';
-  cardIds.forEach(function(cid, i){
-    var dot = document.createElement('div');
-    dot.className = 'mode-dot' + (cid===activeCard?' active':'');
-    dots.appendChild(dot);
-  });
+  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
+  if(id && document.getElementById(id)){
+    document.getElementById(id).classList.add('active');
+    activeCard=id;
+    var btn=document.querySelector('[data-card="'+id+'"]');
+    if(btn)btn.classList.add('active');
+  } else activeCard=null;
 }
 
-function cardLoop(){
-  showCard(cardIds[cardIdx]);
-  setTimeout(function(){
-    showCard(null);
-    cardIdx = (cardIdx+1) % cardIds.length;
-  }, CFG.CARD_SHOW);
+function toggleCard(id){
+  if(cardTimeout) clearTimeout(cardTimeout);
+  if(activeCard===id){showCard(null);return;}
+  showCard(id);
+  // Auto-dismiss after 30s of no interaction
+  cardTimeout=setTimeout(function(){showCard(null)},30000);
 }
-setInterval(cardLoop, CFG.CARD_SHOW + CFG.CARD_GAP);
-setTimeout(cardLoop, 8000);
+
+// Touch feedback on nav bar
+var navBar=document.getElementById('navBar');
+navBar.addEventListener('touchstart',function(){navBar.classList.add('touched')},{passive:true});
+navBar.addEventListener('touchend',function(){setTimeout(function(){if(!activeCard)navBar.classList.remove('touched')},3000)});
+// Auto-cycle removed per §7 — cards are on-demand via bottom nav
+// Show calendar briefly on load, then ambient
+setTimeout(function(){showCard('calendarCard');setTimeout(function(){showCard(null)},8000)},5000);
 
 // ═══════════════════════════════════════════
 // WEATHER
