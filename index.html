@@ -1218,6 +1218,22 @@ function onPresenceDetected() {
   }, PRESENCE_HOLD_MS);
 }
 
+// ── Skylight schedule: keep screen alive 5:30am–midnight ────
+// The kiosk APK has a 5.5-min dim timer that fades the overlay to black.
+// During scheduled awake hours, we call Greg.resetDim() every minute to
+// keep the overlay clear. Outside those hours, we let it dim naturally.
+function checkSkylightSchedule() {
+  var now = new Date();
+  var minuteOfDay = now.getHours() * 60 + now.getMinutes();
+  // Awake: 5:30am (330) to midnight (1440)
+  var isAwakeHours = minuteOfDay >= 330; // before midnight, after 5:30am
+  if (isAwakeHours && typeof Greg !== 'undefined' && Greg.resetDim) {
+    Greg.resetDim();
+  }
+}
+checkSkylightSchedule();
+setInterval(checkSkylightSchedule, 60000); // every minute
+
 // Auto-init camera after page load
 setTimeout(initCamera, 5000);
 </script>
