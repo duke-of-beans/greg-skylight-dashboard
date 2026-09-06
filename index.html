@@ -166,8 +166,8 @@ var CFG = {
   
   // Commute destinations
   DESTINATIONS: [
-    {name: 'School', address: 'WHPS School Woodland Hills CA', icon: 'SCH'},
-    {name: 'Beach', address: 'Silverstrand Beach Oxnard CA', icon: 'BCH'}
+    {name: 'School', address: 'WHPS School Woodland Hills CA', icon: 'SCH', estimate: '~30 min', distance: '18 mi'},
+    {name: 'Beach', address: 'Silverstrand Beach Oxnard CA', icon: 'BCH', estimate: '~45 min', distance: '35 mi'}
   ],
   COMMUTE_REFRESH: 600000, // 10 min
   
@@ -651,22 +651,11 @@ fetchSpotify(); setInterval(fetchSpotify, CFG.SPOTIFY_REFRESH);
 // COMMUTE TIMES (Distance Matrix API)
 // ═══════════════════════════════════════════
 function fetchCommute(){
-  if(!CFG.GOOGLE_API_KEY || !CFG.DESTINATIONS.length){
-    document.getElementById('commuteItems').innerHTML='<div class="grocery-empty">No destinations configured</div>';
-    return;
-  }
-  var dests = CFG.DESTINATIONS.map(function(d){return encodeURIComponent(d.address)}).join('|');
-  var url = CFG.SUPABASE_URL+'/functions/v1/commute-proxy?origins='+encodeURIComponent('Simi Valley CA')+'&destinations='+dests;
-  fetch(url).then(function(r){return r.json()}).then(function(d){
-    if(d.status!=='OK') return;
-    var container = document.getElementById('commuteItems');
-    container.innerHTML = d.rows[0].elements.map(function(el,i){
-      var dest = CFG.DESTINATIONS[i];
-      var dur = (el.duration_in_traffic||el.duration||{}).text||'--';
-      var dist = (el.distance||{}).text||'';
-      return '<div class="commute-row"><div class="commute-icon">'+dest.icon+'</div><div class="commute-name">'+dest.name+'</div><div><div class="commute-time">'+dur+'</div><div class="commute-dist">'+dist+'</div></div></div>';
-    }).join('');
-  }).catch(function(){});
+  var container = document.getElementById('commuteItems');
+  // Static commute data — Distance Matrix API requires GCP billing
+  container.innerHTML = CFG.DESTINATIONS.map(function(dest){
+    return '<div class="commute-row"><div class="commute-icon">'+dest.icon+'</div><div class="commute-name">'+dest.name+'</div><div><div class="commute-time">'+dest.estimate+'</div><div class="commute-dist">'+dest.distance+'</div></div></div>';
+  }).join('');
 }
 fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
