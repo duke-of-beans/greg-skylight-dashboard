@@ -230,6 +230,7 @@ var CFG = {
   <div class="nav-btn" data-card="commuteCard" onclick="toggleCard('commuteCard')"><svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><path d='M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z'/><circle cx='12' cy='10' r='3'/></svg></div>
   <div class="nav-btn" data-card="suggestionCard" onclick="toggleCard('suggestionCard')"><svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><path d='M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z'/></svg></div>
   <div class="nav-btn" data-card="groceryCard" onclick="toggleCard('groceryCard')"><svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><path d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z'/><path d='M3 6h18'/><path d='M16 10a4 4 0 01-8 0'/></svg></div>
+  <div class="nav-btn" onclick="if(typeof Greg!=='undefined')Greg.launchApp('com.aurora.store')"><svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><path d='M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/></svg></div>
 </div>
 
 <!-- ═══ Card layer ═══ -->
@@ -269,7 +270,6 @@ var CFG = {
       <div class="media-btn" data-pkg="com.peacocktv.peacockandroid"><div class="media-icon" style="background:#1A8C37">Pk</div><div class="media-name">Peacock</div></div>
       <div class="media-btn" data-pkg="com.tribtv.ktla2"><div class="media-icon" style="background:#0055A5">5</div><div class="media-name">KTLA</div></div>
       <div class="media-btn" data-pkg="com.google.android.apps.youtube.kids"><div class="media-icon" style="background:#FF4444">YK</div><div class="media-name">YT Kids</div></div>
-      <div class="media-btn" data-pkg="com.aurora.store"><div class="media-icon" style="background:#7B68EE">A</div><div class="media-name">App Store</div></div>
     </div>
   </div>
   <!-- Now Playing (Spotify) -->
