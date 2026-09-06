@@ -844,7 +844,7 @@ function fetchPlexusFeed() {
       'Authorization': 'Bearer ' + CFG.PLEXUS_KEY,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ lat: CFG.LAT, lon: CFG.LON })
+    body: JSON.stringify({ lat: CFG.LAT, lon: CFG.LON, units: 'fahrenheit' })
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
@@ -853,6 +853,24 @@ function fetchPlexusFeed() {
       Object.values(data._meta.sources).filter(function(s){return s==='ok'}).length + '/' + 
       Object.keys(data._meta.sources).length + ' sources OK');
     
+    // Weather from PLEXUS (replaces direct Open-Meteo fetch)
+    if (data.weather) {
+      var w = data.weather;
+      document.getElementById('weatherTemp').textContent = Math.round(w.temperature) + '°';
+      document.getElementById('weatherDesc').textContent = w.condition || 'Clear';
+      var grid = document.getElementById('weatherGrid');
+      if (grid && w.daily && w.daily.length >= 2) {
+        var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        var html = '';
+        for (var i = 1; i < Math.min(4, w.daily.length); i++) {
+          var d = w.daily[i];
+          var dt = new Date(d.date + 'T12:00:00');
+          html += '<div class="weather-day"><div class="weather-day-name">' + (i===1?'Tomorrow':DOW[dt.getDay()]) + '</div><div class="weather-day-temp">' + Math.round(d.high) + '°</div><div class="weather-day-desc">' + (d.condition||'Clear') + '</div><div class="weather-day-range">' + Math.round(d.low) + ' / ' + Math.round(d.high) + '°</div></div>';
+        }
+        grid.innerHTML = html;
+      }
+    }
+
     // Air quality — NEW data source from PLEXUS
     if (data.airQuality) {
       renderAirQuality(data.airQuality);
