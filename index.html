@@ -244,7 +244,7 @@ var CFG = {
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com')">Open Calendar</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="debugLaunch('https://calendar.google.com', this)">Open Calendar</div></div>
   </div>
   <!-- Weather detail -->
   <div class="interleave-card" id="weatherCard">
@@ -282,7 +282,7 @@ var CFG = {
   <div class="interleave-card" id="commuteCard">
     <div class="card-label">COMMUTE</div>
     <div id="commuteItems"><div class="grocery-empty">Loading travel times…</div></div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://www.google.com/maps')">Open Maps</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="debugLaunch('https://www.google.com/maps', this)">Open Maps</div></div>
   </div>
   <!-- Grocery list -->
   <div class="interleave-card" id="groceryCard">
@@ -649,6 +649,30 @@ function fetchCommute(){
     }).join('');
   }).catch(function(){});
 }
+// Debug: test if clicks and bridge work
+function debugLaunch(url, btn) {
+  btn.style.background = 'var(--greg)';
+  btn.style.color = 'var(--bg)';
+  btn.textContent = 'Opening...';
+  if(typeof Greg === 'undefined') {
+    btn.textContent = 'ERROR: No Greg bridge';
+    btn.style.background = '#C44';
+    return;
+  }
+  if(!Greg.launchUrl) {
+    btn.textContent = 'ERROR: No launchUrl';
+    btn.style.background = '#C44';
+    return;
+  }
+  try {
+    Greg.launchUrl(url);
+    btn.textContent = 'Launched!';
+  } catch(e) {
+    btn.textContent = 'ERROR: ' + e.message;
+    btn.style.background = '#C44';
+  }
+}
+
 fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
 // ═══════════════════════════════════════════
