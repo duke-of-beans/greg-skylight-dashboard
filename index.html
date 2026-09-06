@@ -528,6 +528,25 @@ function fetchCalendar(){
       done();
     }).catch(function(){done()});
   });
+  // Also fetch family events from Supabase
+  pending++;
+  fetch(CFG.SUPABASE_URL+'/rest/v1/family_events?event_date=gte.'+monthStart.split('T')[0]+'&event_date=lte.'+monthEnd.split('T')[0]+'&order=event_date.asc,event_time.asc',
+    {headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
+  .then(function(r){return r.json()}).then(function(items){
+    if(!items||!items.length){done();return;}
+    items.forEach(function(ev){
+      var day=new Date(ev.event_date+'T12:00:00').getDate();
+      if(eventDays.indexOf(day)===-1)eventDays.push(day);
+      // Add today's events to the list
+      var evDate=ev.event_date;
+      var todayStr=now.toISOString().split('T')[0];
+      if(evDate===todayStr){
+        var start=ev.all_day?ev.event_date:(ev.event_date+'T'+ev.event_time);
+        allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2});
+      }
+    });
+    done();
+  }).catch(function(){done()});
 }
 // Calendar card tap → opens Google Calendar
 
@@ -637,7 +656,7 @@ function fetchCommute(){
     return;
   }
   var dests = CFG.DESTINATIONS.map(function(d){return encodeURIComponent(d.address)}).join('|');
-  var url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='+encodeURIComponent('Simi Valley CA')+'&destinations='+dests+'&departure_time=now&key='+CFG.GOOGLE_API_KEY;
+  var url = CFG.SUPABASE_URL+'/functions/v1/commute-proxy?origins='+encodeURIComponent('Simi Valley CA')+'&destinations='+dests;
   fetch(url).then(function(r){return r.json()}).then(function(d){
     if(d.status!=='OK') return;
     var container = document.getElementById('commuteItems');
