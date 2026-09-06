@@ -282,7 +282,7 @@ var CFG = {
   <div class="interleave-card" id="commuteCard">
     <div class="card-label">COMMUTE</div>
     <div id="commuteItems"><div class="grocery-empty">Loading travel times…</div></div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://www.google.com/maps')">Open Maps</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined'){try{Greg.launchApp('com.google.android.apps.maps')}catch(e){Greg.launchUrl('https://www.google.com/maps')}}">Open Maps</div></div>
   </div>
   <!-- Grocery list -->
   <div class="interleave-card" id="groceryCard">
