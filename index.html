@@ -253,7 +253,7 @@ var CFG = {
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com')">Open Calendar</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com/calendar/')">Open Calendar</div></div>
   </div>
   <!-- Weather detail -->
   <div class="interleave-card" id="weatherCard">
@@ -600,7 +600,7 @@ function switchList(el){
 }
 
 function fetchGrocery(){
-  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,text.asc',{headers:{'apikey':CFG.SUPABASE_KEY,'Authorization':'Bearer '+CFG.SUPABASE_KEY}})
+  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,text.asc',{headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
   .then(function(r){return r.json()}).then(function(items){
     var c=document.getElementById('groceryItems');
     if(!items||!items.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:8px 0">List is empty</div>';return;}
@@ -710,16 +710,67 @@ fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 // ═══════════════════════════════════════════
 // GREG SUGGESTIONS (CORTEX)
 // ═══════════════════════════════════════════
-var gregSuggestions = [
-  "The weather looks good today. Maybe take Lilly to the park this afternoon?",
-  "Angela's calendar is clear this evening. Date night opportunity.",
-  "Grocery list has 3 items. Quick Trader Joe's run before dinner?",
-  "Lilly hasn't had outside time today. The backyard is 78° right now.",
-  "Family movie night? It's been two weeks since the last one."
-];
+var gregSuggestions = [];
+var gregIdx = 0;
+
+function buildGregSuggestions(){
+  var s = [];
+  var now = new Date();
+  var hour = now.getHours();
+  var day = now.getDay(); // 0=Sun
+  var temp = document.querySelector('.weather-temp');
+  var tempVal = temp ? parseInt(temp.textContent) : 75;
+  
+  // Time-aware
+  if(hour < 10) s.push("Good morning. Coffee's calling.");
+  if(hour >= 17 && hour < 20) s.push("Evening's here. How was everyone's day?");
+  if(hour >= 20) s.push("Winding down. Tomorrow's a fresh start.");
+  
+  // Weather-aware
+  if(tempVal > 85) s.push("It's "+tempVal+"° out there. Pool day? Or stay in with a movie.");
+  if(tempVal > 70 && tempVal <= 85) s.push("Beautiful "+tempVal+"° outside. Perfect for the park with Lilly.");
+  if(tempVal <= 70) s.push("Only "+tempVal+"° today. Cozy day inside — hot chocolate weather.");
+  
+  // Day-aware
+  if(day === 0 || day === 6) s.push("Weekend. No rush. What does the family want to do today?");
+  if(day === 5) s.push("It's Friday. Movie night?");
+  
+  // Calendar-aware — check today's events from Supabase
+  fetch(CFG.SUPABASE_URL+'/rest/v1/family_events?event_date=eq.'+now.toISOString().split('T')[0],
+    {headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
+  .then(function(r){return r.json()}).then(function(events){
+    if(events && events.length){
+      events.forEach(function(ev){
+        if(ev.event_type==='holiday') s.push("It's "+ev.title+" today. Family time. No obligations.");
+        if(ev.event_type==='birthday') s.push(ev.title+" today! Don't forget the celebration.");
+        if(ev.event_type==='work' && ev.person==='mom') s.push("Mom's working today. Maybe plan something with the kids?");
+        if(ev.title.toLowerCase().indexOf('lunch')>-1) s.push(ev.title+" is today. Have fun!");
+      });
+    }
+    
+    // Grocery-aware
+    fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.1ab282d8-e849-4543-8410-0203ecacba83&checked=eq.false&select=id',
+      {headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
+    .then(function(r){return r.json()}).then(function(items){
+      if(items && items.length > 5) s.push("The grocery list has "+items.length+" items. Costco run before it gets longer?");
+      else if(items && items.length > 0) s.push(items.length+" things on the grocery list. Quick store run?");
+      
+      // Fallbacks
+      if(s.length < 3){
+        s.push("Family dinner idea: try that new recipe Angela saved?");
+        s.push("When's the last time you all played a board game together?");
+      }
+      
+      gregSuggestions = s;
+      gregIdx = 0;
+      if(gregSuggestions.length) document.getElementById('gregVoice').textContent = gregSuggestions[0];
+    }).catch(function(){});
+  }).catch(function(){});
+}
 var gregIdx = 0;
 
 function fetchGregSuggestion(){
+  if(!gregSuggestions.length){buildGregSuggestions();return;}
   if(!CFG.CORTEX_KEY){
     // Rotate built-in suggestions
     document.getElementById('gregVoice').textContent = gregSuggestions[gregIdx];
