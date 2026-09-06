@@ -126,6 +126,13 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .grocery-add-btn{font-size:12px;color:var(--greg);cursor:pointer;padding:8px 16px;border:1px solid var(--greg);border-radius:100px;background:transparent}
 .grocery-add-btn:active{background:var(--greg-bg)}
 
+/* ═══ Camera/presence ═══ */
+.camera-feed{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+.presence-indicator{position:absolute;top:20px;left:20px;z-index:20;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity 0.6s}
+.presence-indicator.active{opacity:1}
+.presence-dot{width:6px;height:6px;border-radius:50%;background:var(--greg)}
+.presence-text{font-size:11px;color:var(--tx3);font-family:var(--fu)}
+
 /* ═══ Pause indicator ═══ */
 .pause-indicator{position:absolute;top:28px;right:36px;z-index:20;opacity:0;transition:opacity 0.4s ease;display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--card);border:1px solid var(--card-b);border-radius:100px;backdrop-filter:blur(16px)}
 .pause-indicator.visible{opacity:1}
@@ -321,6 +328,12 @@ var CFG = {
 </div>
 
 <!-- ═══ Pause indicator ═══ -->
+<div class="presence-indicator" id="presenceIndicator">
+  <div class="presence-dot"></div>
+  <div class="presence-text" id="presenceText">Someone's here</div>
+</div>
+<video class="camera-feed" id="cameraFeed" autoplay playsinline muted></video>
+<canvas id="cameraCanvas" style="display:none"></canvas>
 <div class="pause-indicator" id="pauseIndicator">
   <div class="pause-dot"></div>
   <div class="pause-text">Paused</div>
@@ -1108,6 +1121,105 @@ function printViaIPP(html, title) {
   })
   .catch(function(e) { console.log('Print error:', e); });
 }
+
+// ═══════════════════════════════════════════
+// CAMERA / PRESENCE DETECTION
+// Uses motion detection via frame differencing — no ML needed.
+// Works with Arducam (USB UVC) on Skylight or built-in camera.
+// When motion detected: wake from dim, show presence indicator.
+// ═══════════════════════════════════════════
+
+var cameraActive = false;
+var prevFrame = null;
+var presenceTimeout = null;
+var MOTION_THRESHOLD = 30;    // pixel diff threshold
+var MOTION_PERCENT = 2.0;     // % of pixels that must differ
+var PRESENCE_HOLD_MS = 30000; // stay "present" for 30s after last motion
+
+function initCamera() {
+  var video = document.getElementById('cameraFeed');
+  if (!video || cameraActive) return;
+
+  navigator.mediaDevices.getUserMedia({
+    video: { width: { ideal: 320 }, height: { ideal: 240 }, facingMode: 'environment' }
+  }).then(function(stream) {
+    video.srcObject = stream;
+    cameraActive = true;
+    console.log('Camera active — presence detection enabled');
+    // Start motion detection loop
+    setTimeout(motionLoop, 2000);
+  }).catch(function(err) {
+    // Try without facingMode constraint (some UVC cameras don't support it)
+    navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 320 }, height: { ideal: 240 } }
+    }).then(function(stream) {
+      video.srcObject = stream;
+      cameraActive = true;
+      console.log('Camera active (fallback) — presence detection enabled');
+      setTimeout(motionLoop, 2000);
+    }).catch(function(err2) {
+      console.log('No camera available:', err2.message);
+    });
+  });
+}
+
+function motionLoop() {
+  if (!cameraActive) return;
+  var video = document.getElementById('cameraFeed');
+  var canvas = document.getElementById('cameraCanvas');
+  if (!video || !canvas || video.readyState < 2) {
+    setTimeout(motionLoop, 1000);
+    return;
+  }
+
+  var w = 80, h = 60; // Low-res for speed
+  canvas.width = w;
+  canvas.height = h;
+  var ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, w, h);
+  var frame = ctx.getImageData(0, 0, w, h);
+
+  if (prevFrame) {
+    var diffCount = 0;
+    var total = w * h;
+    for (var i = 0; i < frame.data.length; i += 4) {
+      var dr = Math.abs(frame.data[i] - prevFrame.data[i]);
+      var dg = Math.abs(frame.data[i+1] - prevFrame.data[i+1]);
+      var db = Math.abs(frame.data[i+2] - prevFrame.data[i+2]);
+      if ((dr + dg + db) / 3 > MOTION_THRESHOLD) diffCount++;
+    }
+    var pct = (diffCount / total) * 100;
+    if (pct > MOTION_PERCENT) {
+      onPresenceDetected();
+    }
+  }
+
+  prevFrame = frame;
+  setTimeout(motionLoop, 500); // Check every 500ms
+}
+
+function onPresenceDetected() {
+  // Show presence indicator
+  var ind = document.getElementById('presenceIndicator');
+  if (ind) ind.classList.add('active');
+
+  // Wake the screen if dimmed (same as touch wake in greg-kiosk)
+  // Send a signal to the WebView bridge to reset dim timer
+  if (typeof Greg !== 'undefined' && Greg.sendKey) {
+    // Simulate a wakeup — key event 82 (KEYCODE_MENU) is lightweight
+    // Greg.sendKey(82); // Uncomment if dim overlay needs external wake
+  }
+
+  // Reset presence timeout
+  clearTimeout(presenceTimeout);
+  presenceTimeout = setTimeout(function() {
+    var ind = document.getElementById('presenceIndicator');
+    if (ind) ind.classList.remove('active');
+  }, PRESENCE_HOLD_MS);
+}
+
+// Auto-init camera after page load
+setTimeout(initCamera, 5000);
 </script>
 
 </body>
