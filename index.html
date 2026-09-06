@@ -546,19 +546,7 @@ function fetchCalendar(){
     }).catch(function(){done()});
   });
 }
-// Calendar card tap → full screen
-);
-  var el=document.querySelector('.cal-full-day[data-day="'+day+'"]');
-  if(el)el.classList.add('selected');
-  var evs=calFullEvents[day];
-  var container=document.getElementById('calFullEvents');
-  if(!evs||!evs.length){container.innerHTML='<div style="color:var(--tx3)">No events on this day</div>';return;}
-  container.innerHTML=evs.map(function(ev){
-    var t='All day';
-    if(ev.start.dateTime){var d=new Date(ev.start.dateTime);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
-    return '<div class="cal-event"><div class="cal-dot" style="background:var(--greg);height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div class="cal-where">'+ev.location+'</div>':'')+'</div></div>';
-  }).join('');
-}
+// Calendar card tap → opens Google Calendar
 
 function renderCalendar(events){
   var c=document.getElementById('calendarEvents');
@@ -610,7 +598,7 @@ function fetchGrocery(){
     Object.keys(cats).forEach(function(cat){
       h+='<div style="font-size:11px;color:var(--tx-m);margin:8px 0 4px;text-transform:uppercase;letter-spacing:0.05em">'+cat+'</div>';
       cats[cat].forEach(function(it){
-        h+='<div class="grocery-item'+(it.checked?' checked':'')+'" onclick="toggleGroceryItem(''+it.id+'','+(!it.checked)+')">';
+        h+='<div class="grocery-item'+(it.checked?' checked':'')+'" data-id="'+it.id+'" data-checked="'+(!it.checked)+'">';
         h+='<div class="grocery-check">'+(it.checked?'✓':'')+'</div>';
         h+='<div class="grocery-name">'+it.name+(it.quantity?' <span style=\"color:var(--tx3)\">x'+it.quantity+'</span>':'')+'</div>';
         h+='</div>';
@@ -619,6 +607,15 @@ function fetchGrocery(){
     c.innerHTML=h;
   }).catch(function(e){console.log('Grocery fetch failed:',e)});
 }
+// Grocery item click via delegation
+document.getElementById('groceryItems').addEventListener('click',function(e){
+  var item=e.target.closest('.grocery-item');
+  if(!item)return;
+  var id=item.getAttribute('data-id');
+  var checked=item.getAttribute('data-checked')==='true';
+  if(id)toggleGroceryItem(id,checked);
+});
+
 fetchGrocery(); setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
 
 // ═══════════════════════════════════════════
