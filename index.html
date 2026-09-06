@@ -648,7 +648,7 @@ function fetchCommute(){
   }).catch(function(){});
 }
 document.getElementById('commuteCard').addEventListener('click',function(){
-  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('geo:0,0?q=directions');
+  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('https://www.google.com/maps');
 });
 fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
