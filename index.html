@@ -344,13 +344,9 @@ var cur = 0, paused = false;
 
 function nextSlide(){
   if(paused) return;
-  var prev = slides[cur];
-  prev.classList.remove('active');
-  if(prev.tagName === 'VIDEO') prev.pause();
+  slides[cur].classList.remove('active');
   cur = (cur+1) % slides.length;
-  var next = slides[cur];
-  next.classList.add('active');
-  if(next.tagName === 'VIDEO'){next.currentTime=0;next.play();}
+  slides[cur].classList.add('active');
 }
 setInterval(nextSlide, CFG.PHOTO_INTERVAL);
 
@@ -363,26 +359,10 @@ function fetchPhotos(){
     layer.innerHTML = '';
     d.photos.forEach(function(item, i){
       var url = typeof item === 'string' ? item : item.url;
-      var type = typeof item === 'string' ? 'photo' : (item.type || 'photo');
-      if(type === 'video'){
-        var vid = document.createElement('video');
-        vid.className = 'photo-slide' + (i===0?' active':'');
-        vid.src = url;
-        vid.muted = true;
-        vid.autoplay = false;
-        vid.loop = true;
-        vid.playsInline = true;
-        vid.setAttribute('playsinline','');
-        vid.style.objectFit = 'cover';
-        vid.style.width = '100%';
-        vid.style.height = '100%';
-        layer.appendChild(vid);
-      } else {
-        var div = document.createElement('div');
-        div.className = 'photo-slide' + (i===0?' active':'');
-        div.style.backgroundImage = 'url('+url+')';
-        layer.appendChild(div);
-      }
+      var div = document.createElement('div');
+      div.className = 'photo-slide' + (i===0?' active':'');
+      div.style.backgroundImage = 'url('+url+')';
+      layer.appendChild(div);
     });
     slides = layer.querySelectorAll('.photo-slide');
     cur = 0;
@@ -668,7 +648,7 @@ function fetchCommute(){
   }).catch(function(){});
 }
 document.getElementById('commuteCard').addEventListener('click',function(){
-  if(typeof Greg!=='undefined'&&Greg.launchApp) Greg.launchApp('com.google.android.apps.maps');
+  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('geo:0,0?q=directions');
 });
 fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
