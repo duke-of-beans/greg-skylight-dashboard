@@ -253,13 +253,13 @@ var CFG = {
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com/calendar/r')">Open Calendar</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchApp('com.google.android.calendar')">Open Calendar</div></div>
   </div>
   <!-- Weather detail -->
   <div class="interleave-card" id="weatherCard">
     <div class="card-label">FORECAST</div>
     <div class="weather-detail-grid" id="weatherGrid"></div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://weather.com/weather/today/l/34.27,-118.78')">Open Weather</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined'){try{Greg.launchApp('org.breezyweather')}catch(e){Greg.launchApp('com.weather.Weather')}}">Open Weather</div></div>
   </div>
   <!-- Greg suggestion -->
   <div class="interleave-card" id="suggestionCard">
@@ -304,7 +304,7 @@ var CFG = {
     </div>
     <div id="groceryItems"><div class="grocery-empty">Loading…</div></div>
     <div class="grocery-footer">
-      <div class="grocery-add-btn" onclick="openAddModal()">+ Add item</div>
+      <div style="display:flex;gap:6px;align-items:center"><input type="text" id="quickAddInput" placeholder="Add item..." style="flex:1;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')quickAddItem()"><div class="grocery-add-btn" onclick="quickAddItem()" style="padding:6px 12px;white-space:nowrap">Add</div><div class="grocery-add-btn" onclick="voiceAddItem()" style="padding:6px 10px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div></div>
     </div>
   </div>
 </div>
@@ -631,6 +631,23 @@ function fetchGrocery(){
     });
     c.innerHTML=h;
   }).catch(function(e){console.log('Grocery fetch failed:',e)});
+}
+function quickAddItem(){
+  var input=document.getElementById('quickAddInput');
+  var text=input.value.trim();
+  if(!text)return;
+  sbFetch('grocery_items',{method:'POST',body:JSON.stringify({list_id:activeListId,text:text,category:'Other',checked:false,added_by:'wall'})}).then(function(){input.value='';fetchGrocery()});
+}
+function voiceAddItem(){
+  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){document.getElementById('quickAddInput').placeholder='Voice not available';return;}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var rec=new SR();rec.lang='en-US';rec.interimResults=false;
+  var input=document.getElementById('quickAddInput');
+  input.placeholder='Listening...';input.style.borderColor='var(--greg)';
+  rec.onresult=function(e){input.value=e.results[0][0].transcript;input.placeholder='Add item...';input.style.borderColor='';};
+  rec.onerror=function(){input.placeholder='Add item...';input.style.borderColor='';};
+  rec.onend=function(){input.style.borderColor='';if(!input.value)input.placeholder='Add item...';};
+  rec.start();
 }
 function openAddModal(){
   document.getElementById('addModal').classList.add('open');
