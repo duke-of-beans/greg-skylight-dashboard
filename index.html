@@ -203,7 +203,15 @@ var CFG = {
   WEATHER_REFRESH: 1800000,
   GROCERY_REFRESH: 30000,
   CALENDAR_REFRESH: 300000,
-  PHOTO_REFRESH: 3600000
+  PHOTO_REFRESH: 3600000,
+  
+  // PLEXUS surface feed — replaces all individual API calls
+  PLEXUS_URL: 'https://plexus-production-0b42.up.railway.app',
+  PLEXUS_KEY: 'plx_greg_417ffbb673e176b6e4a35d5775cd7799',
+  PLEXUS_REFRESH: 120000, // 2 min — CORTEX greg suggestions cycle
+  
+  // WiFi printer (IPP)
+  PRINTER_URL: '' // e.g. 'http://192.168.2.XXX:631/ipp/print'
 };
 </script>
 
@@ -304,7 +312,7 @@ var CFG = {
     </div>
     <div id="groceryItems"><div class="grocery-empty">Loading…</div></div>
     <div class="grocery-footer">
-      <div style="display:flex;gap:6px;align-items:center"><input type="text" id="quickAddInput" placeholder="Add item..." style="flex:1;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')quickAddItem()"><div class="grocery-add-btn" onclick="quickAddItem()" style="padding:6px 12px;white-space:nowrap">Add</div><div class="grocery-add-btn" onclick="voiceAddItem()" style="padding:6px 10px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div></div>
+      <div style="display:flex;gap:6px;align-items:center;flex:1"><input type="text" id="quickAddInput" placeholder="Add item..." style="flex:1;padding:8px 10px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:12px;outline:none" onkeydown="if(event.key==='Enter')quickAddItem()"><div class="grocery-add-btn" onclick="quickAddItem()" style="padding:6px 12px;white-space:nowrap">Add</div><div class="grocery-add-btn" onclick="voiceAddItem()" style="padding:6px 10px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div><div class="grocery-add-btn" onclick="printGroceryList()" style="padding:6px 10px" title="Print list"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div></div>
     </div>
   </div>
 </div>
@@ -816,6 +824,171 @@ function fetchGregSuggestion(){
   });
 }
 fetchGregSuggestion(); setInterval(fetchGregSuggestion, 120000);
+
+// ═══════════════════════════════════════════
+// PLEXUS SURFACE FEED
+// Single endpoint replaces 7 separate API calls
+// ═══════════════════════════════════════════
+
+var plexusData = null;
+
+function fetchPlexusFeed() {
+  if (!CFG.PLEXUS_URL || !CFG.PLEXUS_KEY) return;
+  
+  fetch(CFG.PLEXUS_URL + '/v1/surfaces/wall', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + CFG.PLEXUS_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ lat: CFG.LAT, lon: CFG.LON })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    plexusData = data;
+    console.log('PLEXUS feed:', data._meta.latency_ms + 'ms,', 
+      Object.values(data._meta.sources).filter(function(s){return s==='ok'}).length + '/' + 
+      Object.keys(data._meta.sources).length + ' sources OK');
+    
+    // Air quality — NEW data source from PLEXUS
+    if (data.airQuality) {
+      renderAirQuality(data.airQuality);
+    }
+    
+    // Greg suggestions from CORTEX (replaces deterministic JS)
+    if (data.greg && data.greg.length) {
+      gregSuggestions = data.greg.map(function(g) { return g.text; });
+      gregIdx = 0;
+      document.getElementById('gregVoice').textContent = gregSuggestions[0];
+    }
+  })
+  .catch(function(e) { console.log('PLEXUS feed error:', e); });
+}
+
+function renderAirQuality(aq) {
+  // Add AQI badge to weather card if it exists
+  var weatherCard = document.getElementById('weatherCard');
+  if (!weatherCard) return;
+  var existing = document.getElementById('aqiBadge');
+  if (existing) existing.remove();
+  
+  var badge = document.createElement('div');
+  badge.id = 'aqiBadge';
+  badge.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:12px;padding:8px 12px;background:var(--bg3);border-radius:8px;font-size:12px';
+  badge.innerHTML = '<div style="width:8px;height:8px;border-radius:50%;background:' + aq.color + '"></div>' +
+    '<span style="color:var(--tx2)">Air Quality:</span> ' +
+    '<span style="color:var(--tx)">' + aq.label + '</span>' +
+    '<span style="color:var(--tx3)">(AQI ' + aq.us_aqi + ')</span>';
+  
+  weatherCard.appendChild(badge);
+}
+
+// Start PLEXUS feed — runs alongside existing fetches for now
+if (CFG.PLEXUS_URL && CFG.PLEXUS_KEY) {
+  setTimeout(fetchPlexusFeed, 3000); // Wait 3s for initial render
+  setInterval(fetchPlexusFeed, CFG.PLEXUS_REFRESH);
+}
+
+// ═══════════════════════════════════════════
+// PRINT GROCERY LIST
+// ═══════════════════════════════════════════
+
+function printGroceryList() {
+  // Get current list items from the rendered DOM
+  var items = [];
+  var listName = document.querySelector('.list-pick.active');
+  var title = listName ? listName.textContent : 'Grocery List';
+  
+  document.querySelectorAll('#groceryItems .grocery-item').forEach(function(el) {
+    var nameEl = el.querySelector('.grocery-name');
+    var isChecked = el.classList.contains('checked');
+    if (nameEl && !isChecked) {
+      items.push(nameEl.textContent.trim());
+    }
+  });
+  
+  if (!items.length) {
+    // Flash feedback
+    var btn = document.querySelector('[onclick="printGroceryList()"]');
+    if (btn) { btn.style.color = 'var(--tx3)'; setTimeout(function(){ btn.style.color = ''; }, 1000); }
+    return;
+  }
+  
+  // Build print-friendly HTML
+  var now = new Date();
+  var dateStr = (now.getMonth()+1) + '/' + now.getDate() + '/' + now.getFullYear();
+  
+  var printHtml = '<!DOCTYPE html><html><head><style>' +
+    'body{font-family:Arial,sans-serif;padding:20px;max-width:600px;margin:0 auto}' +
+    'h2{margin:0 0 4px;font-size:20px}' +
+    '.date{color:#666;font-size:12px;margin-bottom:16px}' +
+    '.item{padding:6px 0;border-bottom:1px solid #eee;font-size:14px;display:flex;align-items:center;gap:8px}' +
+    '.checkbox{width:14px;height:14px;border:1.5px solid #999;border-radius:2px;flex-shrink:0}' +
+    '</style></head><body>' +
+    '<h2>' + title + '</h2>' +
+    '<div class="date">' + dateStr + ' — ' + items.length + ' items</div>';
+  
+  items.forEach(function(item) {
+    printHtml += '<div class="item"><div class="checkbox"></div>' + item + '</div>';
+  });
+  
+  printHtml += '</body></html>';
+  
+  // Method 1: If WiFi printer URL is configured, send via IPP
+  if (CFG.PRINTER_URL) {
+    printViaIPP(printHtml, title);
+    return;
+  }
+  
+  // Method 2: Use window.print() via iframe (works in most WebViews)
+  var iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:600px;height:800px';
+  document.body.appendChild(iframe);
+  iframe.contentDocument.open();
+  iframe.contentDocument.write(printHtml);
+  iframe.contentDocument.close();
+  
+  setTimeout(function() {
+    try {
+      iframe.contentWindow.print();
+    } catch(e) {
+      // Fallback: use GregBridge if available (Android WebView)
+      if (typeof Greg !== 'undefined' && Greg.printHtml) {
+        Greg.printHtml(printHtml);
+      } else {
+        console.log('Print not available — no printer URL configured and window.print() failed');
+      }
+    }
+    setTimeout(function() { document.body.removeChild(iframe); }, 2000);
+  }, 500);
+}
+
+function printViaIPP(html, title) {
+  // Send print job to WiFi printer via a Supabase edge function proxy
+  // (IPP from browser is blocked by CORS — needs server-side relay)
+  fetch(CFG.SUPABASE_URL + '/functions/v1/print-proxy', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + CFG.SUPABASE_ANON,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      printer_url: CFG.PRINTER_URL,
+      html: html,
+      title: title
+    })
+  })
+  .then(function(r) {
+    if (r.ok) {
+      // Flash success
+      var btn = document.querySelector('[onclick="printGroceryList()"]');
+      if (btn) { btn.style.color = '#00e400'; setTimeout(function(){ btn.style.color = ''; }, 2000); }
+    } else {
+      console.log('Print proxy failed:', r.status);
+    }
+  })
+  .catch(function(e) { console.log('Print error:', e); });
+}
 </script>
 
 </body>
