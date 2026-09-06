@@ -54,8 +54,17 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .cal-day.today{background:var(--greg-bg);color:var(--greg);font-weight:500}
 .cal-day.has-event{color:var(--tx)}
 .cal-day.has-event::after{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--greg);margin:0 auto}
+.cal-day.has-birthday::after{background:#D4A84B !important}
+.cal-day.has-holiday::after{background:#7B8EC4 !important}
+.cal-day.has-work::after{background:#6B8E7B !important}
 .cal-dow{font-size:10px;color:var(--tx-m);font-weight:500;padding:2px 0;letter-spacing:0.05em}
 .cal-other{color:var(--tx-m);opacity:0.4}
+
+.cal-type-birthday .cal-dot{background:#D4A84B !important}
+.cal-type-work .cal-dot{background:#6B8E7B !important}
+.cal-type-holiday .cal-dot{background:#7B8EC4 !important}
+.cal-type-general .cal-dot{background:var(--greg) !important}
+.cal-type-birthday .cal-name{color:#D4A84B}
 
 /* ═══ Calendar card ═══ */
 .cal-event{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2)}
@@ -491,7 +500,7 @@ function buildCalGrid(eventDays){
   for(var d=1;d<=days;d++){
     var cls='cal-day';
     if(d===now.getDate()) cls+=' today';
-    if(eventDays && eventDays.indexOf(d)>-1) cls+=' has-event';
+    if(eventDays && eventDays.indexOf(d)>-1){cls+=' has-event';if(window._eventTypes&&window._eventTypes[d])cls+=' has-'+window._eventTypes[d];}
     html+='<div class="'+cls+'">'+d+'</div>';
   }
   var total=first+days;
@@ -518,6 +527,8 @@ function fetchCalendar(){
         var s=ev.start.dateTime||ev.start.date;
         var day=new Date(s).getDate();
         if(eventDays.indexOf(day)===-1)eventDays.push(day);
+        if(!window._eventTypes)window._eventTypes={};
+        window._eventTypes[day]=ev.event_type||'general';
       });
       done();
     }).catch(function(){done()});
@@ -530,19 +541,21 @@ function fetchCalendar(){
   });
   // Also fetch family events from Supabase
   pending++;
-  fetch(CFG.SUPABASE_URL+'/rest/v1/family_events?event_date=gte.'+monthStart.split('T')[0]+'&event_date=lte.'+monthEnd.split('T')[0]+'&order=event_date.asc,event_time.asc',
+  fetch(CFG.SUPABASE_URL+'/rest/v1/family_events?select=*&event_date=gte.'+monthStart.split('T')[0]+'&event_date=lte.'+monthEnd.split('T')[0]+'&order=event_date.asc,event_time.asc',
     {headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
   .then(function(r){return r.json()}).then(function(items){
     if(!items||!items.length){done();return;}
     items.forEach(function(ev){
       var day=new Date(ev.event_date+'T12:00:00').getDate();
       if(eventDays.indexOf(day)===-1)eventDays.push(day);
+        if(!window._eventTypes)window._eventTypes={};
+        window._eventTypes[day]=ev.event_type||'general';
       // Add today's events to the list
       var evDate=ev.event_date;
       var todayStr=now.toISOString().split('T')[0];
       if(evDate===todayStr){
         var start=ev.all_day?ev.event_date:(ev.event_date+'T'+ev.event_time);
-        allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2});
+        allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2,eventType:ev.event_type||'general'});
       }
     });
     done();
@@ -557,8 +570,9 @@ function renderCalendar(events){
   c.innerHTML=events.map(function(ev){
     var t='All day';
     if(ev.start.indexOf('T')>-1){var d=new Date(ev.start);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
-    var colors=['var(--david)','var(--angela)','var(--greg)'];
-    return '<div class="cal-event"><div class="cal-dot" style="background:'+colors[ev.calIndex%3]+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
+    var typeColors={'birthday':'#D4A84B','work':'#6B8E7B','holiday':'#7B8EC4','general':'var(--greg)'};
+    var evColor=typeColors[ev.eventType||'general']||'var(--greg)';
+    return '<div class="cal-event cal-type-'+(ev.eventType||'general')+'"><div class="cal-dot" style="background:'+evColor+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
   }).join('');
 }
 
@@ -586,7 +600,7 @@ function switchList(el){
 }
 
 function fetchGrocery(){
-  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,name.asc',{headers:{'apikey':CFG.SUPABASE_KEY,'Authorization':'Bearer '+CFG.SUPABASE_KEY}})
+  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,text.asc',{headers:{'apikey':CFG.SUPABASE_KEY,'Authorization':'Bearer '+CFG.SUPABASE_KEY}})
   .then(function(r){return r.json()}).then(function(items){
     var c=document.getElementById('groceryItems');
     if(!items||!items.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:8px 0">List is empty</div>';return;}
@@ -602,13 +616,47 @@ function fetchGrocery(){
       cats[cat].forEach(function(it){
         h+='<div class="grocery-item'+(it.checked?' checked':'')+'" data-id="'+it.id+'" data-checked="'+(!it.checked)+'">';
         h+='<div class="grocery-check">'+(it.checked?'✓':'')+'</div>';
-        h+='<div class="grocery-name">'+it.name+(it.quantity?' <span style=\"color:var(--tx3)\">x'+it.quantity+'</span>':'')+'</div>';
+        h+='<div class="grocery-name">'+(it.text||it.name||'?')+(it.quantity?' <span style=\"color:var(--tx3)\">x'+it.quantity+'</span>':'')+'</div>';
         h+='</div>';
       });
     });
     c.innerHTML=h;
   }).catch(function(e){console.log('Grocery fetch failed:',e)});
 }
+function openAddModal(){
+  document.getElementById('addModal').classList.add('open');
+  var input = document.querySelector('#addModal input');
+  if(input){input.value='';input.focus();}
+}
+function closeAddModal(){
+  document.getElementById('addModal').classList.remove('open');
+}
+function saveNewItem(){
+  var input = document.querySelector('#addModal input');
+  var text = input ? input.value.trim() : '';
+  if(!text) return;
+  var catEl = document.querySelector('.modal-cat.sel');
+  var cat = catEl ? catEl.getAttribute('data-cat') : 'Other';
+  sbFetch('grocery_items',{
+    method:'POST',
+    body:JSON.stringify({list_id:activeListId,text:text,category:cat,checked:false,added_by:'wall'})
+  }).then(function(){closeAddModal();fetchGrocery()});
+}
+function toggleGroceryItem(id, checked){
+  sbFetch('grocery_items?id=eq.'+id,{
+    method:'PATCH',
+    body:JSON.stringify({checked:checked})
+  }).then(function(){fetchGrocery()});
+}
+
+// Category picker
+document.querySelectorAll('.modal-cat').forEach(function(el){
+  el.addEventListener('click',function(){
+    document.querySelectorAll('.modal-cat').forEach(function(c){c.classList.remove('sel')});
+    this.classList.add('sel');
+  });
+});
+
 // Grocery item click via delegation
 document.getElementById('groceryItems').addEventListener('click',function(e){
   var item=e.target.closest('.grocery-item');
