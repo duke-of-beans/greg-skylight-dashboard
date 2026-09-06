@@ -210,8 +210,11 @@ var CFG = {
   PLEXUS_KEY: 'plx_greg_417ffbb673e176b6e4a35d5775cd7799',
   PLEXUS_REFRESH: 120000, // 2 min — CORTEX greg suggestions cycle
   
-  // WiFi printer (IPP)
-  PRINTER_URL: '' // e.g. 'http://192.168.2.XXX:631/ipp/print'
+  // WiFi printer — Epson XP-4200
+  // For Greg-commanded printing, use Sentinel relay (LAN accessible)
+  // For dashboard button, use window.print() → Android print framework → Epson
+  PRINTER_URL: '', // Set to printer IP once connected, e.g. 'http://192.168.2.XX'
+  SENTINEL_PRINT_URL: 'http://100.82.64.110:8090/print' // Tailscale, Sentinel relay
 };
 </script>
 
