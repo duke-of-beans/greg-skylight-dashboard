@@ -547,63 +547,7 @@ function fetchCalendar(){
   });
 }
 // Calendar card tap → full screen
-var calFullOffset=0,calFullEvents={};
-document.getElementById('calendarCard').addEventListener('click',function(){
-  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('https://calendar.google.com');
-});
-
-function openCalFull(){
-  calFullOffset=0;
-  buildCalFull();
-  document.getElementById('calFullscreen').classList.add('open');
-}
-function closeCalFull(){document.getElementById('calFullscreen').classList.remove('open')}
-function calNav(dir){calFullOffset+=dir;buildCalFull()}
-
-function buildCalFull(){
-  var now=new Date(),y=now.getFullYear(),m=now.getMonth()+calFullOffset;
-  var d=new Date(y,m,1);y=d.getFullYear();m=d.getMonth();
-  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calFullMonth').textContent=months[m]+' '+y;
-  var grid=document.getElementById('calFullGrid');
-  var dows=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  var h=dows.map(function(d){return '<div class="cal-dow" style="font-size:12px;padding:8px 0">'+d+'</div>'}).join('');
-  var first=new Date(y,m,1).getDay();
-  var days=new Date(y,m+1,0).getDate();
-  var prevDays=new Date(y,m,0).getDate();
-  for(var i=first-1;i>=0;i--) h+='<div class="cal-full-day cal-other">'+(prevDays-i)+'</div>';
-  var today=now.getDate(),isThisMonth=(calFullOffset===0);
-  for(var dd=1;dd<=days;dd++){
-    var cls='cal-full-day';
-    if(isThisMonth && dd===today) cls+=' today';
-    h+='<div class="'+cls+'" data-day="'+dd+'" onclick="selectCalDay('+dd+')">'+dd+'</div>';
-  }
-  var total=first+days;
-  for(var i=1;total%7!==0;i++,total++) h+='<div class="cal-full-day cal-other">'+i+'</div>';
-  grid.innerHTML=h;
-  document.getElementById('calFullEvents').innerHTML='<div style="color:var(--tx3)">Tap a day to see events</div>';
-  // Fetch month events
-  if(CFG.GOOGLE_API_KEY && CFG.CALENDAR_IDS.length){
-    var ms=new Date(y,m,1).toISOString(),me=new Date(y,m+1,0,23,59,59).toISOString();
-    calFullEvents={};
-    CFG.CALENDAR_IDS.forEach(function(calId){
-      fetch('https://www.googleapis.com/calendar/v3/calendars/'+encodeURIComponent(calId)+'/events?timeMin='+encodeURIComponent(ms)+'&timeMax='+encodeURIComponent(me)+'&singleEvents=true&orderBy=startTime&maxResults=100&key='+CFG.GOOGLE_API_KEY)
-      .then(function(r){return r.json()}).then(function(d){
-        if(!d.items)return;
-        d.items.forEach(function(ev){
-          var day=new Date(ev.start.dateTime||ev.start.date).getDate();
-          if(!calFullEvents[day])calFullEvents[day]=[];
-          calFullEvents[day].push(ev);
-          var el=grid.querySelector('[data-day="'+day+'"]');
-          if(el&&!el.classList.contains('has-event'))el.classList.add('has-event');
-        });
-      }).catch(function(){});
-    });
-  }
-}
-
-function selectCalDay(day){
-  document.querySelectorAll('.cal-full-day.selected').forEach(function(e){e.classList.remove('selected')});
+);
   var el=document.querySelector('.cal-full-day[data-day="'+day+'"]');
   if(el)el.classList.add('selected');
   var evs=calFullEvents[day];
@@ -613,6 +557,18 @@ function selectCalDay(day){
     var t='All day';
     if(ev.start.dateTime){var d=new Date(ev.start.dateTime);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
     return '<div class="cal-event"><div class="cal-dot" style="background:var(--greg);height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div class="cal-where">'+ev.location+'</div>':'')+'</div></div>';
+  }).join('');
+}
+
+function renderCalendar(events){
+  var c=document.getElementById('calendarEvents');
+  if(!events||!events.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:4px 0">Nothing scheduled today</div>';return;}
+  events.sort(function(a,b){return a.start>b.start?1:-1});
+  c.innerHTML=events.map(function(ev){
+    var t='All day';
+    if(ev.start.indexOf('T')>-1){var d=new Date(ev.start);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
+    var colors=['var(--david)','var(--angela)','var(--greg)'];
+    return '<div class="cal-event"><div class="cal-dot" style="background:'+colors[ev.calIndex%3]+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
   }).join('');
 }
 
@@ -752,23 +708,5 @@ function fetchGregSuggestion(){
 fetchGregSuggestion(); setInterval(fetchGregSuggestion, 120000);
 </script>
 
-<!-- Full-screen calendar overlay -->
-<div class="modal-overlay" id="calFullscreen">
-  <div style="background:var(--bg);width:100vw;height:100vh;padding:32px 48px;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-      <div style="display:flex;align-items:center;gap:16px">
-        <div class="nav-month-btn" onclick="calNav(-1)">◀</div>
-        <div id="calFullMonth" style="font-family:var(--fg);font-size:28px;color:var(--tx)"></div>
-        <div class="nav-month-btn" onclick="calNav(1)">▶</div>
-      </div>
-      <div class="grocery-add-btn" onclick="closeCalFull()" style="font-size:14px;padding:8px 20px">Close</div>
-    </div>
-    <div id="calFullGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:14px;text-align:center"></div>
-    <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px">
-      <div style="font-family:var(--fu);font-size:13px;color:var(--tx3);margin-bottom:12px">EVENTS FOR SELECTED DAY</div>
-      <div id="calFullEvents" style="font-size:14px;color:var(--tx3)">Tap a day to see events</div>
-    </div>
-  </div>
-</div>
 </body>
 </html>
