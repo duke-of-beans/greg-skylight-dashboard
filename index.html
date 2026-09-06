@@ -392,7 +392,7 @@ function fetchPhotos(){
     cur = 0;
   }).catch(function(e){console.log('Photo fetch failed:',e)});
 }
-fetchPhotos(); setInterval(fetchPhotos, CFG.PHOTO_REFRESH);
+fetchPhotos(); if(!CFG.PLEXUS_KEY) setInterval(fetchPhotos, CFG.PHOTO_REFRESH);
 
 // ═══════════════════════════════════════════
 // FULLSCREEN
@@ -499,7 +499,7 @@ function fetchWeather(){
     }
   }).catch(function(){});
 }
-fetchWeather(); setInterval(fetchWeather, CFG.WEATHER_REFRESH);
+fetchWeather(); if(!CFG.PLEXUS_KEY) setInterval(fetchWeather, CFG.WEATHER_REFRESH);
 
 // ═══════════════════════════════════════════
 // GOOGLE CALENDAR
@@ -596,7 +596,7 @@ function renderCalendar(events){
   }).join('');
 }
 
-fetchCalendar(); setInterval(fetchCalendar, CFG.CALENDAR_REFRESH);
+fetchCalendar(); if(!CFG.PLEXUS_KEY) setInterval(fetchCalendar, CFG.CALENDAR_REFRESH);
 
 // ═══════════════════════════════════════════
 // SUPABASE GROCERY LIST
@@ -703,7 +703,7 @@ document.getElementById('groceryItems').addEventListener('click',function(e){
   if(id)toggleGroceryItem(id,checked);
 });
 
-fetchGrocery(); setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
+fetchGrocery(); if(!CFG.PLEXUS_KEY) setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
 
 // ═══════════════════════════════════════════
 // SPOTIFY NOW PLAYING
@@ -730,7 +730,7 @@ function fetchSpotify(){
     }).join('');
   }).catch(function(){});
 }
-fetchSpotify(); setInterval(fetchSpotify, CFG.SPOTIFY_REFRESH);
+fetchSpotify(); if(!CFG.PLEXUS_KEY) setInterval(fetchSpotify, CFG.SPOTIFY_REFRESH);
 
 // ═══════════════════════════════════════════
 // COMMUTE TIMES (Distance Matrix API)
@@ -742,7 +742,7 @@ function fetchCommute(){
     return '<div class="commute-row"><div class="commute-icon">'+dest.icon+'</div><div class="commute-name">'+dest.name+'</div><div><div class="commute-time">'+dest.estimate+'</div><div class="commute-dist">'+dest.distance+'</div></div></div>';
   }).join('');
 }
-fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
+fetchCommute(); if(!CFG.PLEXUS_KEY) setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
 // ═══════════════════════════════════════════
 // GREG SUGGESTIONS (CORTEX)
@@ -826,7 +826,7 @@ function fetchGregSuggestion(){
     gregIdx = (gregIdx+1) % gregSuggestions.length;
   });
 }
-fetchGregSuggestion(); setInterval(fetchGregSuggestion, 120000);
+fetchGregSuggestion(); if(!CFG.PLEXUS_KEY) setInterval(fetchGregSuggestion, 120000);
 
 // ═══════════════════════════════════════════
 // PLEXUS SURFACE FEED
@@ -879,8 +879,34 @@ function fetchPlexusFeed() {
     // Greg suggestions from CORTEX (replaces deterministic JS)
     if (data.greg && data.greg.length) {
       gregSuggestions = data.greg.map(function(g) { return g.text; });
+      
+      // Add extras to the suggestion rotation
+      if (data.extras) {
+        if (data.extras.quote) {
+          gregSuggestions.push('"' + data.extras.quote.text + '" — ' + data.extras.quote.author);
+        }
+        if (data.extras.meal_idea) {
+          var m = data.extras.meal_idea;
+          gregSuggestions.push('Dinner idea: ' + m.name + ' (' + m.area + ' ' + m.category.toLowerCase() + ')');
+        }
+      }
+      
       gregIdx = 0;
       document.getElementById('gregVoice').textContent = gregSuggestions[0];
+    }
+    
+    // NASA APOD — add to photo slideshow if it's an image
+    if (data.extras && data.extras.nasa_apod && data.extras.nasa_apod.media_type === 'image') {
+      var layer = document.getElementById('photoLayer');
+      var existing = document.getElementById('apodSlide');
+      if (!existing && layer) {
+        var apodDiv = document.createElement('div');
+        apodDiv.id = 'apodSlide';
+        apodDiv.className = 'photo-slide';
+        apodDiv.style.backgroundImage = 'url(' + data.extras.nasa_apod.url + ')';
+        layer.appendChild(apodDiv);
+        slides = layer.querySelectorAll('.photo-slide');
+      }
     }
   })
   .catch(function(e) { console.log('PLEXUS feed error:', e); });
