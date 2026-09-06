@@ -31,8 +31,8 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 
 /* ═══ Interleave cards ═══ */
 .card-layer{position:absolute;top:0;right:0;bottom:80px;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
-.interleave-card{position:absolute;right:40px;width:360px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:auto}
-.interleave-card.active{opacity:1;transform:translateX(0)}
+.interleave-card{position:absolute;right:40px;width:360px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:none}
+.interleave-card.active{opacity:1;transform:translateX(0);pointer-events:auto}
 .interleave-card::-webkit-scrollbar{display:none}
 .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.05em;margin-bottom:12px}
 .card-title{font-family:var(--fg);font-size:20px;font-weight:400;color:var(--tx);margin-bottom:16px}
