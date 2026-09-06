@@ -264,7 +264,7 @@ var CFG = {
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchApp('com.google.android.calendar')">Open Calendar</div></div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center"><div class="grocery-add-btn" onclick="openAddEventModal()">+ Add Event</div><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchApp('com.google.android.calendar')">Open Calendar</div></div>
   </div>
   <!-- Weather detail -->
   <div class="interleave-card" id="weatherCard">
@@ -342,6 +342,28 @@ var CFG = {
     <div class="modal-btns">
       <div class="modal-btn cancel" onclick="closeAddModal()">Cancel</div>
       <div class="modal-btn save" onclick="saveNewItem()">Add</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Add event modal ═══ -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal">
+    <h3>Add Calendar Event</h3>
+    <input type="text" id="eventTitle" placeholder="Event title" autocomplete="off">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input type="date" id="eventDate" style="flex:1;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--tx);font-family:var(--fu);font-size:14px;outline:none;color-scheme:dark">
+      <input type="time" id="eventTime" style="width:120px;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--tx);font-family:var(--fu);font-size:14px;outline:none;color-scheme:dark" placeholder="Time (optional)">
+    </div>
+    <div class="modal-cats" id="eventTypePicker">
+      <div class="modal-cat sel" data-type="general" onclick="pickEventType(this)">General</div>
+      <div class="modal-cat" data-type="birthday" onclick="pickEventType(this)">Birthday</div>
+      <div class="modal-cat" data-type="work" onclick="pickEventType(this)">Work</div>
+      <div class="modal-cat" data-type="holiday" onclick="pickEventType(this)">Holiday</div>
+    </div>
+    <div class="modal-btns">
+      <div class="modal-btn cancel" onclick="closeEventModal()">Cancel</div>
+      <div class="modal-btn save" onclick="saveNewEvent()">Add Event</div>
     </div>
   </div>
 </div>
@@ -934,6 +956,53 @@ function renderAirQuality(aq) {
 if (CFG.PLEXUS_URL && CFG.PLEXUS_KEY) {
   setTimeout(fetchPlexusFeed, 3000); // Wait 3s for initial render
   setInterval(fetchPlexusFeed, CFG.PLEXUS_REFRESH);
+}
+
+// ═══════════════════════════════════════════
+// ADD EVENT MODAL
+// ═══════════════════════════════════════════
+
+function openAddEventModal() {
+  var modal = document.getElementById('eventModal');
+  modal.classList.add('open');
+  document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('eventTitle').value = '';
+  document.getElementById('eventTime').value = '';
+  setTimeout(function(){ document.getElementById('eventTitle').focus(); }, 100);
+}
+
+function closeEventModal() {
+  document.getElementById('eventModal').classList.remove('open');
+}
+
+function pickEventType(el) {
+  document.querySelectorAll('#eventTypePicker .modal-cat').forEach(function(c) { c.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+function saveNewEvent() {
+  var title = document.getElementById('eventTitle').value.trim();
+  var date = document.getElementById('eventDate').value;
+  var time = document.getElementById('eventTime').value || null;
+  var typeEl = document.querySelector('#eventTypePicker .modal-cat.sel');
+  var eventType = typeEl ? typeEl.getAttribute('data-type') : 'general';
+  if (!title || !date) return;
+
+  // Save to Supabase family_events (wall display)
+  sbFetch('family_events', {
+    method: 'POST',
+    body: JSON.stringify({ title: title, event_date: date, event_time: time, all_day: !time, person: 'family', event_type: eventType })
+  }).then(function() {
+    closeEventModal();
+    fetchCalendar();
+  });
+
+  // Also write to Google Calendar if OAuth is configured (best-effort)
+  fetch(CFG.SUPABASE_URL + '/functions/v1/calendar-auth?action=write', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: title, date: date, time: time })
+  }).catch(function() {});
 }
 
 // ═══════════════════════════════════════════
