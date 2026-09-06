@@ -46,6 +46,9 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .cal-full-day.has-event::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--greg);margin:2px auto 0}
 .cal-full-day.selected{background:var(--bg3);border:1px solid var(--border)}
 
+.list-pick{padding:6px 14px;border-radius:100px;font-size:12px;font-family:var(--fu);color:var(--tx3);border:1px solid var(--border2);cursor:pointer;transition:all 0.2s}
+.list-pick.active{background:var(--greg-bg);color:var(--greg);border-color:var(--greg)}
+
 /* ═══ Calendar grid ═══ */
 .cal-day{padding:4px 0;border-radius:6px;color:var(--tx3);font-family:var(--fu);line-height:1.8}
 .cal-day.today{background:var(--greg-bg);color:var(--greg);font-weight:500}
@@ -280,7 +283,11 @@ var CFG = {
   </div>
   <!-- Grocery list -->
   <div class="interleave-card" id="groceryCard">
-    <div class="card-label">GROCERY LIST</div>
+    <div class="card-label">GROCERY LISTS</div>
+    <div id="groceryPicker" style="display:flex;gap:8px;margin-bottom:12px">
+      <div class="list-pick active" data-list="1ab282d8-e849-4543-8410-0203ecacba83" onclick="switchList(this)">Angela & David</div>
+      <div class="list-pick" data-list="86c871c3-821f-4af7-b729-4440b7895a16" onclick="switchList(this)">Grammy</div>
+    </div>
     <div id="groceryItems"><div class="grocery-empty">Loading…</div></div>
     <div class="grocery-footer">
       <div class="grocery-add-btn" onclick="openAddModal()">+ Add item</div>
@@ -541,11 +548,9 @@ function fetchCalendar(){
 }
 // Calendar card tap → full screen
 var calFullOffset=0,calFullEvents={};
-document.getElementById('calendarCard').addEventListener('touchend',function(e){
-  if(e.target.closest('.nav-btn'))return;
-  openCalFull();
+document.getElementById('calendarCard').addEventListener('click',function(){
+  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('https://calendar.google.com');
 });
-document.getElementById('calendarCard').addEventListener('click',function(){openCalFull()});
 
 function openCalFull(){
   calFullOffset=0;
@@ -626,66 +631,38 @@ function sbFetch(path, opts){
   return fetch(CFG.SUPABASE_URL+'/rest/v1/'+path, Object.assign({},{headers:headers},opts));
 }
 
+var activeListId = '1ab282d8-e849-4543-8410-0203ecacba83';
+function switchList(el){
+  document.querySelectorAll('.list-pick').forEach(function(p){p.classList.remove('active')});
+  el.classList.add('active');
+  activeListId = el.getAttribute('data-list');
+  fetchGrocery();
+}
+
 function fetchGrocery(){
-  // Get default list
-  sbFetch('grocery_lists?archived=eq.false&order=created_at.asc&limit=1',{headers:{'Accept':'application/json'}})
-  .then(function(r){return r.json()}).then(function(lists){
-    if(!lists.length) return;
-    groceryListId = lists[0].id;
-    return sbFetch('grocery_items?list_id=eq.'+groceryListId+'&order=checked.asc,sort_order.asc,created_at.desc',{headers:{'Accept':'application/json'}});
-  }).then(function(r){if(r) return r.json()}).then(function(items){
-    if(!items) return;
-    groceryData = items;
-    renderGrocery();
-  }).catch(function(){});
+  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,name.asc',{headers:{'apikey':CFG.SUPABASE_KEY,'Authorization':'Bearer '+CFG.SUPABASE_KEY}})
+  .then(function(r){return r.json()}).then(function(items){
+    var c=document.getElementById('groceryItems');
+    if(!items||!items.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:8px 0">List is empty</div>';return;}
+    var cats={};
+    items.forEach(function(it){
+      var cat=it.category||'Other';
+      if(!cats[cat])cats[cat]=[];
+      cats[cat].push(it);
+    });
+    var h='';
+    Object.keys(cats).forEach(function(cat){
+      h+='<div style="font-size:11px;color:var(--tx-m);margin:8px 0 4px;text-transform:uppercase;letter-spacing:0.05em">'+cat+'</div>';
+      cats[cat].forEach(function(it){
+        h+='<div class="grocery-item'+(it.checked?' checked':'')+'" onclick="toggleGroceryItem(''+it.id+'','+(!it.checked)+')">';
+        h+='<div class="grocery-check">'+(it.checked?'✓':'')+'</div>';
+        h+='<div class="grocery-name">'+it.name+(it.quantity?' <span style=\"color:var(--tx3)\">x'+it.quantity+'</span>':'')+'</div>';
+        h+='</div>';
+      });
+    });
+    c.innerHTML=h;
+  }).catch(function(e){console.log('Grocery fetch failed:',e)});
 }
-
-function renderGrocery(){
-  var container = document.getElementById('groceryItems');
-  if(!groceryData.length){
-    container.innerHTML='<div class="grocery-empty">List is empty — tap + to add</div>';
-    return;
-  }
-  container.innerHTML = groceryData.map(function(item){
-    var checked = item.checked;
-    return '<div class="grocery-item" data-id="'+item.id+'"><div class="grocery-check'+(checked?' checked':'')+'" onclick="toggleItem(\''+item.id+'\','+(!checked)+')"></div><div class="grocery-text'+(checked?' checked':'')+'">'+item.text+'</div>'+(item.category&&item.category!=='other'?'<div class="grocery-cat">'+item.category+'</div>':'')+'</div>';
-  }).join('');
-}
-
-function toggleItem(id, checked){
-  var body = {checked:checked};
-  if(checked) body.checked_at = new Date().toISOString();
-  sbFetch('grocery_items?id=eq.'+id,{method:'PATCH',body:JSON.stringify(body),headers:{'Prefer':'return=minimal'}})
-  .then(function(){fetchGrocery()});
-}
-
-// Add item modal
-var selectedCat = 'other';
-document.querySelectorAll('.modal-cat').forEach(function(el){
-  el.addEventListener('click',function(){
-    document.querySelectorAll('.modal-cat').forEach(function(e){e.classList.remove('sel')});
-    el.classList.add('sel');
-    selectedCat = el.dataset.cat;
-  });
-});
-
-function openAddModal(){
-  document.getElementById('addModal').classList.add('open');
-  setTimeout(function(){document.getElementById('newItemText').focus()},100);
-}
-function closeAddModal(){
-  document.getElementById('addModal').classList.remove('open');
-  document.getElementById('newItemText').value='';
-}
-function saveNewItem(){
-  var text = document.getElementById('newItemText').value.trim();
-  if(!text || !groceryListId) return;
-  sbFetch('grocery_items',{method:'POST',body:JSON.stringify({list_id:groceryListId,text:text,category:selectedCat,added_by:'wall'}),headers:{'Prefer':'return=minimal'}})
-  .then(function(){closeAddModal();fetchGrocery()});
-}
-// Enter key in input
-document.getElementById('newItemText').addEventListener('keydown',function(e){if(e.key==='Enter')saveNewItem()});
-
 fetchGrocery(); setInterval(fetchGrocery, CFG.GROCERY_REFRESH);
 
 // ═══════════════════════════════════════════
@@ -736,6 +713,9 @@ function fetchCommute(){
     }).join('');
   }).catch(function(){});
 }
+document.getElementById('commuteCard').addEventListener('click',function(){
+  if(typeof Greg!=='undefined'&&Greg.launchUrl) Greg.launchUrl('https://maps.google.com');
+});
 fetchCommute(); setInterval(fetchCommute, CFG.COMMUTE_REFRESH);
 
 // ═══════════════════════════════════════════
