@@ -253,21 +253,23 @@ var CFG = {
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
-    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com/calendar/')">Open Calendar</div></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://calendar.google.com/calendar/r')">Open Calendar</div></div>
   </div>
   <!-- Weather detail -->
   <div class="interleave-card" id="weatherCard">
     <div class="card-label">FORECAST</div>
     <div class="weather-detail-grid" id="weatherGrid"></div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(typeof Greg!=='undefined')Greg.launchUrl('https://weather.com/weather/today/l/34.27,-118.78')">Open Weather</div></div>
   </div>
   <!-- Greg suggestion -->
   <div class="interleave-card" id="suggestionCard">
     <div class="card-label" style="color:var(--greg)">GREG</div>
     <div class="greg-voice" id="gregVoice">Thinking about what matters today…</div>
     <div class="greg-attr">— Greg</div>
+    <div style="margin-top:12px;text-align:center"><div class="grocery-add-btn" onclick="if(gregSuggestions.length>1){gregIdx=(gregIdx+1)%gregSuggestions.length;document.getElementById('gregVoice').textContent=gregSuggestions[gregIdx];}">Next thought</div></div>
   </div>
   <!-- Media launcher -->
-  <div class="interleave-card" id="mediaCard" style="pointer-events:auto">
+  <div class="interleave-card" id="mediaCard">
     <div class="card-label">WATCH</div>
     <div class="media-grid" id="mediaGrid">
       <div class="media-btn" data-pkg="com.netflix.mediaclient"><div class="media-icon" style="background:#E50914"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 2v20l7-7 7 7V2H5z" fill="none" stroke="#fff" stroke-width="0"/><path d="M6 3h3v18l-3-3V3z" fill="#fff"/><path d="M15 3h3v18l-3-3V3z" fill="#fff"/><path d="M6 3l12 18h-3L3 3h3z" fill="#fff"/></svg></div><div class="media-name">Netflix</div></div>
@@ -400,6 +402,13 @@ document.addEventListener('touchstart',function(e){
   if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
   paused=true;pi.classList.add('visible');
 },{passive:true});
+// Tap outside card = close it
+document.addEventListener('click',function(e){
+  if(activeCard && !e.target.closest('.interleave-card') && !e.target.closest('.nav-bar') && !e.target.closest('.nav-btn') && !e.target.closest('.modal-overlay')){
+    showCard(null);
+  }
+});
+
 document.addEventListener('touchend',function(e){
   if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
   paused=false;pi.classList.remove('visible');
@@ -612,7 +621,7 @@ function fetchGrocery(){
     });
     var h='';
     Object.keys(cats).forEach(function(cat){
-      h+='<div style="font-size:11px;color:var(--tx-m);margin:8px 0 4px;text-transform:uppercase;letter-spacing:0.05em">'+cat+'</div>';
+      h+='<div style="font-size:10px;color:var(--tx-m);margin:6px 0 3px;text-transform:uppercase;letter-spacing:0.05em">'+cat+'</div>';
       cats[cat].forEach(function(it){
         h+='<div class="grocery-item'+(it.checked?' checked':'')+'" data-id="'+it.id+'" data-checked="'+(!it.checked)+'">';
         h+='<div class="grocery-check">'+(it.checked?'✓':'')+'</div>';
