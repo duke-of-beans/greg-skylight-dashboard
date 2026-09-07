@@ -34,7 +34,14 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 /* ═══ Interleave cards ═══ */
 .card-layer{position:absolute;top:0;right:0;bottom:80px;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
 .interleave-card{position:absolute;right:40px;width:360px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:none}
-.interleave-card.active{opacity:1;transform:translateX(0);pointer-events:auto}
+/* Opening something is the personal zone (Vogel & Balakrishnan): someone is
+   standing at the wall, not reading it from across the room. A floating box
+   with 28px text was tuned for the glance distance, not the up-close working
+   distance -- it read as cramped and half-clipped. Any actively-opened card
+   now takes the whole screen: real width for multi-column content, smaller
+   (still touch-friendly) text because the reader is three feet away, not ten. */
+.interleave-card.active{position:fixed;inset:0;right:0;width:100%;max-height:100%;height:100%;border-radius:0;padding:40px 56px 32px;opacity:1;transform:none;transition:opacity .35s ease;pointer-events:auto;z-index:50;background:rgba(20,17,14,.97);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+body.card-open .persistent-overlay{opacity:0;pointer-events:none;transition:opacity .2s ease}
 .interleave-card::-webkit-scrollbar{display:none}
 .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.05em;margin-bottom:12px}
 .card-title{font-family:var(--fg);font-size:20px;font-weight:400;color:var(--tx);margin-bottom:16px}
@@ -116,45 +123,51 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 
 /* ═══ Grocery card ═══ */
 /* ═══ Grocery — the list a kitchen wall deserves (spec: docs/ux-graph, WG-18/19/38/39) ═══ */
-#groceryCard.interleave-card{width:600px;padding:24px 28px 20px}
-#groceryCard .list-pick{font-size:15px;padding:8px 16px;min-height:40px;display:flex;align-items:center}
-.g-head{display:flex;align-items:baseline;gap:12px;margin:2px 0 8px;flex-wrap:wrap}
-.g-count{font-family:var(--fg);font-size:44px;line-height:1;color:var(--tx)}
-.g-count-sub{font-family:var(--fu);font-size:16px;color:var(--tx2)}
-.g-sec{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2);margin:16px 0 2px}
-.g-tray-label{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);margin:14px 0 6px}
-.g-tray{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
-.g-chip{border:1px solid var(--border);border-radius:100px;padding:10px 18px;font-size:20px;min-height:56px;display:flex;align-items:center;color:var(--tx);background:var(--bg2)}
+/* Full-screen personal-zone retune (2026-09-07): the floating 600px/28px box read
+   as cramped and clipped items off-screen. Full screen + smaller text + real
+   multi-column flow uses the space the wall actually has. */
+#groceryCard.interleave-card{display:flex;flex-direction:column}
+#groceryCard .list-pick{font-size:16px;padding:9px 18px;min-height:44px;display:flex;align-items:center}
+.g-body{flex:1;min-height:0;overflow-y:auto;max-width:1400px}
+.g-head{display:flex;align-items:baseline;gap:14px;margin:4px 0 14px;flex-wrap:wrap}
+.g-count{font-family:var(--fg);font-size:40px;line-height:1;color:var(--tx)}
+.g-count-sub{font-family:var(--fu);font-size:17px;color:var(--tx2)}
+.g-sec{font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);margin:14px 0 4px;break-after:avoid}
+.g-tray-label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);margin:12px 0 6px}
+.g-tray{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}
+.g-chip{border:1px solid var(--border);border-radius:100px;padding:9px 16px;font-size:17px;min-height:46px;display:flex;align-items:center;color:var(--tx);background:var(--bg2)}
 .g-chip:active{background:var(--bg3)}
 .g-chip.due{border-color:var(--angela);color:var(--angela)}
-.grocery-item{display:flex;align-items:center;gap:16px;min-height:60px;padding:8px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s}
+#groceryItems{column-width:400px;column-gap:36px}
+.grocery-item{display:flex;align-items:center;gap:12px;min-height:44px;padding:5px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s;break-inside:avoid}
 .grocery-item:last-child{border-bottom:none}
 .grocery-item.pressing{background:var(--bg2);border-radius:10px}
-.grocery-check{width:30px;height:30px;border:2px solid var(--greg);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg)}
-.grocery-check svg{width:20px;height:20px;display:none}
+.grocery-check{width:24px;height:24px;border:2px solid var(--greg);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg)}
+.grocery-check svg{width:16px;height:16px;display:none}
 .grocery-item.checked .grocery-check{background:var(--greg)}
 .grocery-item.checked .grocery-check svg{display:block}
-.grocery-name{font-size:28px;color:var(--tx);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grocery-name{font-size:21px;color:var(--tx);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .grocery-item.checked .grocery-name{color:var(--tx3);text-decoration:line-through}
-.g-qty{font-size:18px;color:var(--tx2);margin-left:8px}
-.g-src{font-size:14px;color:var(--tx3);white-space:nowrap;padding:3px 10px;border:1px solid var(--border2);border-radius:100px}
-#groceryCard.grammy .grocery-name{font-size:34px}
-#groceryCard.grammy .grocery-item{min-height:68px}
+.g-qty{font-size:15px;color:var(--tx2);margin-left:6px}
+.g-src{font-size:12px;color:var(--tx3);white-space:nowrap;padding:2px 8px;border:1px solid var(--border2);border-radius:100px}
+#groceryCard.grammy .grocery-name{font-size:26px}
+#groceryCard.grammy .grocery-item{min-height:52px}
+#groceryCard.grammy #groceryItems{column-width:520px}
 .g-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1}
-.g-act{border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:16px;color:var(--tx);background:var(--bg2);min-height:48px;display:flex;align-items:center;gap:6px}
+.g-act{border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:15px;color:var(--tx);background:var(--bg2);min-height:44px;display:flex;align-items:center;gap:6px}
 .g-act:active{background:var(--bg3)}
 .g-act.danger{border-color:#B8553D;color:#E8907B}
-.g-act.qty{font-size:20px;min-width:48px;justify-content:center}
-.g-footer{margin-top:14px;padding-top:12px;border-top:1px solid var(--border2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.g-footer input{flex:1;min-width:180px;padding:12px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:18px;outline:none}
-.g-btn{border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--tx2);display:flex;align-items:center;gap:6px;min-height:48px;background:var(--bg2)}
+.g-act.qty{font-size:18px;min-width:44px;justify-content:center}
+.g-footer{margin-top:14px;padding-top:14px;border-top:1px solid var(--border2);display:flex;gap:10px;align-items:center;flex-wrap:wrap;max-width:1400px}
+.g-footer input{flex:1;min-width:200px;padding:12px 18px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:18px;outline:none}
+.g-btn{border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:15px;color:var(--tx2);display:flex;align-items:center;gap:6px;min-height:46px;background:var(--bg2)}
 .g-btn:active{background:var(--bg3)}
-.g-done{border-radius:100px;background:var(--greg);color:var(--bg);font-size:17px;font-weight:500;padding:12px 22px;min-height:48px;display:flex;align-items:center}
+.g-done{border-radius:100px;background:var(--greg);color:var(--bg);font-size:17px;font-weight:500;padding:12px 24px;min-height:46px;display:flex;align-items:center}
 .g-done:active{opacity:.85}
-.g-undo{position:sticky;bottom:0;margin-top:12px;background:#B8553D;color:#fff;border-radius:100px;padding:12px 12px 12px 20px;display:flex;justify-content:space-between;align-items:center;font-size:16px;z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.g-undo{position:sticky;bottom:0;margin-top:12px;background:#B8553D;color:#fff;border-radius:100px;padding:12px 12px 12px 20px;display:flex;justify-content:space-between;align-items:center;font-size:16px;z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.35);max-width:1400px}
 .g-undo b{font-weight:500}
 .g-undo .g-undo-btn{background:rgba(255,255,255,.18);border-radius:100px;padding:8px 16px;font-weight:500}
-.g-empty{font-size:20px;color:var(--tx3);padding:18px 0}
+.g-empty{font-size:19px;color:var(--tx3);padding:18px 0}
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
 
 /* ═══ Camera/presence ═══ */
@@ -351,10 +364,12 @@ var CFG = {
       <div class="list-pick active" data-list="1ab282d8-e849-4543-8410-0203ecacba83" onclick="switchList(this)">Angela &amp; David</div>
       <div class="list-pick" data-list="86c871c3-821f-4af7-b729-4440b7895a16" onclick="switchList(this)">Grammy</div>
     </div>
-    <div class="g-head" id="groceryHead"><span class="g-count">…</span></div>
-    <div id="groceryUsual"></div>
-    <div id="groceryItems"><div class="g-empty">Loading…</div></div>
-    <div id="groceryRecent"></div>
+    <div class="g-body">
+      <div class="g-head" id="groceryHead"><span class="g-count">…</span></div>
+      <div id="groceryUsual"></div>
+      <div id="groceryItems"><div class="g-empty">Loading…</div></div>
+      <div id="groceryRecent"></div>
+    </div>
     <div class="g-footer">
       <input type="text" id="quickAddInput" placeholder="Add something…" onkeydown="if(event.key==='Enter')quickAddItem()">
       <div class="g-btn" onclick="quickAddItem()">Add</div>
@@ -544,7 +559,11 @@ function showCard(id){
     activeCard=id;
     var btn=document.querySelector('[data-card="'+id+'"]');
     if(btn)btn.classList.add('active');
-  } else activeCard=null;
+    document.body.classList.add('card-open');
+  } else {
+    activeCard=null;
+    document.body.classList.remove('card-open');
+  }
 }
 
 // Dedicated calendar nav button -> full Google Calendar app directly.
