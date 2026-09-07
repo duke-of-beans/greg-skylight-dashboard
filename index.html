@@ -1283,5 +1283,364 @@ setInterval(checkSkylightSchedule, 60000); // every minute
 setTimeout(initCamera, 5000);
 </script>
 
+
+<!-- ├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É
+     GREG DISPLAY LAYER ├óΓé¼ΓÇ¥ what Greg shows you.
+     Listens on CORTEX WS for 'display' events. Renders three content kinds
+     into a full-screen overlay: structured (existing cards), generated (HTML
+     from CORTEX), interactive (chalkboard, timer, stopwatch ├óΓé¼ΓÇ¥ local modes).
+     Returns to ambient on timeout or dismiss. Every push logged for learning.
+     ├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É -->
+<style>
+  /* ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Display overlay ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼ */
+  .greg-display{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;flex-direction:column;opacity:0;transition:opacity 220ms ease}
+  .greg-display.open{display:flex}
+  .greg-display.visible{opacity:1}
+  .greg-display-head{display:flex;align-items:center;justify-content:space-between;padding:20px 32px 0;flex:0 0 auto}
+  .greg-display-title{font-family:var(--fg);font-size:22px;color:var(--tx2);font-weight:500}
+  .greg-display-timer{font-family:var(--fu);font-size:13px;color:var(--tx3);letter-spacing:.06em;text-transform:uppercase}
+  .greg-display-body{flex:1 1 auto;overflow-y:auto;padding:16px 32px 32px;-webkit-overflow-scrolling:touch}
+  .greg-display-body::-webkit-scrollbar{width:0}
+  .greg-display-dismiss{position:absolute;top:16px;right:20px;width:44px;height:44px;border-radius:100px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+  .greg-display-dismiss svg{width:20px;height:20px;stroke:var(--tx2);stroke-width:2;fill:none;stroke-linecap:round}
+
+  /* ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Action confirmation (visibility principle) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼ */
+  .greg-action{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);z-index:45;background:var(--bg2);border:1px solid var(--border);border-radius:100px;padding:14px 28px;font-family:var(--fg);font-size:20px;color:var(--tx);opacity:0;transition:opacity 200ms,transform 200ms;pointer-events:none;white-space:nowrap;max-width:80vw;overflow:hidden;text-overflow:ellipsis}
+  .greg-action.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .greg-action::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--greg);margin-right:12px;vertical-align:middle}
+
+  /* ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Structured view highlight (item just added) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼ */
+  .greg-highlight{animation:gregHighlight 1.4s ease-out}
+  @keyframes gregHighlight{0%{background:rgba(212,168,75,.35)}100%{background:transparent}}
+
+  /* ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Chalkboard ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼ */
+  .chalk-wrap{display:flex;flex-direction:column;height:100%;gap:12px}
+  .chalk-canvas{flex:1;background:#1A2A22;border-radius:16px;border:2px solid #2E4438;touch-action:none;cursor:crosshair}
+  .chalk-tools{display:flex;gap:12px;align-items:center;justify-content:center;flex:0 0 auto}
+  .chalk-color{width:48px;height:48px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+  .chalk-color.sel{border-color:var(--tx)}
+  .chalk-btn{padding:12px 24px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--tx2);font-family:var(--fu);font-size:15px;cursor:pointer}
+
+  /* ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Timer / stopwatch ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼ */
+  .timer-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:24px}
+  .timer-face{font-family:var(--fg);font-size:180px;font-weight:500;color:var(--tx);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .timer-face.done{color:var(--greg)}
+  .timer-label{font-family:var(--fu);font-size:18px;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase}
+  .timer-ring{width:320px;height:320px;position:absolute;pointer-events:none}
+  .timer-ring circle{fill:none;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
+  .timer-ring .bg{stroke:var(--bg3)}
+  .timer-ring .fg{stroke:var(--greg);transition:stroke-dashoffset 1s linear}
+</style>
+
+<!-- Overlay shell -->
+<div class="greg-display" id="gregDisplay">
+  <div class="greg-display-dismiss" id="gregDisplayDismiss" title="Close">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </div>
+  <div class="greg-display-head">
+    <div class="greg-display-title" id="gregDisplayTitle"></div>
+    <div class="greg-display-timer" id="gregDisplayTimer"></div>
+  </div>
+  <div class="greg-display-body" id="gregDisplayBody"></div>
+</div>
+<div class="greg-action" id="gregAction"></div>
+
+<script>
+// ├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É
+// GREG DISPLAY ├óΓé¼ΓÇ¥ WS client + renderers
+// ├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É├óΓÇó┬É
+(function(){
+  var overlay = document.getElementById('gregDisplay');
+  var titleEl = document.getElementById('gregDisplayTitle');
+  var timerEl = document.getElementById('gregDisplayTimer');
+  var bodyEl  = document.getElementById('gregDisplayBody');
+  var actionEl = document.getElementById('gregAction');
+  var dismissEl = document.getElementById('gregDisplayDismiss');
+
+  var closeTimer = null, countdownTick = null, modeCleanup = null;
+  var current = null;
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ WS connection ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  var ws = null, reconnectDelay = 2000;
+  function connectWs(){
+    var base = CFG.CORTEX_URL.replace(/^http/, 'ws');
+    var url = base + '/ws?surface=skylight' + (CFG.CORTEX_KEY ? '&token=' + encodeURIComponent(CFG.CORTEX_KEY) : '');
+    try { ws = new WebSocket(url); } catch(e){ scheduleReconnect(); return; }
+    ws.onopen = function(){ reconnectDelay = 2000; console.log('[greg-display] WS connected'); };
+    ws.onmessage = function(ev){
+      var msg; try { msg = JSON.parse(ev.data); } catch(e){ return; }
+      if (msg.type === 'display' && msg.data) showDisplay(msg.data);
+    };
+    ws.onclose = function(){ scheduleReconnect(); };
+    ws.onerror = function(){ try{ ws.close(); }catch(e){} };
+  }
+  function scheduleReconnect(){
+    setTimeout(connectWs, reconnectDelay);
+    reconnectDelay = Math.min(reconnectDelay * 1.6, 30000);
+  }
+  connectWs();
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Public API (for voice/other scripts) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  window.gregDisplay = { show: showDisplay, close: closeDisplay, action: showAction };
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Action confirmation (4s pill) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  var actionTimer = null;
+  function showAction(text){
+    actionEl.textContent = text;
+    actionEl.classList.add('show');
+    clearTimeout(actionTimer);
+    actionTimer = setTimeout(function(){ actionEl.classList.remove('show'); }, 3800);
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Main dispatcher ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function showDisplay(d){
+    // Action confirmations are pills, not overlays
+    if (d.view === 'action') { showAction(d.title || 'Done.'); return; }
+
+    // 'photos' / ambient = close whatever is up
+    if (d.view === 'photos' || d.view === 'ambient') { closeDisplay(); return; }
+
+    cleanupMode();
+    current = d;
+    titleEl.textContent = d.title || '';
+    bodyEl.innerHTML = '';
+    bodyEl.scrollTop = 0;
+
+    if (d.kind === 'structured')       renderStructured(d);
+    else if (d.kind === 'generated')   renderGenerated(d);
+    else if (d.kind === 'interactive') renderInteractive(d);
+
+    openOverlay();
+    setCloseTimer(d.timeout_s);
+    if (typeof Greg !== 'undefined' && Greg.resetDim) Greg.resetDim();
+  }
+
+  function openOverlay(){
+    overlay.classList.add('open');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ overlay.classList.add('visible'); }); });
+  }
+  function closeDisplay(){
+    clearTimeout(closeTimer); clearInterval(countdownTick);
+    cleanupMode();
+    overlay.classList.remove('visible');
+    setTimeout(function(){ overlay.classList.remove('open'); bodyEl.innerHTML=''; }, 240);
+    timerEl.textContent = '';
+    current = null;
+  }
+  function cleanupMode(){ if (modeCleanup) { try{ modeCleanup(); }catch(e){} modeCleanup = null; } }
+
+  function setCloseTimer(s){
+    clearTimeout(closeTimer); clearInterval(countdownTick);
+    if (!s || s <= 0) { timerEl.textContent = ''; return; }
+    var end = Date.now() + s*1000;
+    var tick = function(){
+      var left = Math.max(0, Math.round((end - Date.now())/1000));
+      timerEl.textContent = left > 60 ? Math.ceil(left/60) + ' min' : left + 's';
+    };
+    tick(); countdownTick = setInterval(tick, 1000);
+    closeTimer = setTimeout(closeDisplay, s*1000);
+  }
+  dismissEl.addEventListener('click', closeDisplay);
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ STRUCTURED: reuse the existing dashboard cards ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function renderStructured(d){
+    // Map view id ├óΓÇáΓÇÖ existing card element id
+    var map = { calendar:'calendarCard', grocery:'groceryCard', weather:'weatherCard',
+                media:'mediaCard', commute:'commuteCard', spotify:'spotifyCard', suggestion:'suggestionCard' };
+    var cardId = map[d.view];
+    // Structured views just open the existing card ├óΓé¼ΓÇ¥ no overlay needed.
+    // Close overlay if open, then show the card via the existing system.
+    overlay.classList.remove('open','visible');
+    if (cardId && typeof showCard === 'function') {
+      showCard(cardId);
+      // VISIBILITY: highlight the item that was just added
+      if (d.highlight) setTimeout(function(){ highlightItem(cardId, d.highlight); }, 300);
+      // Structured views use the card timeout, then return to ambient
+      clearTimeout(closeTimer);
+      if (d.timeout_s > 0) closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, d.timeout_s*1000);
+    }
+  }
+  function highlightItem(cardId, text){
+    var card = document.getElementById(cardId); if (!card) return;
+    var needle = String(text).toLowerCase();
+    var els = card.querySelectorAll('li, .grocery-item, .cal-event, .event, [data-item]');
+    for (var i=0;i<els.length;i++){
+      if ((els[i].textContent||'').toLowerCase().indexOf(needle) !== -1){
+        els[i].classList.add('greg-highlight');
+        els[i].scrollIntoView({block:'center', behavior:'smooth'});
+        setTimeout(function(el){ return function(){ el.classList.remove('greg-highlight'); }; }(els[i]), 1600);
+        break;
+      }
+    }
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ GENERATED: HTML from CORTEX (already Gregore-styled) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function renderGenerated(d){
+    bodyEl.innerHTML = d.html || '<p style="color:var(--tx2)">Nothing to show.</p>';
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ INTERACTIVE: local modes ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function renderInteractive(d){
+    if (d.view === 'chalkboard') modeCleanup = mountChalkboard(bodyEl);
+    else if (d.view === 'timer') modeCleanup = mountTimer(bodyEl, (d.content && d.content.seconds) || 300);
+    else if (d.view === 'stopwatch') modeCleanup = mountStopwatch(bodyEl);
+    else bodyEl.innerHTML = '<p style="color:var(--tx2)">Unknown mode: ' + d.view + '</p>';
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ CHALKBOARD ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  // Thick chalk lines on a dark green board. Touch draws. Voice can
+  // also drive it through window.gregDisplay.chalk (color/clear/undo).
+  function mountChalkboard(root){
+    root.innerHTML =
+      '<div class="chalk-wrap">' +
+        '<canvas class="chalk-canvas" id="chalkCanvas"></canvas>' +
+        '<div class="chalk-tools" id="chalkTools">' +
+          '<div class="chalk-color sel" data-c="#F2EFE6" style="background:#F2EFE6"></div>' +
+          '<div class="chalk-color" data-c="#F5D67A" style="background:#F5D67A"></div>' +
+          '<div class="chalk-color" data-c="#F28C8C" style="background:#F28C8C"></div>' +
+          '<div class="chalk-color" data-c="#8CC8F2" style="background:#8CC8F2"></div>' +
+          '<div class="chalk-color" data-c="#A6E3A1" style="background:#A6E3A1"></div>' +
+          '<div class="chalk-color" data-c="#D9A6F2" style="background:#D9A6F2"></div>' +
+          '<div class="chalk-btn" id="chalkUndo">Undo</div>' +
+          '<div class="chalk-btn" id="chalkClear">Clear</div>' +
+        '</div>' +
+      '</div>';
+    var canvas = document.getElementById('chalkCanvas');
+    var ctx = canvas.getContext('2d');
+    var color = '#F2EFE6', size = 9, drawing = false, last = null, strokes = [], cur = null;
+
+    function fit(){
+      var r = canvas.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(r.width*dpr); canvas.height = Math.round(r.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      redraw();
+    }
+    function redraw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      strokes.forEach(paint);
+    }
+    function paint(s){
+      if (s.pts.length < 2) return;
+      ctx.strokeStyle = s.color; ctx.lineWidth = s.size; ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.globalAlpha = 0.92;
+      ctx.beginPath(); ctx.moveTo(s.pts[0].x, s.pts[0].y);
+      for (var i=1;i<s.pts.length;i++) ctx.lineTo(s.pts[i].x, s.pts[i].y);
+      ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    function pos(e){
+      var r = canvas.getBoundingClientRect();
+      var t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - r.left, y: t.clientY - r.top };
+    }
+    function down(e){ e.preventDefault(); drawing = true; last = pos(e); cur = {color:color,size:size,pts:[last]}; strokes.push(cur); }
+    function move(e){
+      if (!drawing) return; e.preventDefault();
+      var p = pos(e); cur.pts.push(p);
+      ctx.strokeStyle = color; ctx.lineWidth = size; ctx.lineCap='round'; ctx.globalAlpha=0.92;
+      ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); ctx.globalAlpha=1;
+      last = p;
+    }
+    function up(){ drawing = false; cur = null; }
+
+    canvas.addEventListener('touchstart', down, {passive:false});
+    canvas.addEventListener('touchmove', move, {passive:false});
+    canvas.addEventListener('touchend', up);
+    canvas.addEventListener('mousedown', down);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    window.addEventListener('resize', fit);
+
+    var tools = document.getElementById('chalkTools');
+    tools.addEventListener('click', function(e){
+      var c = e.target.closest('.chalk-color');
+      if (c){ color = c.getAttribute('data-c'); tools.querySelectorAll('.chalk-color').forEach(function(x){x.classList.remove('sel')}); c.classList.add('sel'); return; }
+      if (e.target.id === 'chalkUndo'){ strokes.pop(); redraw(); }
+      if (e.target.id === 'chalkClear'){ strokes = []; redraw(); }
+    });
+
+    // Voice hooks ├óΓé¼ΓÇ¥ non-touch control for Lilly's mode
+    window.gregDisplay.chalk = {
+      color: function(c){ color = c; },
+      clear: function(){ strokes = []; redraw(); },
+      undo: function(){ strokes.pop(); redraw(); },
+      size: function(n){ size = n; }
+    };
+
+    setTimeout(fit, 50);
+    return function(){
+      window.removeEventListener('resize', fit);
+      window.removeEventListener('mouseup', up);
+      delete window.gregDisplay.chalk;
+    };
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ TIMER ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function mountTimer(root, seconds){
+    var total = seconds;
+    root.innerHTML =
+      '<div class="timer-wrap">' +
+        '<svg class="timer-ring" viewBox="0 0 320 320"><circle class="bg" cx="160" cy="160" r="150"/><circle class="fg" id="timerFg" cx="160" cy="160" r="150"/></svg>' +
+        '<div class="timer-face" id="timerFace"></div>' +
+        '<div class="timer-label" id="timerLabel">timer</div>' +
+      '</div>';
+    var face = document.getElementById('timerFace'), fg = document.getElementById('timerFg'), label = document.getElementById('timerLabel');
+    var circ = 2*Math.PI*150; fg.style.strokeDasharray = circ; 
+    var end = Date.now() + total*1000, done = false;
+    function fmt(s){ var m=Math.floor(s/60), r=s%60; return (m>0? m+':' : '') + (m>0 ? String(r).padStart(2,'0') : r); }
+    function tick(){
+      var left = Math.max(0, Math.round((end-Date.now())/1000));
+      face.textContent = fmt(left);
+      fg.style.strokeDashoffset = circ * (1 - left/total);
+      if (left === 0 && !done){
+        done = true; face.classList.add('done'); label.textContent = 'time\'s up';
+        chime();
+        // Speak via the wall face if it's listening
+        try { fetch(CFG.CORTEX_URL + '/v1/conversation/hear', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text:'[timer finished]', surface:'skylight' }) }); } catch(e){}
+      }
+    }
+    tick(); var iv = setInterval(tick, 250);
+    return function(){ clearInterval(iv); };
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ STOPWATCH ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function mountStopwatch(root){
+    root.innerHTML =
+      '<div class="timer-wrap">' +
+        '<div class="timer-face" id="swFace">0:00</div>' +
+        '<div class="timer-label">stopwatch</div>' +
+        '<div class="chalk-tools"><div class="chalk-btn" id="swToggle">Start</div><div class="chalk-btn" id="swReset">Reset</div></div>' +
+      '</div>';
+    var face = document.getElementById('swFace'), toggle = document.getElementById('swToggle'), reset = document.getElementById('swReset');
+    var running = false, start = 0, acc = 0, iv = null;
+    function fmt(ms){ var s=Math.floor(ms/1000), m=Math.floor(s/60), r=s%60, t=Math.floor((ms%1000)/100); return m+':'+String(r).padStart(2,'0')+'.'+t; }
+    function tick(){ face.textContent = fmt(acc + (running ? Date.now()-start : 0)); }
+    toggle.addEventListener('click', function(){
+      if (running){ acc += Date.now()-start; running=false; toggle.textContent='Start'; clearInterval(iv); tick(); }
+      else { start = Date.now(); running=true; toggle.textContent='Stop'; iv = setInterval(tick, 100); }
+    });
+    reset.addEventListener('click', function(){ acc=0; running=false; clearInterval(iv); toggle.textContent='Start'; tick(); });
+    window.gregDisplay.stopwatch = { toggle: function(){ toggle.click(); }, reset: function(){ reset.click(); } };
+    return function(){ clearInterval(iv); delete window.gregDisplay.stopwatch; };
+  }
+
+  // ├óΓÇ¥Γé¼├óΓÇ¥Γé¼ Chime (WebAudio, no asset) ├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼├óΓÇ¥Γé¼
+  function chime(){
+    try {
+      var ac = new (window.AudioContext||window.webkitAudioContext)();
+      [0, 0.18, 0.36].forEach(function(t, i){
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.type='sine'; o.frequency.value = [880, 1108, 1318][i];
+        g.gain.setValueAtTime(0.0001, ac.currentTime + t);
+        g.gain.exponentialRampToValueAtTime(0.25, ac.currentTime + t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + t + 0.6);
+        o.connect(g); g.connect(ac.destination);
+        o.start(ac.currentTime + t); o.stop(ac.currentTime + t + 0.65);
+      });
+    } catch(e){}
+  }
+})();
+</script>
+
 </body>
 </html>
