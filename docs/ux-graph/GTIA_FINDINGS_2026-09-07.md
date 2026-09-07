@@ -51,13 +51,17 @@
 1. **One resting state** — the frame: curated photos with a glance strip (time, weather glyph,
    next event, tonight's dinner). It is the guest's and Grammy's whole experience and everyone's
    default.
-2. **Three summoned modes, not eight icons:**
+2. **Four summoned modes, not eight icons** (three from the graph; Entertainment added by David 2026-09-07 — the Skylight is itself a TV/radio/entertainment space and Skylight-native playback was under-specified in the inventory, so the graph lumped media with kids/household):
    - **Household** (lists, tonight, cook mode, adds by voice/text/camera) — the dinner-prep and
      weekend workspace, Angela and David's mode.
    - **Kids** (routines → unlock, Lilly's play, Dwight's curiosity, content-by-name TV) — the
      after-school and bedtime mode; the wall's differentiator.
    - **Plan & Remember** (week, imports, activity planner, on-this-day, albums) — the evening and
-     weekend sit-down layer; where memory (LIFELOG/Throwbak) lives.
+     weekend sit-down layer; where memory lives — PRIVACY LINE (David 2026-09-07): LIFELOG is David's
+     private diary and NEVER reaches the wall; on-this-day = Throwbak metadata against the photos (who,
+     when, where) as Google-style cards plus vague family-safe event labels only.
+   - **Entertainment** (music, radio, YouTube on the Skylight itself with real controls; now-playing;
+     the other rooms' TVs) — David's correction, see WG-37.
 3. **The morning brief is a scheduled state of the resting layer** (roughly 6–8am on school days),
    not a mode: agenda by person, dress hint, precip, commute, Greg says it once to whoever walks in.
 4. **Verbs are everywhere and need no icon** — add, put on, dinner's ready, timer, show me. They
@@ -73,8 +77,9 @@
   icons; the now-playing card appears when something is playing (structured push).
 - Calendar splits: the glance (agenda, resting layer), the week/imports (Plan & Remember), the
   adds (a verb). The month grid is one tap inside Plan & Remember.
-- List → Household. Greg → the talk affordance stays. Download → drop.
-- Proposed chrome: **three mode tiles + talk**, defaults driven by time of day and by who is
+- List → Household. Greg → the talk affordance stays. Download = Aurora Store (app installs) → an
+  admin surface (long-press / "Greg, open the app store", ring ≤ 2), not deleted.
+- Proposed chrome: **four mode tiles + talk** (Household, Kids, Plan & Remember, Entertainment), defaults driven by time of day and by who is
   standing there. If a mode is empty for the person present, it does not show.
 
 ## 3. Per-persona leads (what the wall should lead with when it knows who you are)
@@ -89,7 +94,9 @@
 - Guest: slideshow, guest mode, weather, minimal chrome, agenda glance only.
 
 ## 4. What the graph could NOT decide, and what replaces the guess
-- Persona weights are priors. The display log (asked / dismissed / tapped / timed out, per view,
+- Persona weights are priors (David: fine — benchmark over time, nothing set in stone). Greg also
+  catalogs every friction point and unmet desire as gaps so the wall grows with the family (WG-36).
+  The display log (asked / dismissed / tapped / timed out, per view,
   per detected person, per hour) plus grocery/calendar activity and Roku state replace them; re-run
   gtia.py monthly with measured weights.
 - Louvain cannot rank features inside a mode for build order — that is reach × steps-removed,
@@ -104,6 +111,8 @@
 3. KIDS: picture routines with one-tap complete and Greg-enforced unlocks; Lilly's play mode;
    Dwight's curiosity mode with never-dead-end.
 4. PLAN & REMEMBER: week view, flyer/school import by voice or camera, activity planner (WG-09),
-   LIFELOG/Throwbak on-this-day (existing thread), Google write-back (WG-02, blocked on David).
+   Throwbak-metadata on-this-day, family-safe only (existing thread), Google write-back (WG-02, blocked on David).
+4b. ENTERTAINMENT: Spotify on the Skylight (Premium to verify), radio/podcasts, YouTube with real
+   controls, now-playing with transport, audio-reactive visuals (WG-37).
 5. INVARIANTS: display-log instrumentation first (it is what makes the next run real), undo, guest
    mode, grandparent legibility.
