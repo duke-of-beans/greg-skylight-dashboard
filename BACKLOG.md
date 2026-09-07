@@ -16,7 +16,7 @@
 
 ## P1 — Sensors
 
-- [ ] **Arducam as room sensor** — Wire the 160° Arducam IMX291 (USB OTG on Skylight, confirmed enumerated at 4x /dev/video nodes) for room presence detection. Feed to Sentinel for: who's home, how many people, motion detection. Feeds ring determination + proactive speech decisions.
+- [x] **Arducam as room sensor** — SHIPPED 2026-09-07 (Gregore-private repo, arducam_monitor.py). The Arducam enumerates cleanly as a V4L2 UVC device on the Skylight (`/dev/video9-12`, confirmed "Arducam 1080P Low Light" via `v4l2-ctl --list-devices`). New Sentinel systemd service greg-arducam-monitor captures a still frame every 10s via `v4l2-ctl --stream-count=1` + `adb pull`, feeds it through the existing YuNet face-detect model, and serves `GET /v1/room-presence -> {face_count, faces, checked_at}` (proxied through greg_surface_https.py, same pattern as roku-state). Feeds ring determination + proactive speech decisions.
 
 ## P1 — Kiosk Stability
 
@@ -24,6 +24,6 @@
 
 ## P2 — Infrastructure
 
-- [ ] **Roku ECP integration** — Playback-state awareness for Greg's context. What's playing, paused, volume level. Roku on the same network.
+- [x] **Roku ECP integration** — SHIPPED 2026-09-07 (Gregore-private repo, roku_monitor.py). Polls the family room's 43" RCA Roku TV (192.168.2.238). Serves `GET /v1/roku-state -> {tv_on, app, is_playing_content}`. Also identified this session: 192.168.2.171 (Streaming Stick Plus) = living room, 192.168.2.156 (Streaming Stick) = mom's room.
 
-- [ ] **Skylight Pixel spoofing persistence** — resetprop works but doesn't survive reboot without Magisk. Either install Magisk (bootloader is unlocked) or add a boot script via init.d. Current workaround: re-run `/data/local/tmp/spoof-pixel.sh` after reboot or include in greg-reload.ps1.
+- [x] **Skylight Pixel spoofing persistence** — SHIPPED 2026-09-07 (Gregore-private repo, skylight_spoof_watchdog.sh). Root cause found: `resetprop` needs `adb root` elevation to write properties at all — plain `adb shell` silently fails since property files are root-owned at the DAC level. No Magisk or bootloader flashing needed; the device already supports `adb root` (userdebug/eng build). New Sentinel systemd service greg-skylight-spoof polls `ro.product.model` every 30s and auto re-elevates + re-spoofs if it ever reverts to the real "D156" after a reboot. Verified end-to-end via a real device reboot.
