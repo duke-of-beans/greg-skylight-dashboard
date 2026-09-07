@@ -1,0 +1,41 @@
+/* ═══ Grocery — the list a kitchen wall deserves (spec: docs/ux-graph, WG-18/19/38/39) ═══ */
+#groceryCard.interleave-card{width:600px;padding:24px 28px 20px}
+#groceryCard .list-pick{font-size:15px;padding:8px 16px;min-height:40px;display:flex;align-items:center}
+.g-head{display:flex;align-items:baseline;gap:12px;margin:2px 0 8px;flex-wrap:wrap}
+.g-count{font-family:var(--fg);font-size:44px;line-height:1;color:var(--tx)}
+.g-count-sub{font-family:var(--fu);font-size:16px;color:var(--tx2)}
+.g-sec{font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2);margin:16px 0 2px}
+.g-tray-label{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);margin:14px 0 6px}
+.g-tray{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+.g-chip{border:1px solid var(--border);border-radius:100px;padding:10px 18px;font-size:20px;min-height:56px;display:flex;align-items:center;color:var(--tx);background:var(--bg2)}
+.g-chip:active{background:var(--bg3)}
+.g-chip.due{border-color:var(--angela);color:var(--angela)}
+.grocery-item{display:flex;align-items:center;gap:16px;min-height:60px;padding:8px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s}
+.grocery-item:last-child{border-bottom:none}
+.grocery-item.pressing{background:var(--bg2);border-radius:10px}
+.grocery-check{width:30px;height:30px;border:2px solid var(--greg);border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg)}
+.grocery-check svg{width:20px;height:20px;display:none}
+.grocery-item.checked .grocery-check{background:var(--greg)}
+.grocery-item.checked .grocery-check svg{display:block}
+.grocery-name{font-size:28px;color:var(--tx);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grocery-item.checked .grocery-name{color:var(--tx3);text-decoration:line-through}
+.g-qty{font-size:18px;color:var(--tx2);margin-left:8px}
+.g-src{font-size:14px;color:var(--tx3);white-space:nowrap;padding:3px 10px;border:1px solid var(--border2);border-radius:100px}
+#groceryCard.grammy .grocery-name{font-size:34px}
+#groceryCard.grammy .grocery-item{min-height:68px}
+.g-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1}
+.g-act{border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:16px;color:var(--tx);background:var(--bg2);min-height:48px;display:flex;align-items:center;gap:6px}
+.g-act:active{background:var(--bg3)}
+.g-act.danger{border-color:#B8553D;color:#E8907B}
+.g-act.qty{font-size:20px;min-width:48px;justify-content:center}
+.g-footer{margin-top:14px;padding-top:12px;border-top:1px solid var(--border2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.g-footer input{flex:1;min-width:180px;padding:12px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:18px;outline:none}
+.g-btn{border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--tx2);display:flex;align-items:center;gap:6px;min-height:48px;background:var(--bg2)}
+.g-btn:active{background:var(--bg3)}
+.g-done{border-radius:100px;background:var(--greg);color:var(--bg);font-size:17px;font-weight:500;padding:12px 22px;min-height:48px;display:flex;align-items:center}
+.g-done:active{opacity:.85}
+.g-undo{position:sticky;bottom:0;margin-top:12px;background:#B8553D;color:#fff;border-radius:100px;padding:12px 12px 12px 20px;display:flex;justify-content:space-between;align-items:center;font-size:16px;z-index:3;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.g-undo b{font-weight:500}
+.g-undo .g-undo-btn{background:rgba(255,255,255,.18);border-radius:100px;padding:8px 16px;font-weight:500}
+.g-empty{font-size:20px;color:var(--tx3);padding:18px 0}
+@media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
