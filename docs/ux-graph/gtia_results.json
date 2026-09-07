@@ -1,0 +1,2860 @@
+{
+ "resolution": 1.0,
+ "modularity": 0.08726755280685132,
+ "personas": {
+  "PS": [
+   "Angela (primary scheduler)",
+   0.26
+  ],
+  "P2": [
+   "David (WFH, cook, builder)",
+   0.24
+  ],
+  "T": [
+   "Lilly (2)",
+   0.16
+  ],
+  "ER": [
+   "Dwight (7)",
+   0.12
+  ],
+  "G": [
+   "Grammy",
+   0.1
+  ],
+  "AI": [
+   "Greg as curator",
+   0.08
+  ],
+  "GU": [
+   "Guest",
+   0.04
+  ]
+ },
+ "lambda_context": 1.0,
+ "communities": [
+  {
+   "community": 1,
+   "size": 35,
+   "reach": 16.78,
+   "functions": {
+    "meals": 7,
+    "media": 2,
+    "grocery": 15,
+    "ai": 2,
+    "calendar": 4,
+    "weather": 3,
+    "system": 1,
+    "photos": 1
+   },
+   "persona_profile": {
+    "PS": 0.77,
+    "P2": 0.69,
+    "T": 0.03,
+    "ER": 0.14,
+    "G": 0.49,
+    "AI": 0.54,
+    "GU": 0.03
+   },
+   "context_profile": {
+    "morning": 11,
+    "afterschool": 5,
+    "dinner_prep": 23,
+    "dinner": 3,
+    "evening": 2,
+    "weekend": 19,
+    "toddler_alone": 0,
+    "guest": 1,
+    "grammy": 3
+   },
+   "members": [
+    [
+     36,
+     "Tonight dinner card",
+     0.8
+    ],
+    [
+     83,
+     "One-way \"dinner's ready\" broadcast",
+     0.73
+    ],
+    [
+     9,
+     "Voice-add with on-wall echo",
+     0.72
+    ],
+    [
+     89,
+     "Morning briefing with a face",
+     0.71
+    ],
+    [
+     22,
+     "Color per person",
+     0.69
+    ],
+    [
+     2,
+     "One-line advice (umbrella / coat / park day)",
+     0.66
+    ],
+    [
+     31,
+     "Voice-add event with confirm",
+     0.66
+    ],
+    [
+     106,
+     "Ingredients + a vague idea \u2192 dish suggestions",
+     0.66
+    ],
+    [
+     103,
+     "Text or MMS a list / photo to Greg's number \u2192 canon list",
+     0.64
+    ],
+    [
+     105,
+     "Camera list ingest at the wall (hold up paper / phone)",
+     0.61
+    ],
+    [
+     15,
+     "Frequency-based staples (\"you're due for eggs\")",
+     0.59
+    ],
+    [
+     8,
+     "Shared real-time list sync (phone page)",
+     0.58
+    ],
+    [
+     10,
+     "Explicit in-cart / bought state",
+     0.58
+    ],
+    [
+     12,
+     "Delete item",
+     0.58
+    ],
+    [
+     39,
+     "Cook-mode step display",
+     0.58
+    ],
+    [
+     41,
+     "Use what we have ingredient search",
+     0.54
+    ],
+    [
+     94,
+     "Route AI outputs into real lists / calendar",
+     0.53
+    ],
+    [
+     20,
+     "List generated from meal plan",
+     0.48
+    ],
+    [
+     17,
+     "Grammy's list, voice-routed",
+     0.46
+    ],
+    [
+     87,
+     "Family jukebox (Spotify)",
+     0.46
+    ],
+    [
+     11,
+     "Recently-bought re-add tray",
+     0.39
+    ],
+    [
+     99,
+     "Guest mode (hide personal content)",
+     0.36
+    ],
+    [
+     38,
+     "Recipe capture (photo / URL / handwriting)",
+     0.36
+    ],
+    [
+     40,
+     "Cook timers auto-parsed from recipe",
+     0.36
+    ],
+    [
+     4,
+     "Next-hour precipitation alert",
+     0.35
+    ],
+    [
+     14,
+     "Autocomplete from household history",
+     0.35
+    ],
+    [
+     3,
+     "Per-person dress hint",
+     0.35
+    ],
+    [
+     77,
+     "Remote push-in by family",
+     0.35
+    ],
+    [
+     13,
+     "Store / aisle sorting per store",
+     0.34
+    ],
+    [
+     37,
+     "AI weekly plan from constraints",
+     0.3
+    ],
+    [
+     26,
+     "Per-person filter",
+     0.28
+    ],
+    [
+     25,
+     "Month grid on tap",
+     0.27
+    ],
+    [
+     19,
+     "Barcode / photo add of an empty carton",
+     0.17
+    ],
+    [
+     18,
+     "Quantity / units",
+     0.14
+    ],
+    [
+     21,
+     "Export / handoff to AnyList or Instacart",
+     0.12
+    ]
+   ]
+  },
+  {
+   "community": 2,
+   "size": 33,
+   "reach": 15.5,
+   "functions": {
+    "system": 3,
+    "photos": 10,
+    "calendar": 8,
+    "media": 2,
+    "weather": 3,
+    "ai": 3,
+    "routines": 3,
+    "dwight": 1
+   },
+   "persona_profile": {
+    "PS": 0.66,
+    "P2": 0.56,
+    "T": 0.18,
+    "ER": 0.35,
+    "G": 0.47,
+    "AI": 0.53,
+    "GU": 0.1
+   },
+   "context_profile": {
+    "morning": 17,
+    "afterschool": 7,
+    "dinner_prep": 4,
+    "dinner": 4,
+    "evening": 30,
+    "weekend": 21,
+    "toddler_alone": 0,
+    "guest": 6,
+    "grammy": 13
+   },
+   "members": [
+    [
+     96,
+     "Presence / face personalisation on approach",
+     0.88
+    ],
+    [
+     74,
+     "Curated idle slideshow (faces first)",
+     0.88
+    ],
+    [
+     101,
+     "Every command echoed on the wall",
+     0.87
+    ],
+    [
+     81,
+     "Presence-triggered flip photos \u2192 utility",
+     0.85
+    ],
+    [
+     23,
+     "Today's agenda glance",
+     0.74
+    ],
+    [
+     108,
+     "TV intercom: pause + on-screen message + Greg's voice on the TV",
+     0.73
+    ],
+    [
+     1,
+     "Glanceable conditions glyph + temp",
+     0.73
+    ],
+    [
+     82,
+     "On-device face recognition \u2192 prioritise content",
+     0.71
+    ],
+    [
+     80,
+     "On this day memories",
+     0.68
+    ],
+    [
+     91,
+     "Local-events / activity planner",
+     0.63
+    ],
+    [
+     109,
+     "LIFELOG on-this-day story cards",
+     0.61
+    ],
+    [
+     27,
+     "Two-way Google write-back",
+     0.58
+    ],
+    [
+     24,
+     "Week view",
+     0.49
+    ],
+    [
+     78,
+     "Kids' artwork gallery",
+     0.49
+    ],
+    [
+     76,
+     "Ambient brightness / color matching",
+     0.48
+    ],
+    [
+     110,
+     "Throwbak face-curated albums",
+     0.43
+    ],
+    [
+     5,
+     "Severe-weather alert card",
+     0.39
+    ],
+    [
+     30,
+     "School calendar batch import",
+     0.39
+    ],
+    [
+     75,
+     "Slow / print-like cadence",
+     0.37
+    ],
+    [
+     90,
+     "Proactive suggestion line (deferent, dismissible)",
+     0.36
+    ],
+    [
+     33,
+     "Event countdown (\"3 sleeps\")",
+     0.36
+    ],
+    [
+     6,
+     "Weather-as-scene art (idle)",
+     0.36
+    ],
+    [
+     88,
+     "Video call to grandparents",
+     0.34
+    ],
+    [
+     49,
+     "Reward created / edited from the wall",
+     0.32
+    ],
+    [
+     32,
+     "Conflict detection",
+     0.3
+    ],
+    [
+     79,
+     "On-photo captions / story",
+     0.29
+    ],
+    [
+     100,
+     "Grandparent-first legibility (large type, voice)",
+     0.25
+    ],
+    [
+     48,
+     "Pinned reward goal + progress",
+     0.19
+    ],
+    [
+     92,
+     "Family-rhythm digest",
+     0.19
+    ],
+    [
+     35,
+     "One event \u2192 multiple people",
+     0.19
+    ],
+    [
+     46,
+     "Streak tracking",
+     0.18
+    ],
+    [
+     70,
+     "Chess / checkers / logic",
+     0.12
+    ],
+    [
+     34,
+     "Per-event memo",
+     0.12
+    ]
+   ]
+  },
+  {
+   "community": 0,
+   "size": 43,
+   "reach": 13.86,
+   "functions": {
+    "system": 5,
+    "routines": 8,
+    "media": 3,
+    "calendar": 2,
+    "toddler": 14,
+    "dwight": 7,
+    "ai": 1,
+    "grocery": 1,
+    "meals": 1,
+    "weather": 1
+   },
+   "persona_profile": {
+    "PS": 0.27,
+    "P2": 0.25,
+    "T": 0.5,
+    "ER": 0.47,
+    "G": 0.13,
+    "AI": 0.49,
+    "GU": 0.04
+   },
+   "context_profile": {
+    "morning": 7,
+    "afterschool": 36,
+    "dinner_prep": 5,
+    "dinner": 3,
+    "evening": 20,
+    "weekend": 12,
+    "toddler_alone": 20,
+    "guest": 1,
+    "grammy": 4
+   },
+   "members": [
+    [
+     95,
+     "Ambient-far / implicit / personal zones",
+     0.94
+    ],
+    [
+     107,
+     "Routine complete \u2192 device unlock, Greg-enforced",
+     0.83
+    ],
+    [
+     84,
+     "Content-by-name TV control",
+     0.72
+    ],
+    [
+     85,
+     "Roku voice control with on-wall status",
+     0.59
+    ],
+    [
+     28,
+     "Photo / flyer / email \u2192 events (import)",
+     0.48
+    ],
+    [
+     98,
+     "Minimal / collapsible nav",
+     0.47
+    ],
+    [
+     102,
+     "Timer / stopwatch / chalkboard tools",
+     0.46
+    ],
+    [
+     64,
+     "Generous listening, no rushed timeout",
+     0.44
+    ],
+    [
+     43,
+     "Picture-step routine",
+     0.44
+    ],
+    [
+     112,
+     "Joint moments (\"show Daddy!\")",
+     0.43
+    ],
+    [
+     65,
+     "Never-say-\"wrong\" recognition handling",
+     0.42
+    ],
+    [
+     61,
+     "Rotating short activities (4-6 min)",
+     0.38
+    ],
+    [
+     53,
+     "No-fail open-ended play mode",
+     0.37
+    ],
+    [
+     52,
+     "Toddler tidy-up ritual",
+     0.36
+    ],
+    [
+     44,
+     "Walk-up one-tap complete (no login)",
+     0.35
+    ],
+    [
+     72,
+     "Never dead-end on \"I don't know\"",
+     0.34
+    ],
+    [
+     51,
+     "Today's Feelings check-in",
+     0.33
+    ],
+    [
+     47,
+     "Confetti / celebration",
+     0.33
+    ],
+    [
+     50,
+     "Child-lock per list",
+     0.31
+    ],
+    [
+     93,
+     "Undo / correct any proactive action",
+     0.31
+    ],
+    [
+     62,
+     "Contingent voice reactions by name",
+     0.31
+    ],
+    [
+     67,
+     "Jokes / fun facts / science",
+     0.3
+    ],
+    [
+     16,
+     "Icon / picture tiles for pre-readers",
+     0.3
+    ],
+    [
+     97,
+     "Kid reach-height touch zone",
+     0.27
+    ],
+    [
+     58,
+     "Animal sounds / peekaboo / \"where's the X\"",
+     0.26
+    ],
+    [
+     66,
+     "Why answers in kid register",
+     0.25
+    ],
+    [
+     69,
+     "Mental-math and reading games",
+     0.24
+    ],
+    [
+     73,
+     "Homework help",
+     0.24
+    ],
+    [
+     60,
+     "Sing-along / music-making",
+     0.22
+    ],
+    [
+     68,
+     "Quizzes / trivia",
+     0.2
+    ],
+    [
+     71,
+     "Lego-build prompts",
+     0.2
+    ],
+    [
+     45,
+     "Stars / points per step",
+     0.19
+    ],
+    [
+     55,
+     "Audio + visual payoff on every tap",
+     0.19
+    ],
+    [
+     104,
+     "Display-log instrumentation (replaces persona priors)",
+     0.19
+    ],
+    [
+     59,
+     "Tap-to-draw chalkboard",
+     0.19
+    ],
+    [
+     63,
+     "Gesture / tap accepted in place of speech",
+     0.17
+    ],
+    [
+     54,
+     "Giant isolated tap targets",
+     0.16
+    ],
+    [
+     42,
+     "Kid-facing meal icon (\"Taco Tuesday\")",
+     0.14
+    ],
+    [
+     86,
+     "Two-way check-in (consent-visible)",
+     0.14
+    ],
+    [
+     56,
+     "Tap-only interactions (no drag)",
+     0.11
+    ],
+    [
+     57,
+     "Ignore accidental / multi-touch",
+     0.11
+    ],
+    [
+     7,
+     "Tappable weather scene with animal sounds",
+     0.1
+    ],
+    [
+     29,
+     "TeamSnap / sports sync",
+     0.09
+    ]
+   ]
+  }
+ ],
+ "persona_top": {
+  "PS": [
+   [
+    1,
+    "Glanceable conditions glyph + temp"
+   ],
+   [
+    2,
+    "One-line advice (umbrella / coat / park day)"
+   ],
+   [
+    8,
+    "Shared real-time list sync (phone page)"
+   ],
+   [
+    9,
+    "Voice-add with on-wall echo"
+   ],
+   [
+    10,
+    "Explicit in-cart / bought state"
+   ],
+   [
+    12,
+    "Delete item"
+   ],
+   [
+    15,
+    "Frequency-based staples (\"you're due for eggs\")"
+   ],
+   [
+    20,
+    "List generated from meal plan"
+   ]
+  ],
+  "P2": [
+   [
+    1,
+    "Glanceable conditions glyph + temp"
+   ],
+   [
+    8,
+    "Shared real-time list sync (phone page)"
+   ],
+   [
+    9,
+    "Voice-add with on-wall echo"
+   ],
+   [
+    10,
+    "Explicit in-cart / bought state"
+   ],
+   [
+    12,
+    "Delete item"
+   ],
+   [
+    103,
+    "Text or MMS a list / photo to Greg's number \u2192 canon list"
+   ],
+   [
+    22,
+    "Color per person"
+   ],
+   [
+    23,
+    "Today's agenda glance"
+   ]
+  ],
+  "T": [
+   [
+    47,
+    "Confetti / celebration"
+   ],
+   [
+    53,
+    "No-fail open-ended play mode"
+   ],
+   [
+    54,
+    "Giant isolated tap targets"
+   ],
+   [
+    55,
+    "Audio + visual payoff on every tap"
+   ],
+   [
+    58,
+    "Animal sounds / peekaboo / \"where's the X\""
+   ],
+   [
+    61,
+    "Rotating short activities (4-6 min)"
+   ],
+   [
+    62,
+    "Contingent voice reactions by name"
+   ],
+   [
+    64,
+    "Generous listening, no rushed timeout"
+   ]
+  ],
+  "ER": [
+   [
+    43,
+    "Picture-step routine"
+   ],
+   [
+    44,
+    "Walk-up one-tap complete (no login)"
+   ],
+   [
+    47,
+    "Confetti / celebration"
+   ],
+   [
+    107,
+    "Routine complete \u2192 device unlock, Greg-enforced"
+   ],
+   [
+    64,
+    "Generous listening, no rushed timeout"
+   ],
+   [
+    65,
+    "Never-say-\"wrong\" recognition handling"
+   ],
+   [
+    66,
+    "Why answers in kid register"
+   ],
+   [
+    67,
+    "Jokes / fun facts / science"
+   ]
+  ],
+  "G": [
+   [
+    1,
+    "Glanceable conditions glyph + temp"
+   ],
+   [
+    9,
+    "Voice-add with on-wall echo"
+   ],
+   [
+    17,
+    "Grammy's list, voice-routed"
+   ],
+   [
+    74,
+    "Curated idle slideshow (faces first)"
+   ],
+   [
+    80,
+    "On this day memories"
+   ],
+   [
+    95,
+    "Ambient-far / implicit / personal zones"
+   ],
+   [
+    100,
+    "Grandparent-first legibility (large type, voice)"
+   ],
+   [
+    101,
+    "Every command echoed on the wall"
+   ]
+  ],
+  "AI": [
+   [
+    2,
+    "One-line advice (umbrella / coat / park day)"
+   ],
+   [
+    9,
+    "Voice-add with on-wall echo"
+   ],
+   [
+    15,
+    "Frequency-based staples (\"you're due for eggs\")"
+   ],
+   [
+    20,
+    "List generated from meal plan"
+   ],
+   [
+    103,
+    "Text or MMS a list / photo to Greg's number \u2192 canon list"
+   ],
+   [
+    105,
+    "Camera list ingest at the wall (hold up paper / phone)"
+   ],
+   [
+    27,
+    "Two-way Google write-back"
+   ],
+   [
+    28,
+    "Photo / flyer / email \u2192 events (import)"
+   ]
+  ],
+  "GU": [
+   [
+    74,
+    "Curated idle slideshow (faces first)"
+   ],
+   [
+    95,
+    "Ambient-far / implicit / personal zones"
+   ],
+   [
+    99,
+    "Guest mode (hide personal content)"
+   ],
+   [
+    1,
+    "Glanceable conditions glyph + temp"
+   ],
+   [
+    98,
+    "Minimal / collapsible nav"
+   ],
+   [
+    6,
+    "Weather-as-scene art (idle)"
+   ],
+   [
+    75,
+    "Slow / print-like cadence"
+   ],
+   [
+    23,
+    "Today's agenda glance"
+   ]
+  ]
+ },
+ "features": [
+  {
+   "id": 1,
+   "name": "Glanceable conditions glyph + temp",
+   "fn": "weather",
+   "imp": 1.0,
+   "reach": 0.728,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 1.0,
+    "ER": 0.6,
+    "GU": 0.6,
+    "T": 0.2
+   },
+   "contexts": [
+    "afterschool",
+    "grammy",
+    "guest",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 2,
+   "name": "One-line advice (umbrella / coat / park day)",
+   "fn": "weather",
+   "imp": 1.0,
+   "reach": 0.66,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.8,
+    "AI": 1.0,
+    "ER": 0.4
+   },
+   "contexts": [
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 3,
+   "name": "Per-person dress hint",
+   "fn": "weather",
+   "imp": 0.7,
+   "reach": 0.35,
+   "personas": {
+    "PS": 1.0,
+    "ER": 0.8,
+    "AI": 1.0,
+    "T": 0.4
+   },
+   "contexts": [
+    "morning"
+   ]
+  },
+  {
+   "id": 4,
+   "name": "Next-hour precipitation alert",
+   "fn": "weather",
+   "imp": 0.7,
+   "reach": 0.353,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "AI": 0.8,
+    "G": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 5,
+   "name": "Severe-weather alert card",
+   "fn": "weather",
+   "imp": 0.7,
+   "reach": 0.392,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner",
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 6,
+   "name": "Weather-as-scene art (idle)",
+   "fn": "weather",
+   "imp": 0.7,
+   "reach": 0.356,
+   "personas": {
+    "T": 0.8,
+    "ER": 0.8,
+    "GU": 0.6,
+    "PS": 0.4,
+    "P2": 0.4,
+    "G": 0.6
+   },
+   "contexts": [
+    "evening",
+    "grammy",
+    "guest",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 7,
+   "name": "Tappable weather scene with animal sounds",
+   "fn": "weather",
+   "imp": 0.4,
+   "reach": 0.102,
+   "personas": {
+    "T": 1.0,
+    "ER": 0.4,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 8,
+   "name": "Shared real-time list sync (phone page)",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.58,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 9,
+   "name": "Voice-add with on-wall echo",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.716,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 1.0,
+    "AI": 1.0,
+    "ER": 0.3
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "morning"
+   ]
+  },
+  {
+   "id": 10,
+   "name": "Explicit in-cart / bought state",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.58,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 11,
+   "name": "Recently-bought re-add tray",
+   "fn": "grocery",
+   "imp": 0.7,
+   "reach": 0.392,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.6,
+    "AI": 0.6
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 12,
+   "name": "Delete item",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.58,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 13,
+   "name": "Store / aisle sorting per store",
+   "fn": "grocery",
+   "imp": 0.7,
+   "reach": 0.344,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.4
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 14,
+   "name": "Autocomplete from household history",
+   "fn": "grocery",
+   "imp": 0.7,
+   "reach": 0.353,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.4,
+    "AI": 0.8
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 15,
+   "name": "Frequency-based staples (\"you're due for eggs\")",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.592,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 16,
+   "name": "Icon / picture tiles for pre-readers",
+   "fn": "grocery",
+   "imp": 0.7,
+   "reach": 0.3,
+   "personas": {
+    "T": 0.8,
+    "ER": 0.8,
+    "G": 1.0,
+    "PS": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "grammy",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 17,
+   "name": "Grammy's list, voice-routed",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.464,
+   "personas": {
+    "G": 1.0,
+    "AI": 0.8,
+    "PS": 0.6,
+    "P2": 0.6
+   },
+   "contexts": [
+    "dinner_prep",
+    "grammy"
+   ]
+  },
+  {
+   "id": 18,
+   "name": "Quantity / units",
+   "fn": "grocery",
+   "imp": 0.4,
+   "reach": 0.136,
+   "personas": {
+    "PS": 0.6,
+    "P2": 0.6,
+    "G": 0.4
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 19,
+   "name": "Barcode / photo add of an empty carton",
+   "fn": "grocery",
+   "imp": 0.4,
+   "reach": 0.174,
+   "personas": {
+    "PS": 0.6,
+    "P2": 0.8,
+    "G": 0.4,
+    "AI": 0.6
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 20,
+   "name": "List generated from meal plan",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.484,
+   "personas": {
+    "PS": 1.0,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 21,
+   "name": "Export / handoff to AnyList or Instacart",
+   "fn": "grocery",
+   "imp": 0.4,
+   "reach": 0.12,
+   "personas": {
+    "PS": 0.6,
+    "P2": 0.6
+   },
+   "contexts": [
+    "weekend"
+   ]
+  },
+  {
+   "id": 103,
+   "name": "Text or MMS a list / photo to Greg's number \u2192 canon list",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.64,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 105,
+   "name": "Camera list ingest at the wall (hold up paper / phone)",
+   "fn": "grocery",
+   "imp": 1.0,
+   "reach": 0.612,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep",
+    "grammy",
+    "weekend"
+   ]
+  },
+  {
+   "id": 22,
+   "name": "Color per person",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.688,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "ER": 0.8,
+    "G": 0.8,
+    "GU": 0.3
+   },
+   "contexts": [
+    "afterschool",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 23,
+   "name": "Today's agenda glance",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.74,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "ER": 0.8,
+    "GU": 0.4,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "grammy",
+    "morning"
+   ]
+  },
+  {
+   "id": 24,
+   "name": "Week view",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.492,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "G": 0.4
+   },
+   "contexts": [
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 25,
+   "name": "Month grid on tap",
+   "fn": "calendar",
+   "imp": 0.7,
+   "reach": 0.274,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.6,
+    "G": 0.4
+   },
+   "contexts": [
+    "weekend"
+   ]
+  },
+  {
+   "id": 26,
+   "name": "Per-person filter",
+   "fn": "calendar",
+   "imp": 0.7,
+   "reach": 0.28,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.6,
+    "ER": 0.4
+   },
+   "contexts": [
+    "morning"
+   ]
+  },
+  {
+   "id": 27,
+   "name": "Two-way Google write-back",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.58,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "AI": 1.0
+   },
+   "contexts": [
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 28,
+   "name": "Photo / flyer / email \u2192 events (import)",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.484,
+   "personas": {
+    "PS": 1.0,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 29,
+   "name": "TeamSnap / sports sync",
+   "fn": "calendar",
+   "imp": 0.4,
+   "reach": 0.091,
+   "personas": {
+    "PS": 0.6,
+    "ER": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "weekend"
+   ]
+  },
+  {
+   "id": 30,
+   "name": "School calendar batch import",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.388,
+   "personas": {
+    "PS": 1.0,
+    "AI": 1.0,
+    "ER": 0.4
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 31,
+   "name": "Voice-add event with confirm",
+   "fn": "calendar",
+   "imp": 1.0,
+   "reach": 0.66,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep",
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 32,
+   "name": "Conflict detection",
+   "fn": "calendar",
+   "imp": 0.7,
+   "reach": 0.302,
+   "personas": {
+    "PS": 0.8,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 33,
+   "name": "Event countdown (\"3 sleeps\")",
+   "fn": "calendar",
+   "imp": 0.7,
+   "reach": 0.358,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "PS": 0.6,
+    "G": 0.6,
+    "AI": 0.6
+   },
+   "contexts": [
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 34,
+   "name": "Per-event memo",
+   "fn": "calendar",
+   "imp": 0.4,
+   "reach": 0.12,
+   "personas": {
+    "PS": 0.6,
+    "P2": 0.6
+   },
+   "contexts": [
+    "evening"
+   ]
+  },
+  {
+   "id": 35,
+   "name": "One event \u2192 multiple people",
+   "fn": "calendar",
+   "imp": 0.7,
+   "reach": 0.19,
+   "personas": {
+    "PS": 0.8,
+    "AI": 0.8
+   },
+   "contexts": [
+    "evening"
+   ]
+  },
+  {
+   "id": 36,
+   "name": "Tonight dinner card",
+   "fn": "meals",
+   "imp": 1.0,
+   "reach": 0.804,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "ER": 0.8,
+    "G": 0.8,
+    "T": 0.3,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner",
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 37,
+   "name": "AI weekly plan from constraints",
+   "fn": "meals",
+   "imp": 0.7,
+   "reach": 0.302,
+   "personas": {
+    "PS": 0.8,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "weekend"
+   ]
+  },
+  {
+   "id": 38,
+   "name": "Recipe capture (photo / URL / handwriting)",
+   "fn": "meals",
+   "imp": 0.7,
+   "reach": 0.358,
+   "personas": {
+    "PS": 0.8,
+    "G": 0.8,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 39,
+   "name": "Cook-mode step display",
+   "fn": "meals",
+   "imp": 1.0,
+   "reach": 0.58,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 40,
+   "name": "Cook timers auto-parsed from recipe",
+   "fn": "meals",
+   "imp": 0.7,
+   "reach": 0.356,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.6,
+    "AI": 0.6
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 41,
+   "name": "Use what we have ingredient search",
+   "fn": "meals",
+   "imp": 1.0,
+   "reach": 0.54,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep"
+   ]
+  },
+  {
+   "id": 42,
+   "name": "Kid-facing meal icon (\"Taco Tuesday\")",
+   "fn": "meals",
+   "imp": 0.4,
+   "reach": 0.141,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "PS": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "dinner"
+   ]
+  },
+  {
+   "id": 106,
+   "name": "Ingredients + a vague idea \u2192 dish suggestions",
+   "fn": "meals",
+   "imp": 1.0,
+   "reach": 0.66,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 43,
+   "name": "Picture-step routine",
+   "fn": "routines",
+   "imp": 1.0,
+   "reach": 0.436,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "PS": 0.6,
+    "AI": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 44,
+   "name": "Walk-up one-tap complete (no login)",
+   "fn": "routines",
+   "imp": 1.0,
+   "reach": 0.352,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "PS": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 45,
+   "name": "Stars / points per step",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.193,
+   "personas": {
+    "ER": 1.0,
+    "PS": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 46,
+   "name": "Streak tracking",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.179,
+   "personas": {
+    "ER": 1.0,
+    "PS": 0.4,
+    "AI": 0.4
+   },
+   "contexts": [
+    "evening"
+   ]
+  },
+  {
+   "id": 47,
+   "name": "Confetti / celebration",
+   "fn": "routines",
+   "imp": 1.0,
+   "reach": 0.328,
+   "personas": {
+    "ER": 1.0,
+    "T": 1.0,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 48,
+   "name": "Pinned reward goal + progress",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.193,
+   "personas": {
+    "ER": 1.0,
+    "PS": 0.6
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 49,
+   "name": "Reward created / edited from the wall",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.316,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 50,
+   "name": "Child-lock per list",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.314,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "ER": 0.4
+   },
+   "contexts": [
+    "afterschool"
+   ]
+  },
+  {
+   "id": 51,
+   "name": "Today's Feelings check-in",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.33,
+   "personas": {
+    "ER": 1.0,
+    "PS": 0.8,
+    "P2": 0.4,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 52,
+   "name": "Toddler tidy-up ritual",
+   "fn": "routines",
+   "imp": 0.7,
+   "reach": 0.356,
+   "personas": {
+    "T": 1.0,
+    "PS": 0.6,
+    "P2": 0.6,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 107,
+   "name": "Routine complete \u2192 device unlock, Greg-enforced",
+   "fn": "routines",
+   "imp": 1.0,
+   "reach": 0.828,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "PS": 1.0,
+    "P2": 1.0,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 53,
+   "name": "No-fail open-ended play mode",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.368,
+   "personas": {
+    "T": 1.0,
+    "AI": 0.8,
+    "P2": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 54,
+   "name": "Giant isolated tap targets",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.16,
+   "personas": {
+    "T": 1.0
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 55,
+   "name": "Audio + visual payoff on every tap",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.192,
+   "personas": {
+    "T": 1.0,
+    "AI": 0.4
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 56,
+   "name": "Tap-only interactions (no drag)",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.112,
+   "personas": {
+    "T": 1.0
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 57,
+   "name": "Ignore accidental / multi-touch",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.112,
+   "personas": {
+    "T": 1.0
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 58,
+   "name": "Animal sounds / peekaboo / \"where's the X\"",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.26,
+   "personas": {
+    "T": 1.0,
+    "AI": 0.8,
+    "ER": 0.3
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 59,
+   "name": "Tap-to-draw chalkboard",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.188,
+   "personas": {
+    "T": 1.0,
+    "ER": 0.8,
+    "GU": 0.3
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 60,
+   "name": "Sing-along / music-making",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.217,
+   "personas": {
+    "T": 1.0,
+    "ER": 0.6,
+    "AI": 0.6,
+    "G": 0.3
+   },
+   "contexts": [
+    "evening",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 61,
+   "name": "Rotating short activities (4-6 min)",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.384,
+   "personas": {
+    "T": 1.0,
+    "AI": 1.0,
+    "P2": 0.6
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 62,
+   "name": "Contingent voice reactions by name",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.312,
+   "personas": {
+    "T": 1.0,
+    "AI": 1.0,
+    "ER": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 63,
+   "name": "Gesture / tap accepted in place of speech",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.168,
+   "personas": {
+    "T": 1.0,
+    "AI": 1.0
+   },
+   "contexts": [
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 64,
+   "name": "Generous listening, no rushed timeout",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.44,
+   "personas": {
+    "T": 1.0,
+    "ER": 1.0,
+    "AI": 1.0,
+    "G": 0.8
+   },
+   "contexts": [
+    "afterschool",
+    "grammy",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 65,
+   "name": "Never-say-\"wrong\" recognition handling",
+   "fn": "toddler",
+   "imp": 1.0,
+   "reach": 0.42,
+   "personas": {
+    "T": 1.0,
+    "ER": 1.0,
+    "AI": 1.0,
+    "G": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "grammy",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 112,
+   "name": "Joint moments (\"show Daddy!\")",
+   "fn": "toddler",
+   "imp": 0.7,
+   "reach": 0.434,
+   "personas": {
+    "T": 1.0,
+    "P2": 1.0,
+    "AI": 0.8,
+    "PS": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 66,
+   "name": "Why answers in kid register",
+   "fn": "dwight",
+   "imp": 1.0,
+   "reach": 0.248,
+   "personas": {
+    "ER": 1.0,
+    "AI": 1.0,
+    "T": 0.3
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 67,
+   "name": "Jokes / fun facts / science",
+   "fn": "dwight",
+   "imp": 1.0,
+   "reach": 0.304,
+   "personas": {
+    "ER": 1.0,
+    "AI": 1.0,
+    "T": 0.4,
+    "G": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "dinner",
+    "evening"
+   ]
+  },
+  {
+   "id": 68,
+   "name": "Quizzes / trivia",
+   "fn": "dwight",
+   "imp": 0.7,
+   "reach": 0.196,
+   "personas": {
+    "ER": 1.0,
+    "AI": 0.8,
+    "P2": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "weekend"
+   ]
+  },
+  {
+   "id": 69,
+   "name": "Mental-math and reading games",
+   "fn": "dwight",
+   "imp": 0.7,
+   "reach": 0.238,
+   "personas": {
+    "ER": 1.0,
+    "AI": 0.8,
+    "PS": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 70,
+   "name": "Chess / checkers / logic",
+   "fn": "dwight",
+   "imp": 0.4,
+   "reach": 0.125,
+   "personas": {
+    "ER": 1.0,
+    "P2": 0.6,
+    "AI": 0.6
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 71,
+   "name": "Lego-build prompts",
+   "fn": "dwight",
+   "imp": 0.7,
+   "reach": 0.196,
+   "personas": {
+    "ER": 1.0,
+    "AI": 0.8,
+    "P2": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "weekend"
+   ]
+  },
+  {
+   "id": 72,
+   "name": "Never dead-end on \"I don't know\"",
+   "fn": "dwight",
+   "imp": 1.0,
+   "reach": 0.336,
+   "personas": {
+    "ER": 1.0,
+    "AI": 1.0,
+    "T": 0.6,
+    "G": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 73,
+   "name": "Homework help",
+   "fn": "dwight",
+   "imp": 0.7,
+   "reach": 0.238,
+   "personas": {
+    "ER": 1.0,
+    "PS": 0.6,
+    "AI": 0.8
+   },
+   "contexts": [
+    "afterschool",
+    "evening"
+   ]
+  },
+  {
+   "id": 74,
+   "name": "Curated idle slideshow (faces first)",
+   "fn": "photos",
+   "imp": 1.0,
+   "reach": 0.88,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 1.0,
+    "ER": 0.6,
+    "T": 0.6,
+    "GU": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner",
+    "evening",
+    "grammy",
+    "guest",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 75,
+   "name": "Slow / print-like cadence",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.367,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 1.0,
+    "GU": 0.6
+   },
+   "contexts": [
+    "evening",
+    "grammy",
+    "guest"
+   ]
+  },
+  {
+   "id": 76,
+   "name": "Ambient brightness / color matching",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.482,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.8,
+    "GU": 0.4,
+    "AI": 1.0,
+    "T": 0.4,
+    "ER": 0.4
+   },
+   "contexts": [
+    "evening",
+    "morning"
+   ]
+  },
+  {
+   "id": 77,
+   "name": "Remote push-in by family",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.35,
+   "personas": {
+    "G": 1.0,
+    "PS": 0.8,
+    "P2": 0.8
+   },
+   "contexts": [
+    "grammy",
+    "weekend"
+   ]
+  },
+  {
+   "id": 78,
+   "name": "Kids' artwork gallery",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.49,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "G": 1.0,
+    "PS": 0.8,
+    "P2": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "grammy",
+    "guest"
+   ]
+  },
+  {
+   "id": 79,
+   "name": "On-photo captions / story",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.291,
+   "personas": {
+    "G": 1.0,
+    "PS": 0.6,
+    "P2": 0.6,
+    "GU": 0.4
+   },
+   "contexts": [
+    "evening",
+    "grammy",
+    "guest"
+   ]
+  },
+  {
+   "id": 80,
+   "name": "On this day memories",
+   "fn": "photos",
+   "imp": 1.0,
+   "reach": 0.676,
+   "personas": {
+    "PS": 0.8,
+    "P2": 1.0,
+    "G": 1.0,
+    "AI": 1.0,
+    "ER": 0.4
+   },
+   "contexts": [
+    "evening",
+    "grammy",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 81,
+   "name": "Presence-triggered flip photos \u2192 utility",
+   "fn": "photos",
+   "imp": 1.0,
+   "reach": 0.852,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "ER": 0.8,
+    "T": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "grammy",
+    "morning"
+   ]
+  },
+  {
+   "id": 82,
+   "name": "On-device face recognition \u2192 prioritise content",
+   "fn": "photos",
+   "imp": 1.0,
+   "reach": 0.708,
+   "personas": {
+    "AI": 1.0,
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.6,
+    "ER": 0.6,
+    "T": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "grammy",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 109,
+   "name": "LIFELOG on-this-day story cards",
+   "fn": "photos",
+   "imp": 1.0,
+   "reach": 0.608,
+   "personas": {
+    "P2": 1.0,
+    "PS": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 110,
+   "name": "Throwbak face-curated albums",
+   "fn": "photos",
+   "imp": 0.7,
+   "reach": 0.426,
+   "personas": {
+    "P2": 1.0,
+    "PS": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 83,
+   "name": "One-way \"dinner's ready\" broadcast",
+   "fn": "media",
+   "imp": 1.0,
+   "reach": 0.732,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "AI": 1.0,
+    "ER": 0.6
+   },
+   "contexts": [
+    "dinner"
+   ]
+  },
+  {
+   "id": 84,
+   "name": "Content-by-name TV control",
+   "fn": "media",
+   "imp": 1.0,
+   "reach": 0.72,
+   "personas": {
+    "ER": 0.8,
+    "T": 0.6,
+    "P2": 1.0,
+    "PS": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 85,
+   "name": "Roku voice control with on-wall status",
+   "fn": "media",
+   "imp": 1.0,
+   "reach": 0.588,
+   "personas": {
+    "P2": 1.0,
+    "PS": 0.8,
+    "G": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 86,
+   "name": "Two-way check-in (consent-visible)",
+   "fn": "media",
+   "imp": 0.4,
+   "reach": 0.139,
+   "personas": {
+    "P2": 0.8,
+    "PS": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 87,
+   "name": "Family jukebox (Spotify)",
+   "fn": "media",
+   "imp": 0.7,
+   "reach": 0.459,
+   "personas": {
+    "PS": 0.8,
+    "P2": 1.0,
+    "ER": 0.6,
+    "T": 0.6,
+    "G": 0.4
+   },
+   "contexts": [
+    "dinner",
+    "dinner_prep",
+    "weekend"
+   ]
+  },
+  {
+   "id": 88,
+   "name": "Video call to grandparents",
+   "fn": "media",
+   "imp": 0.7,
+   "reach": 0.339,
+   "personas": {
+    "ER": 1.0,
+    "T": 0.8,
+    "G": 0.8,
+    "PS": 0.6
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 108,
+   "name": "TV intercom: pause + on-screen message + Greg's voice on the TV",
+   "fn": "media",
+   "imp": 1.0,
+   "reach": 0.732,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 0.8,
+    "AI": 1.0,
+    "ER": 0.6
+   },
+   "contexts": [
+    "dinner",
+    "evening"
+   ]
+  },
+  {
+   "id": 89,
+   "name": "Morning briefing with a face",
+   "fn": "ai",
+   "imp": 1.0,
+   "reach": 0.708,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "ER": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "morning"
+   ]
+  },
+  {
+   "id": 90,
+   "name": "Proactive suggestion line (deferent, dismissible)",
+   "fn": "ai",
+   "imp": 0.7,
+   "reach": 0.364,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "AI": 1.0,
+    "G": 0.4
+   },
+   "contexts": [
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 91,
+   "name": "Local-events / activity planner",
+   "fn": "ai",
+   "imp": 1.0,
+   "reach": 0.628,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "AI": 1.0,
+    "ER": 0.4
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 92,
+   "name": "Family-rhythm digest",
+   "fn": "ai",
+   "imp": 0.4,
+   "reach": 0.192,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "evening",
+    "weekend"
+   ]
+  },
+  {
+   "id": 93,
+   "name": "Undo / correct any proactive action",
+   "fn": "ai",
+   "imp": 0.7,
+   "reach": 0.314,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "AI": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 94,
+   "name": "Route AI outputs into real lists / calendar",
+   "fn": "ai",
+   "imp": 1.0,
+   "reach": 0.532,
+   "personas": {
+    "PS": 1.0,
+    "P2": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "dinner_prep",
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 95,
+   "name": "Ambient-far / implicit / personal zones",
+   "fn": "system",
+   "imp": 1.0,
+   "reach": 0.936,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "T": 0.8,
+    "ER": 0.8,
+    "G": 1.0,
+    "GU": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner",
+    "dinner_prep",
+    "evening",
+    "grammy",
+    "guest",
+    "morning",
+    "toddler_alone",
+    "weekend"
+   ]
+  },
+  {
+   "id": 96,
+   "name": "Presence / face personalisation on approach",
+   "fn": "system",
+   "imp": 1.0,
+   "reach": 0.884,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "T": 0.8,
+    "ER": 0.8,
+    "G": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "grammy",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 97,
+   "name": "Kid reach-height touch zone",
+   "fn": "system",
+   "imp": 0.7,
+   "reach": 0.269,
+   "personas": {
+    "T": 1.0,
+    "ER": 1.0,
+    "PS": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 98,
+   "name": "Minimal / collapsible nav",
+   "fn": "system",
+   "imp": 0.7,
+   "reach": 0.47,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.8,
+    "ER": 0.8,
+    "GU": 0.8,
+    "T": 0.4
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 99,
+   "name": "Guest mode (hide personal content)",
+   "fn": "system",
+   "imp": 0.7,
+   "reach": 0.364,
+   "personas": {
+    "GU": 1.0,
+    "PS": 0.8,
+    "P2": 0.8,
+    "AI": 1.0
+   },
+   "contexts": [
+    "guest"
+   ]
+  },
+  {
+   "id": 100,
+   "name": "Grandparent-first legibility (large type, voice)",
+   "fn": "system",
+   "imp": 1.0,
+   "reach": 0.252,
+   "personas": {
+    "G": 1.0,
+    "AI": 0.6,
+    "PS": 0.4
+   },
+   "contexts": [
+    "grammy",
+    "morning"
+   ]
+  },
+  {
+   "id": 101,
+   "name": "Every command echoed on the wall",
+   "fn": "system",
+   "imp": 1.0,
+   "reach": 0.872,
+   "personas": {
+    "PS": 1.0,
+    "P2": 1.0,
+    "G": 1.0,
+    "ER": 0.8,
+    "T": 0.6,
+    "AI": 1.0
+   },
+   "contexts": [
+    "afterschool",
+    "dinner",
+    "dinner_prep",
+    "evening",
+    "grammy",
+    "morning",
+    "weekend"
+   ]
+  },
+  {
+   "id": 102,
+   "name": "Timer / stopwatch / chalkboard tools",
+   "fn": "system",
+   "imp": 0.7,
+   "reach": 0.456,
+   "personas": {
+    "PS": 0.8,
+    "P2": 0.8,
+    "G": 0.6,
+    "ER": 0.8,
+    "T": 0.6
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "toddler_alone"
+   ]
+  },
+  {
+   "id": 104,
+   "name": "Display-log instrumentation (replaces persona priors)",
+   "fn": "system",
+   "imp": 0.7,
+   "reach": 0.19,
+   "personas": {
+    "AI": 1.0,
+    "P2": 0.8
+   },
+   "contexts": [
+    "afterschool",
+    "dinner_prep",
+    "evening",
+    "morning",
+    "weekend"
+   ]
+  }
+ ]
+}
