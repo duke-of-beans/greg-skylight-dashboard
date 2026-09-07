@@ -576,11 +576,7 @@ function showCard(id){
 // never show a cramped widget without event details when the real app
 // is one launch away.
 function openFullCalendar(){
-  if(typeof Greg!=='undefined' && Greg.launchApp){
-    Greg.launchApp('com.google.android.calendar');
-  } else {
-    toggleCard('calendarCard'); // fallback if GregBridge unavailable
-  }
+  toggleCard('calendarCard');  // 7-day card IS the calendar view now
 }
 
 function toggleCard(id){
