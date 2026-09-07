@@ -1,0 +1,112 @@
+id,name,fn,imp,reach,PS,P2,T,ER,G,AI,GU,morning,afterschool,dinner_prep,dinner,evening,weekend,toddler_alone,guest,grammy
+1,Glanceable conditions glyph + temp,weather,1.0,0.728,1.0,1.0,0.2,0.6,1.0,0,0.6,1,1,0,0,0,1,0,1,1
+2,One-line advice (umbrella / coat / park day),weather,1.0,0.66,1.0,0.8,0,0.4,0.8,1.0,0,1,0,0,0,0,1,0,0,0
+3,Per-person dress hint,weather,0.7,0.35,1.0,0,0.4,0.8,0,1.0,0,1,0,0,0,0,0,0,0,0
+4,Next-hour precipitation alert,weather,0.7,0.353,0.8,0.8,0,0,0.4,0.8,0,1,1,0,0,0,1,0,0,0
+5,Severe-weather alert card,weather,0.7,0.392,0.8,0.8,0,0,0.8,1.0,0,1,0,0,1,1,0,0,0,0
+6,Weather-as-scene art (idle),weather,0.7,0.356,0.4,0.4,0.8,0.8,0.6,0,0.6,1,0,0,0,1,1,0,1,1
+7,Tappable weather scene with animal sounds,weather,0.4,0.102,0,0,1.0,0.4,0,0.6,0,0,1,0,0,0,0,1,0,0
+8,Shared real-time list sync (phone page),grocery,1.0,0.58,1.0,1.0,0,0,0.8,0,0,0,0,1,0,0,1,0,0,0
+9,Voice-add with on-wall echo,grocery,1.0,0.716,1.0,1.0,0,0.3,1.0,1.0,0,1,1,1,0,0,0,0,0,0
+10,Explicit in-cart / bought state,grocery,1.0,0.58,1.0,1.0,0,0,0.8,0,0,0,0,1,0,0,1,0,0,0
+11,Recently-bought re-add tray,grocery,0.7,0.392,1.0,0.8,0,0,0.6,0.6,0,0,0,1,0,0,1,0,0,0
+12,Delete item,grocery,1.0,0.58,1.0,1.0,0,0,0.8,0,0,0,0,1,0,0,0,0,0,0
+13,Store / aisle sorting per store,grocery,0.7,0.344,1.0,0.8,0,0,0.4,0,0,0,0,1,0,0,1,0,0,0
+14,Autocomplete from household history,grocery,0.7,0.353,0.8,0.8,0,0,0.4,0.8,0,0,0,1,0,0,0,0,0,0
+15,"Frequency-based staples (""you're due for eggs"")",grocery,1.0,0.592,1.0,0.8,0,0,0.6,1.0,0,1,0,1,0,0,1,0,0,0
+16,Icon / picture tiles for pre-readers,grocery,0.7,0.3,0.4,0,0.8,0.8,1.0,0,0,0,1,0,0,0,0,1,0,1
+17,"Grammy's list, voice-routed",grocery,1.0,0.464,0.6,0.6,0,0,1.0,0.8,0,0,0,1,0,0,0,0,0,1
+18,Quantity / units,grocery,0.4,0.136,0.6,0.6,0,0,0.4,0,0,0,0,1,0,0,0,0,0,0
+19,Barcode / photo add of an empty carton,grocery,0.4,0.174,0.6,0.8,0,0,0.4,0.6,0,0,0,1,0,0,0,0,0,0
+20,List generated from meal plan,grocery,1.0,0.484,1.0,0.6,0,0,0,1.0,0,0,0,1,0,0,1,0,0,0
+21,Export / handoff to AnyList or Instacart,grocery,0.4,0.12,0.6,0.6,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+103,Text or MMS a list / photo to Greg's number → canon list,grocery,1.0,0.64,1.0,1.0,0,0,0.6,1.0,0,1,1,1,0,0,1,0,0,0
+105,Camera list ingest at the wall (hold up paper / phone),grocery,1.0,0.612,1.0,0.8,0,0,0.8,1.0,0,0,0,1,0,0,1,0,0,1
+22,Color per person,calendar,1.0,0.688,1.0,1.0,0,0.8,0.8,0,0.3,1,1,0,0,0,1,0,0,0
+23,Today's agenda glance,calendar,1.0,0.74,1.0,1.0,0,0.8,0.8,0.6,0.4,1,1,0,0,0,0,0,0,1
+24,Week view,calendar,1.0,0.492,1.0,0.8,0,0,0.4,0,0,1,0,0,0,1,1,0,0,0
+25,Month grid on tap,calendar,0.7,0.274,0.8,0.6,0,0,0.4,0,0,0,0,0,0,0,1,0,0,0
+26,Per-person filter,calendar,0.7,0.28,0.8,0.6,0,0.4,0,0,0,1,0,0,0,0,0,0,0,0
+27,Two-way Google write-back,calendar,1.0,0.58,1.0,1.0,0,0,0,1.0,0,1,0,0,0,1,1,0,0,0
+28,Photo / flyer / email → events (import),calendar,1.0,0.484,1.0,0.6,0,0,0,1.0,0,0,1,0,0,1,1,0,0,0
+29,TeamSnap / sports sync,calendar,0.4,0.091,0.6,0,0,0.6,0,0,0,0,1,0,0,0,1,0,0,0
+30,School calendar batch import,calendar,1.0,0.388,1.0,0,0,0.4,0,1.0,0,0,0,0,0,1,1,0,0,0
+31,Voice-add event with confirm,calendar,1.0,0.66,1.0,1.0,0,0,0.8,1.0,0,1,0,1,0,1,0,0,0,0
+32,Conflict detection,calendar,0.7,0.302,0.8,0.6,0,0,0,1.0,0,0,0,0,0,1,1,0,0,0
+33,"Event countdown (""3 sleeps"")",calendar,0.7,0.358,0.6,0,0.8,1.0,0.6,0.6,0,1,0,0,0,1,1,0,0,0
+34,Per-event memo,calendar,0.4,0.12,0.6,0.6,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+35,One event → multiple people,calendar,0.7,0.19,0.8,0,0,0,0,0.8,0,0,0,0,0,1,0,0,0,0
+36,Tonight dinner card,meals,1.0,0.804,1.0,1.0,0.3,0.8,0.8,1.0,0,0,1,1,1,0,0,0,0,0
+37,AI weekly plan from constraints,meals,0.7,0.302,0.8,0.6,0,0,0,1.0,0,0,0,0,0,0,1,0,0,0
+38,Recipe capture (photo / URL / handwriting),meals,0.7,0.358,0.8,0.6,0,0,0.8,1.0,0,0,0,1,0,0,1,0,0,0
+39,Cook-mode step display,meals,1.0,0.58,1.0,1.0,0,0,0.8,0,0,0,0,1,0,0,0,0,0,0
+40,Cook timers auto-parsed from recipe,meals,0.7,0.356,0.8,0.8,0,0,0.6,0.6,0,0,0,1,0,0,0,0,0,0
+41,Use what we have ingredient search,meals,1.0,0.54,0.8,0.8,0,0,0.6,1.0,0,0,0,1,0,0,0,0,0,0
+42,"Kid-facing meal icon (""Taco Tuesday"")",meals,0.4,0.141,0.4,0,0.8,1.0,0,0,0,0,1,0,1,0,0,0,0,0
+106,Ingredients + a vague idea → dish suggestions,meals,1.0,0.66,1.0,1.0,0,0,0.8,1.0,0,0,0,1,0,0,1,0,0,0
+43,Picture-step routine,routines,1.0,0.436,0.6,0,0.8,1.0,0,0.4,0,1,1,0,0,1,0,0,0,0
+44,Walk-up one-tap complete (no login),routines,1.0,0.352,0.4,0,0.8,1.0,0,0,0,1,1,0,0,1,0,0,0,0
+45,Stars / points per step,routines,0.7,0.193,0.6,0,0,1.0,0,0,0,0,1,0,0,1,0,0,0,0
+46,Streak tracking,routines,0.7,0.179,0.4,0,0,1.0,0,0.4,0,0,0,0,0,1,0,0,0,0
+47,Confetti / celebration,routines,1.0,0.328,0,0,1.0,1.0,0,0.6,0,1,1,0,0,1,0,0,0,0
+48,Pinned reward goal + progress,routines,0.7,0.193,0.6,0,0,1.0,0,0,0,0,0,0,0,1,1,0,0,0
+49,Reward created / edited from the wall,routines,0.7,0.316,1.0,0.8,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+50,Child-lock per list,routines,0.7,0.314,0.8,0.8,0,0.4,0,0,0,0,1,0,0,0,0,0,0,0
+51,Today's Feelings check-in,routines,0.7,0.33,0.8,0.4,0,1.0,0,0.6,0,0,1,0,0,1,0,0,0,0
+52,Toddler tidy-up ritual,routines,0.7,0.356,0.6,0.6,1.0,0,0,0.6,0,0,1,0,0,1,0,0,0,0
+107,"Routine complete → device unlock, Greg-enforced",routines,1.0,0.828,1.0,1.0,0.8,1.0,0,1.0,0,0,1,0,0,1,1,0,0,0
+53,No-fail open-ended play mode,toddler,1.0,0.368,0,0.6,1.0,0,0,0.8,0,0,1,0,0,0,0,1,0,0
+54,Giant isolated tap targets,toddler,1.0,0.16,0,0,1.0,0,0,0,0,0,0,0,0,0,0,1,0,0
+55,Audio + visual payoff on every tap,toddler,1.0,0.192,0,0,1.0,0,0,0.4,0,0,0,0,0,0,0,1,0,0
+56,Tap-only interactions (no drag),toddler,0.7,0.112,0,0,1.0,0,0,0,0,0,0,0,0,0,0,1,0,0
+57,Ignore accidental / multi-touch,toddler,0.7,0.112,0,0,1.0,0,0,0,0,0,0,0,0,0,0,1,0,0
+58,"Animal sounds / peekaboo / ""where's the X""",toddler,1.0,0.26,0,0,1.0,0.3,0,0.8,0,0,1,0,0,0,0,1,0,0
+59,Tap-to-draw chalkboard,toddler,0.7,0.188,0,0,1.0,0.8,0,0,0.3,0,1,0,0,0,0,1,0,0
+60,Sing-along / music-making,toddler,0.7,0.217,0,0,1.0,0.6,0.3,0.6,0,0,0,0,0,1,0,1,0,0
+61,Rotating short activities (4-6 min),toddler,1.0,0.384,0,0.6,1.0,0,0,1.0,0,0,0,0,0,0,0,1,0,0
+62,Contingent voice reactions by name,toddler,1.0,0.312,0,0,1.0,0.6,0,1.0,0,0,1,0,0,0,0,1,0,0
+63,Gesture / tap accepted in place of speech,toddler,0.7,0.168,0,0,1.0,0,0,1.0,0,0,0,0,0,0,0,1,0,0
+64,"Generous listening, no rushed timeout",toddler,1.0,0.44,0,0,1.0,1.0,0.8,1.0,0,0,1,0,0,0,0,1,0,1
+65,"Never-say-""wrong"" recognition handling",toddler,1.0,0.42,0,0,1.0,1.0,0.6,1.0,0,0,1,0,0,0,0,1,0,1
+112,"Joint moments (""show Daddy!"")",toddler,0.7,0.434,0.6,1.0,1.0,0,0,0.8,0,0,1,0,0,0,0,1,0,0
+66,Why answers in kid register,dwight,1.0,0.248,0,0,0.3,1.0,0,1.0,0,0,1,0,0,1,1,0,0,0
+67,Jokes / fun facts / science,dwight,1.0,0.304,0,0,0.4,1.0,0.4,1.0,0,0,1,0,1,1,0,0,0,0
+68,Quizzes / trivia,dwight,0.7,0.196,0,0.4,0,1.0,0,0.8,0,0,1,0,0,0,1,0,0,0
+69,Mental-math and reading games,dwight,0.7,0.238,0.6,0,0,1.0,0,0.8,0,0,1,0,0,1,0,0,0,0
+70,Chess / checkers / logic,dwight,0.4,0.125,0,0.6,0,1.0,0,0.6,0,0,0,0,0,1,1,0,0,0
+71,Lego-build prompts,dwight,0.7,0.196,0,0.4,0,1.0,0,0.8,0,0,1,0,0,0,1,0,0,0
+72,"Never dead-end on ""I don't know""",dwight,1.0,0.336,0,0,0.6,1.0,0.4,1.0,0,0,1,0,0,1,0,0,0,0
+73,Homework help,dwight,0.7,0.238,0.6,0,0,1.0,0,0.8,0,0,1,0,0,1,0,0,0,0
+74,Curated idle slideshow (faces first),photos,1.0,0.88,1.0,1.0,0.6,0.6,1.0,1.0,0.8,1,0,0,1,1,1,0,1,1
+75,Slow / print-like cadence,photos,0.7,0.367,0.8,0.8,0,0,1.0,0,0.6,0,0,0,0,1,0,0,1,1
+76,Ambient brightness / color matching,photos,0.7,0.482,0.8,0.8,0.4,0.4,0.8,1.0,0.4,1,0,0,0,1,0,0,0,0
+77,Remote push-in by family,photos,0.7,0.35,0.8,0.8,0,0,1.0,0,0,0,0,0,0,0,1,0,0,1
+78,Kids' artwork gallery,photos,0.7,0.49,0.8,0.6,0.8,1.0,1.0,0,0,0,1,0,0,1,0,0,1,1
+79,On-photo captions / story,photos,0.7,0.291,0.6,0.6,0,0,1.0,0,0.4,0,0,0,0,1,0,0,1,1
+80,On this day memories,photos,1.0,0.676,0.8,1.0,0,0.4,1.0,1.0,0,1,0,0,0,1,1,0,0,1
+81,Presence-triggered flip photos → utility,photos,1.0,0.852,1.0,1.0,0.6,0.8,0.8,1.0,0,1,1,1,0,1,0,0,0,1
+82,On-device face recognition → prioritise content,photos,1.0,0.708,0.8,0.8,0.6,0.6,0.6,1.0,0,1,1,1,0,1,1,0,0,1
+109,LIFELOG on-this-day story cards,photos,1.0,0.608,0.8,1.0,0,0,0.8,1.0,0,1,0,0,0,1,1,0,0,0
+110,Throwbak face-curated albums,photos,0.7,0.426,0.8,1.0,0,0,0.8,1.0,0,0,0,0,0,1,1,0,0,0
+83,"One-way ""dinner's ready"" broadcast",media,1.0,0.732,1.0,1.0,0,0.6,0.8,1.0,0,0,0,0,1,0,0,0,0,0
+84,Content-by-name TV control,media,1.0,0.72,0.8,1.0,0.6,0.8,0,1.0,0,0,1,0,0,1,1,0,0,0
+85,Roku voice control with on-wall status,media,1.0,0.588,0.8,1.0,0,0,0.6,1.0,0,0,1,0,0,1,1,0,0,0
+86,Two-way check-in (consent-visible),media,0.4,0.139,0.6,0.8,0,0,0,0,0,0,1,0,0,0,0,1,0,0
+87,Family jukebox (Spotify),media,0.7,0.459,0.8,1.0,0.6,0.6,0.4,0,0,0,0,1,1,0,1,0,0,0
+88,Video call to grandparents,media,0.7,0.339,0.6,0,0.8,1.0,0.8,0,0,0,0,0,0,1,1,0,0,0
+108,TV intercom: pause + on-screen message + Greg's voice on the TV,media,1.0,0.732,1.0,1.0,0,0.6,0.8,1.0,0,0,0,0,1,1,0,0,0,0
+89,Morning briefing with a face,ai,1.0,0.708,1.0,0.8,0,0.8,0.8,1.0,0,1,0,0,0,0,0,0,0,0
+90,"Proactive suggestion line (deferent, dismissible)",ai,0.7,0.364,0.8,0.8,0,0,0.4,1.0,0,1,0,0,0,1,1,0,0,0
+91,Local-events / activity planner,ai,1.0,0.628,1.0,1.0,0,0.4,0,1.0,0,0,0,0,0,1,1,0,0,0
+92,Family-rhythm digest,ai,0.4,0.192,0.8,0.8,0,0,0,1.0,0,0,0,0,0,1,1,0,0,0
+93,Undo / correct any proactive action,ai,0.7,0.314,0.8,0.8,0,0,0,0.6,0,1,1,1,0,1,1,0,0,0
+94,Route AI outputs into real lists / calendar,ai,1.0,0.532,1.0,0.8,0,0,0,1.0,0,1,0,1,0,1,1,0,0,0
+95,Ambient-far / implicit / personal zones,system,1.0,0.936,1.0,1.0,0.8,0.8,1.0,1.0,0.8,1,1,1,1,1,1,1,1,1
+96,Presence / face personalisation on approach,system,1.0,0.884,1.0,1.0,0.8,0.8,0.8,1.0,0,1,1,1,0,1,1,0,0,1
+97,Kid reach-height touch zone,system,0.7,0.269,0.4,0,1.0,1.0,0,0,0,0,1,0,0,0,0,1,0,0
+98,Minimal / collapsible nav,system,0.7,0.47,0.8,0.8,0.4,0.8,0.8,0,0.8,1,1,1,0,1,1,0,0,0
+99,Guest mode (hide personal content),system,0.7,0.364,0.8,0.8,0,0,0,1.0,1.0,0,0,0,0,0,0,0,1,0
+100,"Grandparent-first legibility (large type, voice)",system,1.0,0.252,0.4,0,0,0,1.0,0.6,0,1,0,0,0,0,0,0,0,1
+101,Every command echoed on the wall,system,1.0,0.872,1.0,1.0,0.6,0.8,1.0,1.0,0,1,1,1,1,1,1,0,0,1
+102,Timer / stopwatch / chalkboard tools,system,0.7,0.456,0.8,0.8,0.6,0.8,0.6,0,0,0,1,1,0,0,0,1,0,0
+104,Display-log instrumentation (replaces persona priors),system,0.7,0.19,0,0.8,0,0,0,1.0,0,1,1,1,0,1,1,0,0,0
