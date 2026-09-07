@@ -12,7 +12,7 @@
 
 ## Architecture
 
-Single self-contained `index.html` (1242 lines). NO build step, NO npm, NO framework.
+Single self-contained `index.html` (~1525 lines). NO build step, NO npm, NO framework.
 This is a locally-served file on an Android tablet (Skylight D156, model 150-CAL).
 
 ### External Dependencies (runtime)
@@ -35,6 +35,8 @@ This is a locally-served file on an Android tablet (Skylight D156, model 150-CAL
 - Nav bar with icon buttons for each card
 - GregBridge JS interface for Android-native calls (`Greg.resetDim()`, `Greg.printHtml()`)
 - Print support for grocery lists (GregBridge → Android print framework, fallback iframe window.print)
+- **Greg Display Layer (2026-09-07):** WebSocket client to CORTEX (`surface=skylight`, ring 5, no token). Listens for `display` events and renders full-screen overlays: structured (opens existing card + highlights item), generated (Gregore-styled HTML from CORTEX), interactive (chalkboard, timer, stopwatch). Action confirmations render as a 4s pill. `window.gregDisplay` exposes `show/close/action` + `chalk`/`stopwatch` hooks for voice control. Block is at the end of `<body>`, marked "GREG DISPLAY LAYER". Auto-reconnects with backoff.
+- **Media card is live:** PLEXUS payload now includes `devices[]` (power/app/playing per Roku) from CORTEX actuate.
 
 ## Devices
 
