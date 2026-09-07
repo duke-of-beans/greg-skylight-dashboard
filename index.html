@@ -700,7 +700,7 @@ function switchList(el){
 }
 
 function fetchGrocery(){
-  fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,text.asc',{headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
+  return fetch(CFG.SUPABASE_URL+'/rest/v1/grocery_items?list_id=eq.'+activeListId+'&order=category.asc,text.asc',{headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON}})
   .then(function(r){return r.json()}).then(function(items){
     var c=document.getElementById('groceryItems');
     if(!items||!items.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:8px 0">List is empty</div>';return;}
@@ -1451,14 +1451,64 @@ setTimeout(initCamera, 5000);
     // Structured views just open the existing card ├óΓé¼ΓÇ¥ no overlay needed.
     // Close overlay if open, then show the card via the existing system.
     overlay.classList.remove('open','visible');
-    if (cardId && typeof showCard === 'function') {
-      showCard(cardId);
-      // VISIBILITY: highlight the item that was just added
-      if (d.highlight) setTimeout(function(){ highlightItem(cardId, d.highlight); }, 300);
-      // Structured views use the card timeout, then return to ambient
-      clearTimeout(closeTimer);
-      if (d.timeout_s > 0) closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, d.timeout_s*1000);
+    if (!cardId || typeof showCard !== 'function') return;
+    showCard(cardId);
+    clearTimeout(closeTimer);
+    if (d.timeout_s > 0) closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, d.timeout_s*1000);
+
+    // VISIBILITY PRINCIPLE: when Greg just WROTE something (add_list_item /
+    // add_family_event) the event carries the fresh row in d.content. Refresh
+    // the card from Supabase first, then animate the new item in - never wait
+    // for the card's own poll.
+    var c = d.content || {};
+
+    if (d.view === 'grocery') {
+      // Greg may have written to the other list - switch the picker to it.
+      if (c.list_id && c.list_id !== activeListId) {
+        var pick = document.querySelector('.list-pick[data-list="' + c.list_id + '"]');
+        if (pick) { activeListId = c.list_id; document.querySelectorAll('.list-pick').forEach(function(p){p.classList.remove('active')}); pick.classList.add('active'); }
+      }
+      var p = (typeof fetchGrocery === 'function') ? fetchGrocery() : null;
+      var after = function(){ if (d.highlight) highlightItem(cardId, d.highlight); };
+      if (p && p.then) p.then(after, after); else setTimeout(after, 300);
+      return;
     }
+
+    if (d.view === 'calendar') {
+      if (typeof fetchCalendar === 'function') fetchCalendar();
+      // fetchCalendar has no promise (counter-based) - give it a beat, then show
+      // the new event at the top of today's list and light up its day cell.
+      setTimeout(function(){
+        var ev = c.event;
+        if (!ev) { if (d.highlight) highlightItem(cardId, d.highlight); return; }
+        var list = document.getElementById('calendarEvents');
+        if (list) {
+          var dt = new Date(ev.event_date + 'T' + (ev.event_time || '12:00:00'));
+          var when = dt.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+          if (ev.event_time) when += ' ' + (dt.getHours()%12||12) + ':' + (dt.getMinutes()<10?'0':'') + dt.getMinutes() + ' ' + (dt.getHours()>=12?'PM':'AM');
+          var row = document.createElement('div');
+          row.className = 'cal-event cal-type-' + (ev.event_type || 'general') + ' greg-highlight';
+          row.innerHTML = '<div class="cal-dot" style="background:var(--greg);height:24px"></div><div><div class="cal-time">Added</div><div class="cal-name">' + String(ev.title).replace(/</g,'&lt;') + '</div><div style="font-size:11px;color:var(--tx-m)">' + when + (ev.person && ev.person !== 'family' ? ' / ' + ev.person : '') + '</div></div>';
+          var empty = null;
+          for (var k=0;k<list.children.length;k++){ if ((list.children[k].textContent||'').indexOf('Nothing scheduled') !== -1) empty = list.children[k]; }
+          if (empty) empty.remove();
+          list.insertBefore(row, list.firstChild);
+          setTimeout(function(){ row.classList.remove('greg-highlight'); }, 1600);
+        }
+        // Light the day cell if the event is in the month on screen
+        var now = new Date();
+        var ym = now.getFullYear() + '-' + (now.getMonth()+1 < 10 ? '0' : '') + (now.getMonth()+1);
+        if (ev.event_date && ev.event_date.slice(0,7) === ym) {
+          var dayNum = String(parseInt(ev.event_date.slice(8,10), 10));
+          var cells = document.querySelectorAll('#calGrid .cal-day:not(.cal-other)');
+          for (var i=0;i<cells.length;i++){ if (cells[i].textContent === dayNum) { cells[i].classList.add('has-event','greg-highlight'); setTimeout(function(el){return function(){el.classList.remove('greg-highlight');};}(cells[i]),1600); break; } }
+        }
+      }, 900);
+      return;
+    }
+
+    // Any other structured view: plain open + optional highlight
+    if (d.highlight) setTimeout(function(){ highlightItem(cardId, d.highlight); }, 300);
   }
   function highlightItem(cardId, text){
     var card = document.getElementById(cardId); if (!card) return;
