@@ -16,6 +16,8 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .photo-layer{position:absolute;inset:0;z-index:1}
 .photo-slide{position:absolute;inset:0;opacity:0;transition:opacity 2.5s ease-in-out;background-size:cover;background-position:center}
 .photo-slide.active{opacity:1}
+.photo-slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo-slide.gradient{background-size:cover}
 .photo-gradient{position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,rgba(30,26,22,0.92) 0%,rgba(30,26,22,0.5) 40%,transparent 100%);z-index:2;pointer-events:none}
 .photo-gradient-top{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(30,26,22,0.5) 0%,transparent 100%);z-index:2;pointer-events:none}
@@ -394,22 +396,39 @@ function updateTime(){
 }
 updateTime(); setInterval(updateTime,10000);
 
-// ═══════════════════════════════════════════
-// PHOTO SLIDESHOW
-// ═══════════════════════════════════════════
-var photoUrls = []; // populated by Drive fetch
+// PHOTO/VIDEO SLIDESHOW
+// Videos <=15s auto-play muted in slideshow rotation.
+// Videos >15s excluded by the photos-proxy edge function.
 var slides = document.querySelectorAll('.photo-slide');
 var cur = 0, paused = false;
+var slideTimer = null;
+
+function scheduleNextSlide(delayMs) {
+  if (slideTimer) clearTimeout(slideTimer);
+  slideTimer = setTimeout(nextSlide, delayMs || CFG.PHOTO_INTERVAL);
+}
 
 function nextSlide(){
-  if(paused) return;
-  slides[cur].classList.remove('active');
+  if(paused) { scheduleNextSlide(); return; }
+  var outgoing = slides[cur];
+  var outVid = outgoing.querySelector('video');
+  if (outVid) { outVid.pause(); outVid.currentTime = 0; }
+  outgoing.classList.remove('active');
   cur = (cur+1) % slides.length;
-  slides[cur].classList.add('active');
+  var incoming = slides[cur];
+  incoming.classList.add('active');
+  var inVid = incoming.querySelector('video');
+  if (inVid) {
+    inVid.currentTime = 0;
+    inVid.play().catch(function(){});
+    var holdMs = ((inVid.duration || 10) + 1) * 1000;
+    scheduleNextSlide(Math.min(holdMs, 20000));
+  } else {
+    scheduleNextSlide();
+  }
 }
-setInterval(nextSlide, CFG.PHOTO_INTERVAL);
+scheduleNextSlide();
 
-// Google Photos from shared albums (via Supabase proxy)
 function fetchPhotos(){
   fetch(CFG.SUPABASE_URL+'/functions/v1/photos-proxy')
   .then(function(r){return r.json()}).then(function(d){
@@ -418,14 +437,27 @@ function fetchPhotos(){
     layer.innerHTML = '';
     d.photos.forEach(function(item, i){
       var url = typeof item === 'string' ? item : item.url;
+      var type = (typeof item === 'object' && item.type) || 'photo';
       var div = document.createElement('div');
       div.className = 'photo-slide' + (i===0?' active':'');
-      div.style.backgroundImage = 'url('+url+')';
+      if (type === 'video') {
+        var vid = document.createElement('video');
+        vid.src = url;
+        vid.autoplay = false;
+        vid.muted = true;
+        vid.playsInline = true;
+        vid.loop = false;
+        vid.preload = 'metadata';
+        div.appendChild(vid);
+      } else {
+        div.style.backgroundImage = 'url('+url+')';
+      }
       layer.appendChild(div);
     });
     slides = layer.querySelectorAll('.photo-slide');
     cur = 0;
-  }).catch(function(e){console.log('Photo fetch failed:',e)});
+    console.log('Slideshow: ' + d.count + ' items (' + (d.videoIncluded||0) + ' short videos)');
+  }).catch(function(e){console.log('Photo fetch failed:',e);});
 }
 fetchPhotos(); if(!CFG.PLEXUS_KEY) setInterval(fetchPhotos, CFG.PHOTO_REFRESH);
 
