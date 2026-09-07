@@ -1,0 +1,112 @@
+id	name	fn	imp	personas	contexts
+1	Glanceable conditions glyph + temp	weather	H	PS:1,P2:1,G:1,ER:.6,GU:.6,T:.2	morning,afterschool,weekend,guest,grammy
+2	One-line advice (umbrella / coat / park day)	weather	H	PS:1,P2:.8,G:.8,AI:1,ER:.4	morning,weekend
+3	Per-person dress hint	weather	M	PS:1,ER:.8,AI:1,T:.4	morning
+4	Next-hour precipitation alert	weather	M	PS:.8,P2:.8,AI:.8,G:.4	morning,afterschool,weekend
+5	Severe-weather alert card	weather	M	PS:.8,P2:.8,G:.8,AI:1	morning,dinner,evening
+6	Weather-as-scene art (idle)	weather	M	T:.8,ER:.8,GU:.6,PS:.4,P2:.4,G:.6	morning,evening,weekend,guest,grammy
+7	Tappable weather scene with animal sounds	weather	L	T:1,ER:.4,AI:.6	toddler_alone,afterschool
+8	Shared real-time list sync (phone page)	grocery	H	PS:1,P2:1,G:.8	dinner_prep,weekend
+9	Voice-add with on-wall echo	grocery	H	PS:1,P2:1,G:1,AI:1,ER:.3	dinner_prep,morning,afterschool
+10	Explicit in-cart / bought state	grocery	H	PS:1,P2:1,G:.8	dinner_prep,weekend
+11	Recently-bought re-add tray	grocery	M	PS:1,P2:.8,G:.6,AI:.6	dinner_prep,weekend
+12	Delete item	grocery	H	PS:1,P2:1,G:.8	dinner_prep
+13	Store / aisle sorting per store	grocery	M	PS:1,P2:.8,G:.4	weekend,dinner_prep
+14	Autocomplete from household history	grocery	M	PS:.8,P2:.8,G:.4,AI:.8	dinner_prep
+15	Frequency-based staples ("you're due for eggs")	grocery	H	PS:1,P2:.8,G:.6,AI:1	morning,dinner_prep,weekend
+16	Icon / picture tiles for pre-readers	grocery	M	T:.8,ER:.8,G:1,PS:.4	afterschool,grammy,toddler_alone
+17	Grammy's list, voice-routed	grocery	H	G:1,AI:.8,PS:.6,P2:.6	grammy,dinner_prep
+18	Quantity / units	grocery	L	PS:.6,P2:.6,G:.4	dinner_prep
+19	Barcode / photo add of an empty carton	grocery	L	PS:.6,P2:.8,G:.4,AI:.6	dinner_prep
+20	List generated from meal plan	grocery	H	PS:1,AI:1,P2:.6	weekend,dinner_prep
+21	Export / handoff to AnyList or Instacart	grocery	L	PS:.6,P2:.6	weekend
+103	Text or MMS a list / photo to Greg's number → canon list	grocery	H	PS:1,P2:1,G:.6,AI:1	morning,afterschool,dinner_prep,weekend
+105	Camera list ingest at the wall (hold up paper / phone)	grocery	H	PS:1,P2:.8,G:.8,AI:1	dinner_prep,weekend,grammy
+22	Color per person	calendar	H	PS:1,P2:1,ER:.8,G:.8,GU:.3	morning,afterschool,weekend
+23	Today's agenda glance	calendar	H	PS:1,P2:1,G:.8,ER:.8,GU:.4,AI:.6	morning,afterschool,grammy
+24	Week view	calendar	H	PS:1,P2:.8,G:.4	morning,weekend,evening
+25	Month grid on tap	calendar	M	PS:.8,P2:.6,G:.4	weekend
+26	Per-person filter	calendar	M	PS:.8,P2:.6,ER:.4	morning
+27	Two-way Google write-back	calendar	H	PS:1,P2:1,AI:1	morning,evening,weekend
+28	Photo / flyer / email → events (import)	calendar	H	PS:1,AI:1,P2:.6	evening,weekend,afterschool
+29	TeamSnap / sports sync	calendar	L	PS:.6,ER:.6	afterschool,weekend
+30	School calendar batch import	calendar	H	PS:1,AI:1,ER:.4	weekend,evening
+31	Voice-add event with confirm	calendar	H	PS:1,P2:1,G:.8,AI:1	morning,dinner_prep,evening
+32	Conflict detection	calendar	M	PS:.8,AI:1,P2:.6	evening,weekend
+33	Event countdown ("3 sleeps")	calendar	M	ER:1,T:.8,PS:.6,G:.6,AI:.6	morning,evening,weekend
+34	Per-event memo	calendar	L	PS:.6,P2:.6	evening
+35	One event → multiple people	calendar	M	PS:.8,AI:.8	evening
+36	"Tonight" dinner card	meals	H	PS:1,P2:1,ER:.8,G:.8,T:.3,AI:1	dinner_prep,afterschool,dinner
+37	AI weekly plan from constraints	meals	M	PS:.8,AI:1,P2:.6	weekend
+38	Recipe capture (photo / URL / handwriting)	meals	M	PS:.8,G:.8,AI:1,P2:.6	weekend,dinner_prep
+39	Cook-mode step display	meals	H	PS:1,P2:1,G:.8	dinner_prep
+40	Cook timers auto-parsed from recipe	meals	M	PS:.8,P2:.8,G:.6,AI:.6	dinner_prep
+41	"Use what we have" ingredient search	meals	H	PS:.8,P2:.8,G:.6,AI:1	dinner_prep
+42	Kid-facing meal icon ("Taco Tuesday")	meals	L	ER:1,T:.8,PS:.4	afterschool,dinner
+106	Ingredients + a vague idea → dish suggestions	meals	H	PS:1,P2:1,G:.8,AI:1	dinner_prep,weekend
+43	Picture-step routine	routines	H	ER:1,T:.8,PS:.6,AI:.4	morning,afterschool,evening
+44	Walk-up one-tap complete (no login)	routines	H	ER:1,T:.8,PS:.4	morning,afterschool,evening
+45	Stars / points per step	routines	M	ER:1,PS:.6	afterschool,evening
+46	Streak tracking	routines	M	ER:1,PS:.4,AI:.4	evening
+47	Confetti / celebration	routines	H	ER:1,T:1,AI:.6	morning,afterschool,evening
+48	Pinned reward goal + progress	routines	M	ER:1,PS:.6	evening,weekend
+49	Reward created / edited from the wall	routines	M	PS:1,P2:.8	evening,weekend
+50	Child-lock per list	routines	M	PS:.8,P2:.8,ER:.4	afterschool
+51	Today's Feelings check-in	routines	M	ER:1,PS:.8,P2:.4,AI:.6	afterschool,evening
+52	Toddler tidy-up ritual	routines	M	T:1,PS:.6,P2:.6,AI:.6	evening,afterschool
+107	Routine complete → device unlock, Greg-enforced	routines	H	ER:1,T:.8,PS:1,P2:1,AI:1	afterschool,evening,weekend
+53	No-fail open-ended play mode	toddler	H	T:1,AI:.8,P2:.6	toddler_alone,afterschool
+54	Giant isolated tap targets	toddler	H	T:1	toddler_alone
+55	Audio + visual payoff on every tap	toddler	H	T:1,AI:.4	toddler_alone
+56	Tap-only interactions (no drag)	toddler	M	T:1	toddler_alone
+57	Ignore accidental / multi-touch	toddler	M	T:1	toddler_alone
+58	Animal sounds / peekaboo / "where's the X"	toddler	H	T:1,AI:.8,ER:.3	toddler_alone,afterschool
+59	Tap-to-draw chalkboard	toddler	M	T:1,ER:.8,GU:.3	toddler_alone,afterschool
+60	Sing-along / music-making	toddler	M	T:1,ER:.6,AI:.6,G:.3	toddler_alone,evening
+61	Rotating short activities (4-6 min)	toddler	H	T:1,AI:1,P2:.6	toddler_alone
+62	Contingent voice reactions by name	toddler	H	T:1,AI:1,ER:.6	toddler_alone,afterschool
+63	Gesture / tap accepted in place of speech	toddler	M	T:1,AI:1	toddler_alone
+64	Generous listening, no rushed timeout	toddler	H	T:1,ER:1,AI:1,G:.8	toddler_alone,afterschool,grammy
+65	Never-say-"wrong" recognition handling	toddler	H	T:1,ER:1,AI:1,G:.6	toddler_alone,afterschool,grammy
+112	Joint moments ("show Daddy!")	toddler	M	T:1,P2:1,AI:.8,PS:.6	toddler_alone,afterschool
+66	"Why" answers in kid register	dwight	H	ER:1,AI:1,T:.3	afterschool,evening,weekend
+67	Jokes / fun facts / science	dwight	H	ER:1,AI:1,T:.4,G:.4	afterschool,dinner,evening
+68	Quizzes / trivia	dwight	M	ER:1,AI:.8,P2:.4	afterschool,weekend
+69	Mental-math and reading games	dwight	M	ER:1,AI:.8,PS:.6	afterschool,evening
+70	Chess / checkers / logic	dwight	L	ER:1,P2:.6,AI:.6	evening,weekend
+71	Lego-build prompts	dwight	M	ER:1,AI:.8,P2:.4	weekend,afterschool
+72	Never dead-end on "I don't know"	dwight	H	ER:1,AI:1,T:.6,G:.4	afterschool,evening
+73	Homework help	dwight	M	ER:1,PS:.6,AI:.8	afterschool,evening
+74	Curated idle slideshow (faces first)	photos	H	PS:1,P2:1,G:1,ER:.6,T:.6,GU:.8,AI:1	morning,dinner,evening,weekend,guest,grammy
+75	Slow / print-like cadence	photos	M	PS:.8,P2:.8,G:1,GU:.6	evening,guest,grammy
+76	Ambient brightness / color matching	photos	M	PS:.8,P2:.8,G:.8,GU:.4,AI:1,T:.4,ER:.4	evening,morning
+77	Remote push-in by family	photos	M	G:1,PS:.8,P2:.8	weekend,grammy
+78	Kids' artwork gallery	photos	M	ER:1,T:.8,G:1,PS:.8,P2:.6	afterschool,evening,grammy,guest
+79	On-photo captions / story	photos	M	G:1,PS:.6,P2:.6,GU:.4	evening,grammy,guest
+80	"On this day" memories	photos	H	PS:.8,P2:1,G:1,AI:1,ER:.4	morning,evening,weekend,grammy
+81	Presence-triggered flip photos → utility	photos	H	PS:1,P2:1,G:.8,ER:.8,T:.6,AI:1	morning,afterschool,dinner_prep,evening,grammy
+82	On-device face recognition → prioritise content	photos	H	AI:1,PS:.8,P2:.8,G:.6,ER:.6,T:.6	morning,afterschool,dinner_prep,evening,weekend,grammy
+109	LIFELOG on-this-day story cards	photos	H	P2:1,PS:.8,G:.8,AI:1	evening,weekend,morning
+110	Throwbak face-curated albums	photos	M	P2:1,PS:.8,G:.8,AI:1	evening,weekend
+83	One-way "dinner's ready" broadcast	media	H	PS:1,P2:1,G:.8,AI:1,ER:.6	dinner
+84	Content-by-name TV control	media	H	ER:.8,T:.6,P2:1,PS:.8,AI:1	afterschool,weekend,evening
+85	Roku voice control with on-wall status	media	H	P2:1,PS:.8,G:.6,AI:1	evening,afterschool,weekend
+86	Two-way check-in (consent-visible)	media	L	P2:.8,PS:.6	afterschool,toddler_alone
+87	Family jukebox (Spotify)	media	M	PS:.8,P2:1,ER:.6,T:.6,G:.4	dinner_prep,dinner,weekend
+88	Video call to grandparents	media	M	ER:1,T:.8,G:.8,PS:.6	weekend,evening
+108	TV intercom: pause + on-screen message + Greg's voice on the TV	media	H	PS:1,P2:1,G:.8,AI:1,ER:.6	dinner,evening
+89	Morning briefing with a face	ai	H	PS:1,P2:.8,ER:.8,G:.8,AI:1	morning
+90	Proactive suggestion line (deferent, dismissible)	ai	M	PS:.8,P2:.8,AI:1,G:.4	morning,weekend,evening
+91	Local-events / activity planner	ai	H	PS:1,P2:1,AI:1,ER:.4	weekend,evening
+92	Family-rhythm digest	ai	L	PS:.8,P2:.8,AI:1	weekend,evening
+93	Undo / correct any proactive action	ai	M	PS:.8,P2:.8,AI:.6	morning,afterschool,dinner_prep,evening,weekend
+94	Route AI outputs into real lists / calendar	ai	H	PS:1,P2:.8,AI:1	morning,dinner_prep,evening,weekend
+95	Ambient-far / implicit / personal zones	system	H	PS:1,P2:1,T:.8,ER:.8,G:1,GU:.8,AI:1	morning,afterschool,dinner_prep,dinner,evening,weekend,toddler_alone,guest,grammy
+96	Presence / face personalisation on approach	system	H	PS:1,P2:1,T:.8,ER:.8,G:.8,AI:1	morning,afterschool,dinner_prep,evening,weekend,grammy
+97	Kid reach-height touch zone	system	M	T:1,ER:1,PS:.4	afterschool,toddler_alone
+98	Minimal / collapsible nav	system	M	PS:.8,P2:.8,G:.8,ER:.8,GU:.8,T:.4	morning,afterschool,dinner_prep,evening,weekend
+99	Guest mode (hide personal content)	system	M	GU:1,PS:.8,P2:.8,AI:1	guest
+100	Grandparent-first legibility (large type, voice)	system	H	G:1,AI:.6,PS:.4	grammy,morning
+101	Every command echoed on the wall	system	H	PS:1,P2:1,G:1,ER:.8,T:.6,AI:1	morning,afterschool,dinner_prep,dinner,evening,weekend,grammy
+102	Timer / stopwatch / chalkboard tools	system	M	PS:.8,P2:.8,G:.6,ER:.8,T:.6	dinner_prep,afterschool,toddler_alone
+104	Display-log instrumentation (replaces persona priors)	system	M	AI:1,P2:.8	morning,afterschool,dinner_prep,evening,weekend
