@@ -1406,8 +1406,15 @@ setTimeout(initCamera, 5000);
     bodyEl.innerHTML = '';
     bodyEl.scrollTop = 0;
 
-    if (d.kind === 'structured')       renderStructured(d);
-    else if (d.kind === 'generated')   renderGenerated(d);
+    if (d.kind === 'structured') {
+      // Structured views live in the dashboard cards, never in the overlay.
+      // (Opening the overlay here left a blank full-screen panel over the card.)
+      clearInterval(countdownTick); timerEl.textContent = '';
+      renderStructured(d);
+      if (typeof Greg !== 'undefined' && Greg.resetDim) Greg.resetDim();
+      return;
+    }
+    if (d.kind === 'generated')        renderGenerated(d);
     else if (d.kind === 'interactive') renderInteractive(d);
 
     openOverlay();
