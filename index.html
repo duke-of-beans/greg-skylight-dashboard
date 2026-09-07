@@ -375,7 +375,7 @@ var CFG = {
       <div class="g-btn" onclick="quickAddItem()">Add</div>
       <div class="g-btn" onclick="voiceAddItem()" title="Say it"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
       <div class="g-btn" onclick="startTripAndPrint()" title="Print the list"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</div>
-      <div class="g-done" id="groceryDone" style="display:none" onclick="doneShopping()">Done shopping</div>
+      <div class="g-done" id="groceryDone" style="display:none" onclick="doneShopping()">✓ Got everything</div>
     </div>
     <div id="groceryUndo"></div>
   </div>
@@ -584,7 +584,7 @@ function toggleCard(id){
   if(activeCard===id){showCard(null);return;}
   showCard(id);
   // Auto-dismiss after 30s of no interaction
-  cardTimeout=setTimeout(function(){showCard(null)},30000);
+  cardTimeout=setTimeout(function(){showCard(null)}, activeCard==='groceryCard' ? 60000 : 30000);
 }
 
 // Media button touch handlers — Android WebView needs touchend, not onclick
@@ -997,6 +997,13 @@ function setQty(id, delta){
     if (gState.suppressTap){ gState.suppressTap=false; return; }
     setChecked(id, row.getAttribute('data-checked')!=='1');
   });
+  // Keep the grocery card alive while interacting — it's a working surface, not a glance.
+  // Resets BOTH timer systems (cardTimeout from nav-button open, closeTimer from display-event open).
+  document.getElementById('groceryCard').addEventListener('pointerdown', function(){
+    if (cardTimeout) { clearTimeout(cardTimeout); cardTimeout = setTimeout(function(){ showCard(null); }, 60000); }
+    if (typeof closeTimer !== 'undefined' && closeTimer) { clearTimeout(closeTimer); closeTimer = setTimeout(function(){ showCard(null); }, 60000); }
+  });
+
   // trays: tap a chip to add
   ['groceryUsual','groceryRecent'].forEach(function(id){
     document.getElementById(id).addEventListener('click', function(e){
