@@ -168,6 +168,10 @@ body.card-open .persistent-overlay{opacity:0;pointer-events:none;transition:opac
 .g-undo b{font-weight:500}
 .g-undo .g-undo-btn{background:rgba(255,255,255,.18);border-radius:100px;padding:8px 16px;font-weight:500}
 .g-empty{font-size:19px;color:var(--tx3);padding:18px 0}
+
+/* Nav bar clearance — cards must not overlap the fixed nav */
+.interleave-card { padding-bottom: 70px; }
+#groceryCard .grocery-add-bar { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
 
 /* ═══ Camera/presence ═══ */
@@ -744,7 +748,8 @@ function sbFetch(path, opts){
   opts = opts || {};
   var headers = {'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON,'Content-Type':'application/json'};
   if(opts.headers) Object.keys(opts.headers).forEach(function(k){headers[k]=opts.headers[k]});
-  return fetch(CFG.SUPABASE_URL+'/rest/v1/'+path, Object.assign({},{headers:headers},opts));
+  delete opts.headers;  // prevent Object.assign from overwriting the merged headers
+  return fetch(CFG.SUPABASE_URL+'/rest/v1/'+path, Object.assign({headers:headers},opts));
 }
 
 // ═══ GROCERY — lifecycle, trays, trips (spec: docs/ux-graph, WG-18/19/38/39) ═══
