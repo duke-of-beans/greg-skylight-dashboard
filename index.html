@@ -961,6 +961,7 @@ function setQty(id, delta){
     document.querySelectorAll('.grocery-item.pressing').forEach(function(r){r.classList.remove('pressing')});
   };
   c.addEventListener('pointerdown', start); c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end); c.addEventListener('pointerleave', end);
+  c.addEventListener('contextmenu', function(e){ e.preventDefault(); var row=e.target.closest('.grocery-item'); if(row && !gState.openActions){ gState.suppressTap=true; openActions(row); } });
   c.addEventListener('click', function(e){
     var row=e.target.closest('.grocery-item'); if(!row) return;
     var id=row.getAttribute('data-id');
@@ -1691,7 +1692,11 @@ setTimeout(initCamera, 5000);
     if (!cardId || typeof showCard !== 'function') return;
     showCard(cardId);
     clearTimeout(closeTimer);
-    if (d.timeout_s > 0) closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, d.timeout_s*1000);
+    // a list is a working surface, not a glance: give it a minute before returning to ambient
+    var ttl = (d.view==='grocery' ? Math.max(d.timeout_s||0, 60) : (d.timeout_s||0));
+    if (ttl > 0) closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, ttl*1000);
+    var cardEl = document.getElementById(cardId);
+    if (cardEl && !cardEl.__keepAlive){ cardEl.__keepAlive = true; cardEl.addEventListener('pointerdown', function(){ if (!closeTimer) return; clearTimeout(closeTimer); closeTimer = setTimeout(function(){ if (typeof showCard==='function') showCard(null); }, 45000); }); }
 
     // VISIBILITY PRINCIPLE: when Greg just WROTE something (add_list_item /
     // add_family_event) the event carries the fresh row in d.content. Refresh
