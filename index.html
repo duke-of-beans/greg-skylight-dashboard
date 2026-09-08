@@ -984,7 +984,8 @@ function renderKidRoutines(routineType){
   var h = '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:12px;text-align:center">'+(labels[routineType]||routineType)+' Routine</div>';
   
   if(!kidRoutines.length){
-    h += '<div style="color:var(--tx3);font-size:15px">No routine steps yet</div>';
+    // Routine window may have passed — never shame, just note
+    h += '<div style="color:var(--tx3);font-size:15px;text-align:center">No steps for this time of day</div>';
   } else {
     kidRoutines.forEach(function(r){
       var done = completedIds.indexOf(r.id) > -1;
@@ -1039,10 +1040,11 @@ function renderKidExtras(){
 function toggleRoutineStep(routineId, currentlyDone){
   var today = new Date().toISOString().split('T')[0];
   if(currentlyDone){
-    // Un-complete: delete the completion
     sbFetch('greg_routine_completions?routine_id=eq.'+routineId+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
   } else {
-    // Complete: insert
+    // Brief echo sound via TTS on check-off
+    var step = kidRoutines.find(function(r){return r.id===routineId});
+    if(step) gregSpeak(step.title + '. Done.');
     sbFetch('greg_routine_completions',{method:'POST',body:JSON.stringify({routine_id:routineId,person:activeKid,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
   }
 }
@@ -1050,7 +1052,9 @@ function toggleRoutineStep(routineId, currentlyDone){
 function claimExtra(choreId){
   var today = new Date().toISOString().split('T')[0];
   var already = kidExtraCompletions.find(function(c){return c.chore_id===choreId});
-  if(already) return; // already claimed today
+  if(already) return;
+  var chore = kidExtras.find(function(c){return c.id===choreId});
+  if(chore) gregSpeak(chore.title + '. Nice work!');
   sbFetch('greg_chore_completions',{method:'POST',body:JSON.stringify({chore_id:choreId,person:activeKid,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
 }
 
@@ -1382,6 +1386,14 @@ document.addEventListener('touchend',function(e){
   if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
   paused=false;pi.classList.remove('visible');
 });
+// Reset auto-dismiss timer on any card interaction
+document.addEventListener('touchstart',function(e){
+  if(activeCard && e.target.closest('.interleave-card')){
+    if(cardTimeout) clearTimeout(cardTimeout);
+    var timeouts = {groceryCard:120000, kidsCard:120000, cookbookCard:60000, tonightCard:60000, tomorrowCard:45000};
+    cardTimeout=setTimeout(function(){showCard(null)}, timeouts[activeCard] || 30000);
+  }
+},{passive:true});
 
 // ═══════════════════════════════════════════
 // CARD CYCLING
@@ -1422,8 +1434,9 @@ function toggleCard(id){
   if(cardTimeout) clearTimeout(cardTimeout);
   if(activeCard===id){showCard(null);return;}
   showCard(id);
-  // Auto-dismiss after 30s of no interaction
-  cardTimeout=setTimeout(function(){showCard(null)}, activeCard==='groceryCard' ? 60000 : 30000);
+  // Auto-dismiss — longer for interactive cards
+  var timeouts = {groceryCard:120000, kidsCard:120000, cookbookCard:60000, tonightCard:60000, tomorrowCard:45000};
+  cardTimeout=setTimeout(function(){showCard(null)}, timeouts[id] || 30000);
 }
 
 // ═══════════════════════════════════════════
