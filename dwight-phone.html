@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Dwight's Phone</title>
+<style>
+:root{--bg:#0D0D1A;--bg2:rgba(20,18,30,0.85);--bg3:rgba(40,35,55,0.7);--border:rgba(100,80,160,0.3);--tx:#F0EBE4;--tx2:#B0A0C8;--tx3:#6A5A7D;--son:#22C55E;--lock:#A78BFA;--accent:#7C3AED}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--tx);overflow-x:hidden;user-select:none;-webkit-user-select:none;background:var(--bg) url('bg.webp') center/cover fixed no-repeat}
+
+/* ═══ BOOT SPLASH ═══ */
+#splash{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s}
+#splash.out{opacity:0;pointer-events:none}
+.splash-name{font-size:52px;font-weight:900;background:linear-gradient(135deg,#7C3AED,#EC4899,#F59E0B,#22C55E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:splashPulse 1.5s ease-in-out infinite alternate}
+.splash-sub{color:var(--tx3);font-size:14px;margin-top:8px;animation:splashFade 0.8s ease-in 0.3s both}
+.splash-dots{display:flex;gap:8px;margin-top:24px}
+.splash-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:splashDot 1.2s ease-in-out infinite}
+.splash-dot:nth-child(2){animation-delay:0.15s}
+.splash-dot:nth-child(3){animation-delay:0.3s}
+@keyframes splashPulse{from{transform:scale(0.95);filter:brightness(0.8)}to{transform:scale(1.05);filter:brightness(1.2)}}
+@keyframes splashFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes splashDot{0%,100%{transform:scale(0.7);opacity:0.3}50%{transform:scale(1.3);opacity:1}}
+
+/* ═══ LOCK SCREEN ═══ */
+.lock{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;background:rgba(13,13,26,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.lock-title{font-size:20px;color:var(--tx);margin-bottom:4px}
+.lock-sub{font-size:13px;color:var(--tx3);margin-bottom:20px;text-align:center}
+.r-list{width:100%;max-width:340px}
+.r-item{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:8px;border-radius:14px;font-size:15px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.2s}
+.r-item:active{transform:scale(0.97)}
+.r-item.done{background:rgba(34,197,94,0.1);color:var(--tx3);text-decoration:line-through}
+.r-item.pending{background:var(--bg2);color:var(--tx)}
+.r-chk{width:26px;height:26px;border-radius:7px;border:2px solid rgba(255,255,255,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.r-chk.done{background:var(--son);border-color:var(--son)}
+.r-chk svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round}
+.r-chk:not(.done) svg{display:none}
+.pbar{width:100%;max-width:340px;margin:0 auto 20px}
+.pbar-track{height:10px;background:rgba(255,255,255,0.08);border-radius:100px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:100px;transition:width 0.5s;background:linear-gradient(90deg,var(--accent),var(--son))}
+.pbar-text{font-size:11px;color:var(--tx3);margin-top:6px;text-align:center}
+
+/* ═══ HOME ═══ */
+.home{padding:20px 16px 80px;min-height:100vh;animation:homeIn 0.4s ease-out}
+@keyframes homeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hero{text-align:center;padding:16px 0 20px}
+.hero-name{font-size:42px;font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#7C3AED 0%,#EC4899 40%,#F59E0B 70%,#22C55E 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:nameShift 4s ease-in-out infinite alternate;line-height:1.1}
+@keyframes nameShift{0%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(20deg) brightness(1.15)}100%{filter:hue-rotate(-10deg) brightness(1)}}
+.hero-pts{font-size:14px;color:var(--son);margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:440px;margin:0 auto}
+.app{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:6px 2px;-webkit-tap-highlight-color:transparent;transition:transform 0.12s;animation:appPop 0.3s ease-out both}
+.app:active{transform:scale(0.85)}
+.app-icon{width:56px;height:56px;border-radius:14px;background:var(--bg3);background-size:cover;background-position:center;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+.app-name{font-size:10px;color:rgba(255,255,255,0.65);text-align:center;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes appPop{from{opacity:0;transform:scale(0.7)}to{opacity:1;transform:scale(1)}}
+.sec{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;margin:16px auto 8px;max-width:440px;padding-left:4px}
+/* Chores widget */
+.chore-tile{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(34,197,94,0.1));border:1px solid var(--border);border-radius:16px;padding:16px;margin:0 auto 8px;max-width:440px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.chore-tile:active{opacity:0.85}
+/* Chore detail screen */
+.chore-screen{position:fixed;inset:0;background:var(--bg);z-index:20;overflow-y:auto;padding:16px;animation:homeIn 0.3s ease-out}
+.chore-back{display:flex;align-items:center;gap:4px;color:var(--tx3);font-size:14px;padding:8px 0;cursor:pointer}
+.chore-cat{font-size:12px;color:var(--tx3);letter-spacing:0.05em;text-transform:uppercase;margin:20px 0 8px}
+.extra-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.extra-card:active{opacity:0.8}
+.extra-pts{color:var(--son);font-weight:700;font-size:16px}
+#status{font-size:10px;color:rgba(255,255,255,0.2);text-align:center;padding:8px;position:fixed;bottom:0;left:0;right:0}
+</style>
+</head>
+<body>
+<div id="splash">
+  <div class="splash-name">DWIGHT</div>
+  <div class="splash-sub">Loading your stuff…</div>
+  <div class="splash-dots"><div class="splash-dot"></div><div class="splash-dot"></div><div class="splash-dot"></div></div>
+</div>
+<div id="app"></div>
+<div id="status"></div>
+<script>
+var CFG={SUPABASE_URL:'https://zdmxqzkqutizehynqojk.supabase.co',SUPABASE_ANON:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkbXhxemtxdXRpemVoeW5xb2prIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0OTY4NjYsImV4cCI6MjA5NzA3Mjg2Nn0.Wmaowo-PiEv8CvvVYs-UAWmvIb_2m5WyUmB0aQdwbsA',PERSON:'dwight'};
+function sbGet(p){return fetch(CFG.SUPABASE_URL+'/rest/v1/'+p,{headers:{'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON,'Accept':'application/json'}}).then(function(r){return r.json()});}
+function sbFetch(p,o){o=o||{};var h={'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON,'Content-Type':'application/json'};if(o.headers)for(var k in o.headers)h[k]=o.headers[k];return fetch(CFG.SUPABASE_URL+'/rest/v1/'+p,Object.assign({},o,{headers:h}));}
+function launch(pkg){if(typeof Greg!=='undefined'&&Greg.launchApp)Greg.launchApp(pkg);}
+function toggleRoutine(id,done){var today=new Date().toISOString().split('T')[0];if(done){sbFetch('greg_routine_completions?routine_id=eq.'+id+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});}else{sbFetch('greg_routine_completions',{method:'POST',body:JSON.stringify({routine_id:id,person:CFG.PERSON,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});}}
+
+// ═══ Icon loader — uses real APK icons via Greg.getAppIcon() ═══
+var _iconCache={};
+function loadIcons(){
+  if(typeof Greg==='undefined'||!Greg.getAppIcon) return;
+  document.querySelectorAll('[data-pkg]').forEach(function(el){
+    var pkg=el.getAttribute('data-pkg');
+    if(!pkg) return;
+    if(_iconCache[pkg]){el.style.backgroundImage='url(data:image/png;base64,'+_iconCache[pkg]+')';return;}
+    try{
+      var b64=Greg.getAppIcon(pkg);
+      if(b64){_iconCache[pkg]=b64;el.style.backgroundImage='url(data:image/png;base64,'+b64+')';}
+    }catch(e){}
+  });
+}
+
+// ═══ All Dwight's apps ═══
+var APPS={
+  games:[
+    {pkg:'com.roblox.client',name:'Roblox'},
+    {pkg:'com.bigbluebubble.singingmonsters.full',name:'Singing Monsters'},
+    {pkg:'com.playrix.township',name:'Township'},
+    {pkg:'com.farlightgames.pgame.gp',name:'Farlight'},
+    {pkg:'com.cassette.aquapark',name:'Aquapark'},
+    {pkg:'io.supercent.prison',name:'Prison'},
+    {pkg:'io.supercent.pizzaidle',name:'Pizza Idle'},
+    {pkg:'com.hwqgrhhjfd.idlefastfood',name:'Fast Food'},
+    {pkg:'io.superbrick.minimartmaster',name:'Mini Mart'},
+    {pkg:'io.superbrick.masterhospital',name:'Hospital'},
+    {pkg:'com.SekGames.MyDreamHospital',name:'Dream Hospital'},
+    {pkg:'com.SekGames.MyShoppingMall',name:'Shopping Mall'},
+    {pkg:'com.master.hotelmaster',name:'Hotel Master'},
+    {pkg:'com.freeplay.crazyoffice',name:'Crazy Office'},
+    {pkg:'com.happykamp.aquariumland',name:'Aquarium'},
+    {pkg:'com.seenax.HideAndSeek',name:'Hide & Seek'},
+    {pkg:'com.kwalee.transformhunt',name:'Transform'},
+    {pkg:'car.manage.movie.boss',name:'Movie Boss'},
+    {pkg:'com.Albus.AwesomePark',name:'Awesome Park'},
+    {pkg:'com.Albus.WaterParkBoys',name:'Water Park'},
+    {pkg:'mobi.blackbears.rollandwall.td.idle.rpg',name:'Roll & Wall'},
+    {pkg:'com.stealthgame.master',name:'Stealth'},
+    {pkg:'com.staff.staff',name:'Staff!'},
+    {pkg:'com.kadka.forknsausage',name:'Fork & Sausage'},
+    {pkg:'com.savetheworld.game',name:'Save World'},
+    {pkg:'flexus.dye.hard',name:'Dye Hard'}
+  ],
+  watch:[
+    {pkg:'com.google.android.apps.youtube.kids',name:'YouTube Kids'},
+    {pkg:'com.android.chrome',name:'Chrome'}
+  ],
+  more:[
+    {pkg:'com.android.vending',name:'Play Store'},
+    {pkg:'net.oneplus.weather',name:'Weather'},
+    {pkg:'com.oneplus.note',name:'Notes'},
+    {pkg:'com.oneplus.soundrecorder',name:'Recorder'}
+  ]
+};
+
+function appTile(a,i){return '<div class="app" style="animation-delay:'+(i*0.03)+'s" onclick="launch(\''+a.pkg+'\')"><div class="app-icon" data-pkg="'+a.pkg+'"></div><div class="app-name">'+a.name+'</div></div>';}
+
+// ═══ State ═══
+var _unlocked=false,_pts=0,_routines=[],_cids=[],_extras=[],_choreComps=[];
+var _currentView='none'; // 'lock','home','chores','offline'
+var _lastCidHash='';
+var _iconsLoaded=false;
+
+function cidHash(cids){return cids.slice().sort().join(',');}
+
+function checkRoutines(forceRender){
+  var today=new Date().toISOString().split('T')[0];var hour=new Date().getHours();
+  var rt=hour<12?'morning':(hour<16?'after_school':'bedtime');
+  Promise.all([
+    sbGet('greg_routines?person=eq.'+CFG.PERSON+'&routine_type=eq.'+rt+'&order=sort_order.asc'),
+    sbGet('greg_routine_completions?person=eq.'+CFG.PERSON+'&completed_date=eq.'+today),
+    sbGet('greg_chore_completions?person=eq.'+CFG.PERSON+'&completed_date=eq.'+today),
+    sbGet('greg_extra_chores?or=(person.eq.'+CFG.PERSON+',person.is.null)&always_available=eq.true&order=sort_order.asc')
+  ]).then(function(r){
+    _routines=r[0]||[];var completions=r[1]||[];_choreComps=r[2]||[];_extras=r[3]||[];
+    if(!Array.isArray(_routines))_routines=[];
+    if(!Array.isArray(completions))completions=[];
+    if(!Array.isArray(_choreComps))_choreComps=[];
+    if(!Array.isArray(_extras))_extras=[];
+    _cids=completions.map(function(c){return c.routine_id;});
+    var allDone=_routines.length>0&&_routines.every(function(r){return _cids.indexOf(r.id)>-1;});
+    _pts=_choreComps.reduce(function(s,c){var ch=_extras.find(function(e){return e.id===c.chore_id;});return s+(ch?ch.points:0);},0);
+    var newHash=cidHash(_cids);
+    var stateChanged=newHash!==_lastCidHash||forceRender;
+    _lastCidHash=newHash;
+    var wasUnlocked=_unlocked;
+    if(_routines.length===0||allDone){_unlocked=true;}else{_unlocked=false;}
+    // Only re-render if state actually changed or view transition needed
+    if(_unlocked&&_currentView==='home'&&!stateChanged){/* skip — home is fine */}
+    else if(!_unlocked&&_currentView==='lock'&&!stateChanged){/* skip — lock is fine */}
+    else if(_currentView==='chores'){/* skip — user is in chores detail, don't yank them out */}
+    else if(_unlocked){showHome();}
+    else{showLock(rt);}
+    document.getElementById('status').textContent=new Date().toLocaleTimeString();
+  }).catch(function(err){if(!_unlocked&&_currentView!=='chores')showOffline(err);});
+}
+
+// ═══ Optimistic toggle — instant visual, background sync ═══
+function toggleRoutine(id,done){
+  var today=new Date().toISOString().split('T')[0];
+  // Optimistic UI: toggle the item visually right now
+  var el=document.querySelector('[data-rid="'+id+'"]');
+  if(el){
+    if(done){
+      el.classList.remove('done');el.classList.add('pending');
+      var chk=el.querySelector('.r-chk');if(chk)chk.classList.remove('done');
+    } else {
+      el.classList.remove('pending');el.classList.add('done');
+      var chk=el.querySelector('.r-chk');if(chk)chk.classList.add('done');
+    }
+    el.style.transition='background 0.3s';
+  }
+  // Update progress bar optimistically
+  var newCount=done?_cids.length-1:_cids.length+1;
+  var total=_routines.length;
+  var fill=document.querySelector('.pbar-fill');
+  if(fill)fill.style.width=Math.round((newCount/total)*100)+'%';
+  var txt=document.querySelector('.pbar-text');
+  if(txt)txt.textContent=newCount+' / '+total;
+  // Background sync
+  if(done){
+    sbFetch('greg_routine_completions?routine_id=eq.'+id+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});
+  } else {
+    sbFetch('greg_routine_completions',{method:'POST',body:JSON.stringify({routine_id:id,person:CFG.PERSON,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});
+  }
+}
+
+function toggleExtra(id,claimed){
+  var today=new Date().toISOString().split('T')[0];
+  // Optimistic UI
+  var el=document.querySelector('[data-eid="'+id+'"]');
+  if(el){
+    if(claimed){el.style.opacity='1';el.style.textDecoration='none';}
+    else{el.style.opacity='0.5';el.style.textDecoration='line-through';}
+  }
+  if(claimed){
+    sbFetch('greg_chore_completions?chore_id=eq.'+id+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});
+  } else {
+    sbFetch('greg_chore_completions',{method:'POST',body:JSON.stringify({chore_id:id,person:CFG.PERSON,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){checkRoutines();});
+  }
+}
+
+function showLock(rt){
+  var labels={morning:'Morning',after_school:'After School',bedtime:'Bedtime'};
+  var done=_cids.length,total=_routines.length,pct=total?Math.round((done/total)*100):0;
+  var h='<div class="lock">'
+    +'<div style="margin-bottom:12px"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="var(--lock)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>'
+    +'<div class="lock-title">'+(labels[rt]||'')+' Routine</div>'
+    +'<div class="lock-sub">Tap to check off · unlocks apps</div>'
+    +'<div class="pbar"><div class="pbar-track"><div class="pbar-fill" style="width:'+pct+'%"></div></div><div class="pbar-text">'+done+' / '+total+'</div></div>'
+    +'<div class="r-list">';
+  _routines.forEach(function(r){var d=_cids.indexOf(r.id)>-1;h+='<div class="r-item '+(d?'done':'pending')+'" data-rid="'+r.id+'" onclick="toggleRoutine(\''+r.id+'\','+d+')"><div class="r-chk '+(d?'done':'')+'"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div>'+r.title+'</div></div>';});
+  h+='</div></div>';document.getElementById('app').innerHTML=h;_currentView='lock';
+}
+function showOffline(err){document.getElementById('app').innerHTML='<div class="lock"><div class="lock-title">Debug</div><div class="lock-sub" style="word-break:break-all;max-width:300px">'+(err?err.toString()+' | '+(err.message||''):'no error obj')+'</div><div class="lock-sub" style="margin-top:12px">Supabase URL: '+CFG.SUPABASE_URL+'</div></div>';}
+
+function showHome(){
+  var h='<div class="home"><div class="hero"><div class="hero-name">DWIGHT</div>'
+    +(_pts>0?'<div class="hero-pts">⭐ '+_pts+' points today</div>':'')+'</div>';
+  // Chores quick-access tile
+  h+='<div class="chore-tile" onclick="openChores()">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center">'
+    +'<div><div style="font-size:15px;font-weight:600;color:var(--tx)">Chores & Points</div>'
+    +'<div style="font-size:12px;color:var(--tx3);margin-top:2px">Earn more · see rewards</div></div>'
+    +'<div style="font-size:28px;color:var(--son);font-weight:800">'+_pts+'</div></div></div>';
+  // App sections
+  h+='<div class="sec">Games</div><div class="grid">';
+  APPS.games.forEach(function(a,i){h+=appTile(a,i);});
+  h+='</div><div class="sec">Watch</div><div class="grid">';
+  APPS.watch.forEach(function(a,i){h+=appTile(a,i);});
+  h+='</div><div class="sec">More</div><div class="grid">';
+  APPS.more.forEach(function(a,i){h+=appTile(a,i);});
+  h+='</div></div>';
+  document.getElementById('app').innerHTML=h;
+  _currentView='home';
+  if(!_iconsLoaded){setTimeout(loadIcons,50);_iconsLoaded=true;}
+}
+
+// ═══ CHORES DETAIL SCREEN ═══
+function openChores(){
+  var today=new Date().toISOString().split('T')[0];
+  var compIds=_choreComps.map(function(c){return c.chore_id;});
+  var h='<div class="chore-screen">'
+    +'<div class="chore-back" onclick="showHome()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Back</div>'
+    +'<div style="text-align:center;margin:12px 0 24px"><div style="font-size:48px;font-weight:900;color:var(--son)">'+_pts+'</div><div style="font-size:13px;color:var(--tx3)">points earned today</div></div>';
+  // Today's routine status
+  if(_routines.length>0){
+    var done=_cids.length,total=_routines.length;
+    h+='<div class="chore-cat">Today\'s Routine ('+done+'/'+total+')</div>';
+    _routines.forEach(function(r){
+      var d=_cids.indexOf(r.id)>-1;
+      h+='<div class="r-item '+(d?'done':'pending')+'" data-rid="'+r.id+'" onclick="toggleRoutine(\''+r.id+'\','+d+')">'
+        +'<div class="r-chk '+(d?'done':'')+'"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>'
+        +'<div>'+r.title+'</div></div>';
+    });
+  }
+  // Extra chores for points
+  if(_extras.length>0){
+    h+='<div class="chore-cat">Earn More Points</div>';
+    _extras.forEach(function(e){
+      var claimed=compIds.indexOf(e.id)>-1;
+      h+='<div class="extra-card" data-eid="'+e.id+'" onclick="toggleExtra(\''+e.id+'\','+claimed+')" style="'+(claimed?'opacity:0.5;text-decoration:line-through':'')+'">'
+        +'<div>'+e.title+'</div><div class="extra-pts">'+(claimed?'✓':'+'+e.points)+'</div></div>';
+    });
+  }
+  h+='</div>';
+  document.getElementById('app').innerHTML=h;_currentView='chores';
+}
+
+function toggleExtra(id,claimed){
+  // handled by optimistic toggleExtra above — this is dead code
+}
+
+// ═══ Boot ═══
+checkRoutines();setInterval(checkRoutines,30000);
+setTimeout(function(){var s=document.getElementById('splash');if(s){s.classList.add('out');setTimeout(function(){s.remove();},600);}},1800);
+var gone=false;document.addEventListener('touchstart',function(){if(!gone){gone=true;var d=document.documentElement;(d.requestFullscreen||d.webkitRequestFullscreen).call(d);}},{once:true,passive:true});
+</script>
+</body>
+</html>
