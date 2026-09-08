@@ -38,7 +38,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 
 /* ═══ Interleave cards → FULL SCREEN overlays ═══ */
 .card-layer{position:fixed;inset:0;z-index:8;pointer-events:none}
-.interleave-card{position:fixed;inset:0;width:100vw;height:100vh;background:var(--bg);opacity:0;transform:translateY(12px);transition:opacity 0.25s ease,transform 0.25s ease;overflow-y:auto;pointer-events:none;padding:28px 48px 100px;z-index:30}
+.interleave-card{position:fixed;inset:0;width:100vw;height:100vh;background:var(--bg);opacity:0;transform:translateY(12px);transition:opacity 0.25s ease,transform 0.25s ease;overflow-y:auto;pointer-events:none;padding:32px 48px 80px;z-index:30}
 .interleave-card.active{opacity:1;transform:none;pointer-events:auto}
 .card-back{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx2);font-family:var(--fu);font-size:14px;margin-bottom:16px;padding:4px 0;width:fit-content;transition:color 0.15s}
 .card-back:active{color:var(--tx)}
@@ -180,7 +180,6 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
 .g-empty{font-size:19px;color:var(--tx3);padding:18px 0}
 
 /* Nav bar clearance — cards must not overlap the fixed nav */
-.interleave-card { padding-bottom: 70px; }
 #groceryCard .grocery-add-bar { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none};@keyframes lillyBounce{to{transform:none}};@keyframes lillyPulse{50%{transform:none}};@keyframes lillyDot{50%{opacity:1}}}
 /* Lilly activity animations */
@@ -200,15 +199,50 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
 #kidsCard .kids-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 #kidsCard .kids-col{min-width:0}
 /* ═══ Full-screen card content constraints ═══ */
-#kidsCard .card-inner,#mediaCard .card-inner,#cookbookCard .card-inner,#tonightCard .card-inner,#calendarCard .card-inner,#groceryCard .card-inner,#tomorrowCard .card-inner{max-width:900px;margin:0 auto}
-.lilly-tile{background:var(--bg2);border:1.5px solid var(--border);border-radius:16px;padding:24px 16px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:transform 0.15s,border-color 0.15s;min-height:110px;color:var(--tx2)}
+/* Design-skill pass: every card gets max-width, centered, proper typography */
+.interleave-card{max-width:100vw}
+.interleave-card > *:not(.card-back){max-width:900px;margin-left:auto;margin-right:auto}
+.interleave-card .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:16px}
+.interleave-card .card-title,.interleave-card h2{font-family:var(--fg);font-size:24px;font-weight:400;color:var(--tx);margin-bottom:16px;line-height:1.3}
+/* Generous padding on full-screen overlays */
+.interleave-card{padding:32px 48px 80px}
+/* Tonight card hero typography */
+#tonightCard .tonight-name{font-family:var(--fg);font-size:30px}
+#tonightCard .tonight-meta{font-size:15px;color:var(--tx2);margin-bottom:16px}
+/* Calendar card: expand the grid */
+#calendarCard > div:not(.card-back){max-width:900px;margin-left:auto;margin-right:auto}
+#calendarCard .cal-event{padding:12px 0}
+#calendarCard .cal-name{font-size:15px;line-height:1.4}
+/* Tomorrow card spacing */
+#tomorrowCard .tomorrow-event{padding:10px 0}
+#tomorrowCard .tomorrow-title{font-size:18px}
+/* Cookbook card masonry */
+#cookbookCard > div:not(.card-back){max-width:900px;margin-left:auto;margin-right:auto}
+/* Media card: wider grid for 15" screen */
+#mediaCard .media-grid{grid-template-columns:repeat(5,1fr);gap:16px;max-width:700px;margin:0 auto}
+#mediaCard .media-icon{width:56px;height:56px;border-radius:14px}
+#mediaCard .media-name{font-size:13px}
+/* Weather card: proper spacing */
+#weatherCard .weather-detail-grid{gap:20px;max-width:800px;margin:0 auto}
+#weatherCard .weather-day-temp{font-family:var(--fg);font-size:28px}
+/* Greg suggestion card */
+#suggestionCard .greg-voice{font-family:var(--fg);font-size:20px;line-height:1.6;max-width:640px;margin:0 auto}
+/* Grocery card — already full-screen designed, just enforce max-width */
+#groceryCard > *:not(.card-back){max-width:1200px;margin-left:auto;margin-right:auto}
+/* Kids card — wider for two-column layout */
+#kidsCard > *:not(.card-back){max-width:960px;margin-left:auto;margin-right:auto}
+#kidsCard .card-label{margin-bottom:16px}
+/* Spotify/Commute cards */
+#spotifyCard > *:not(.card-back){max-width:700px;margin-left:auto;margin-right:auto}
+#commuteCard > *:not(.card-back){max-width:700px;margin-left:auto;margin-right:auto}
+.lilly-tile{background:var(--bg2);border:1.5px solid var(--border);border-radius:16px;padding:28px 16px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:transform 0.15s,border-color 0.15s;min-height:120px;color:var(--tx2)}
 .lilly-tile:active{transform:scale(0.94);border-color:var(--lilly)}
-.lilly-tile .tile-label{font-family:var(--fu);font-size:18px;font-weight:500;color:var(--tx)}
-.lilly-tile .tile-sub{font-size:12px;color:var(--tx3)}
+.lilly-tile .tile-label{font-family:var(--fu);font-size:20px;font-weight:500;color:var(--tx)}
+.lilly-tile .tile-sub{font-size:13px;color:var(--tx3)}
 
 /* ═══ Tonight card (WG-17 Stage 4) ═══ */
-#tonightCard .tonight-hero{display:flex;gap:24px;align-items:flex-start;margin-bottom:20px}
-#tonightCard .tonight-img{width:240px;height:180px;border-radius:12px;background:var(--bg3);object-fit:cover;flex-shrink:0}
+#tonightCard .tonight-hero{display:flex;gap:28px;align-items:flex-start;margin-bottom:24px}
+#tonightCard .tonight-img{width:280px;height:210px;border-radius:12px;background:var(--bg3);object-fit:cover;flex-shrink:0}
 #tonightCard .tonight-info{flex:1;min-width:0}
 #tonightCard .tonight-name{font-family:var(--fg);font-size:28px;color:var(--tx);margin-bottom:8px}
 #tonightCard .tonight-meta{font-size:14px;color:var(--tx2);margin-bottom:12px}
@@ -501,27 +535,27 @@ var CFG = {
   </div>
   <!-- Kids routines (WG-17 Stage 9) -->
   <div class="interleave-card" id="kidsCard">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <div class="card-label" style="margin:0">KIDS</div>
-      <div style="display:flex;gap:8px">
-        <div class="g-btn" id="kidPickDwight" onclick="switchKid('dwight')" style="border-color:#22C55E">Dwight</div>
-        <div class="g-btn" id="kidPickLilly" onclick="switchKid('lilly')" style="border-color:#A78BFA">Lilly</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div style="font-family:var(--fg);font-size:24px;color:var(--tx)">Kids</div>
+      <div style="display:flex;gap:10px">
+        <div class="g-btn" id="kidPickDwight" onclick="switchKid('dwight')" style="border-color:#22C55E;font-size:16px;padding:10px 20px;border-radius:100px">Dwight</div>
+        <div class="g-btn" id="kidPickLilly" onclick="switchKid('lilly')" style="border-color:#A78BFA;font-size:16px;padding:10px 20px;border-radius:100px">Lilly</div>
       </div>
     </div>
     <div id="kidsRoutineBody" style="text-align:center"></div>
     <div id="kidsExtrasSection" style="display:none">
       <div id="kidsExtrasBody"></div>
     </div>
-    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      <div class="tonight-act" onclick="tellGregKids()" style="font-size:14px;padding:8px 16px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg> Tell Greg to change</div>
+    <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <div class="tonight-act" onclick="tellGregKids()" style="font-size:15px;padding:10px 20px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg> Tell Greg to change</div>
     </div>
     <!-- Dwight's AI companion (WG-17 Stage 12) -->
-    <div id="kidChatSection" style="margin-top:16px;border-top:1px solid var(--border2);padding-top:12px;display:none">
-      <div class="card-label" style="margin-bottom:8px;text-align:center">ASK GREG</div>
-      <div id="kidChatHistory" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
-      <div style="display:flex;gap:8px">
-        <input type="text" id="kidChatInput" placeholder="Ask me anything…" style="flex:1;padding:10px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:16px;outline:none" onkeydown="if(event.key==='Enter')sendKidChat()">
-        <div class="g-btn" onclick="sendKidChat()" style="min-width:44px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+    <div id="kidChatSection" style="margin-top:24px;border-top:1px solid var(--border2);padding-top:16px;display:none">
+      <div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:12px;text-align:center">Ask Greg</div>
+      <div id="kidChatHistory" style="max-height:240px;overflow-y:auto;margin-bottom:14px;max-width:600px;margin-left:auto;margin-right:auto"></div>
+      <div style="display:flex;gap:10px;max-width:600px;margin:0 auto">
+        <input type="text" id="kidChatInput" placeholder="Ask me anything…" style="flex:1;padding:12px 18px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:17px;outline:none" onkeydown="if(event.key==='Enter')sendKidChat()">
+        <div class="g-btn" onclick="sendKidChat()" style="min-width:48px;display:flex;align-items:center;justify-content:center;border-radius:100px"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
       </div>
     </div>
   </div>
@@ -1183,8 +1217,8 @@ var LILLY_ACTIVITIES = [
 
 function renderLillyPlay(){
   var body = document.getElementById('kidsRoutineBody');
-  var h = '<div style="font-family:var(--fg);font-size:24px;color:var(--tx);margin-bottom:20px;text-align:center">What do you want to do?</div>';
-  h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:540px;margin:0 auto">';
+  var h = '<div style="font-family:var(--fg);font-size:28px;color:var(--tx);margin-bottom:24px;text-align:center">What do you want to do?</div>';
+  h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:580px;margin:0 auto">';
   LILLY_ACTIVITIES.forEach(function(a){
     var sub = typeof a.sub === 'function' ? a.sub() : a.sub;
     h += '<div class="lilly-tile" onclick="lillyActivity(\''+a.action+'\')">';
