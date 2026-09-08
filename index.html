@@ -2096,6 +2096,13 @@ document.querySelectorAll('.media-btn[data-pkg]').forEach(function(btn){
 var navBar=document.getElementById('navBar');
 navBar.addEventListener('touchstart',function(){navBar.classList.add('touched')},{passive:true});
 navBar.addEventListener('touchend',function(){setTimeout(function(){if(!activeCard)navBar.classList.remove('touched')},3000)});
+// Tapping the homescreen (photo area) brightens nav — in case presence sensor missed the person
+document.addEventListener('touchstart',function(e){
+  if(activeCard) return; // card is open, don't interfere
+  if(e.target.closest('.nav-bar') || e.target.closest('.interleave-card') || e.target.closest('.modal-overlay')) return;
+  navBar.classList.add('touched');
+  setTimeout(function(){ if(!activeCard) navBar.classList.remove('touched'); }, 5000);
+},{passive:true});
 // Auto-cycle removed per §7 — cards are on-demand via bottom nav
 // No auto-show on load — the resting state (photo + corner cluster + advice) is the default
 
