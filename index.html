@@ -29,7 +29,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .glance-weather{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
 .glance-weather-icon{font-size:22px}
 .glance-weather-temp{font-family:var(--fu);font-weight:500;font-size:28px;color:var(--tx)}
-.glance-advice{font-family:var(--fu);font-weight:400;font-size:18px;color:var(--tx);text-shadow:0 2px 12px rgba(30,26,22,0.7);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.glance-advice{font-family:var(--fg);font-weight:400;font-size:22px;color:var(--tx);text-shadow:0 2px 16px rgba(30,26,22,0.8),0 0 40px rgba(30,26,22,0.5);position:absolute;bottom:33%;left:0;right:0;text-align:center;padding:0 60px;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.8s;line-height:1.4}
 .glance-event{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap;max-width:320px;overflow:hidden}
 .glance-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .glance-event-text{font-family:var(--fu);font-size:16px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -337,6 +337,9 @@ var CFG = {
 <div class="photo-gradient"></div>
 <div class="photo-gradient-top"></div>
 
+<!-- ═══ Advice / Countdown — lower-third line (WG-17) ═══ -->
+<div class="glance-advice" id="glanceAdvice">Good morning</div>
+
 <!-- ═══ Glance Strip (WG-17 Stage 2) ═══ -->
 <div class="persistent-overlay">
   <div style="flex-shrink:0">
@@ -347,7 +350,6 @@ var CFG = {
     <span class="glance-weather-icon" id="weatherIcon">&#9728;&#65039;</span>
     <span class="glance-weather-temp" id="weatherTemp">--°</span>
   </div>
-  <div class="glance-advice" id="glanceAdvice">Good morning</div>
   <div class="glance-event" id="glanceEvent">
     <div class="glance-event-dot" id="glanceEventDot" style="background:var(--angela)"></div>
     <div class="glance-event-text" id="glanceEventText"></div>
@@ -558,17 +560,18 @@ function weatherIcon(cond){
   return '&#9728;&#65039;';
 }
 function updateGlanceStrip(){
-  // Advice line — from Greg suggestions or weather
+  // Advice line — lower-third, from Greg suggestions or weather
   var adviceEl = document.getElementById('glanceAdvice');
   if(gregSuggestions.length){
     adviceEl.textContent = gregSuggestions[0];
+    adviceEl.style.opacity = '1';
   } else {
     var temp = parseInt(document.getElementById('weatherTemp').textContent)||70;
     var hour = new Date().getHours();
-    if(hour < 10) adviceEl.textContent = 'Good morning';
-    else if(temp > 85) adviceEl.textContent = 'Hot one — '+temp+'° out there';
-    else if(temp < 55) adviceEl.textContent = 'Bundle up — '+temp+'° today';
-    else adviceEl.textContent = 'Beautiful day — '+temp+'°';
+    if(hour >= 6 && hour < 11){ adviceEl.textContent = 'Good morning'; adviceEl.style.opacity = '0.85'; }
+    else if(temp > 85){ adviceEl.textContent = 'Hot one — '+temp+'° out there'; adviceEl.style.opacity = '0.85'; }
+    else if(temp < 55){ adviceEl.textContent = 'Bundle up — '+temp+'° today'; adviceEl.style.opacity = '0.85'; }
+    else { adviceEl.textContent = ''; adviceEl.style.opacity = '0'; }
   }
 
   // Next event — first upcoming event today from any person
@@ -631,23 +634,20 @@ function fetchCountdowns(){
 function renderCountdownStrip(){
   if(!countdownData.length) return;
   var next = countdownData[0];
-  // Show in the glance advice line when there's a close countdown
+  var el = document.getElementById('glanceAdvice');
+  if(!el) return;
   if(next.days <= 14 && next.days > 0){
-    var el = document.getElementById('glanceAdvice');
-    if(el){
-      var emoji = next.type==='birthday' ? '🎂' : '🎉';
-      var daysText = next.days === 1 ? 'Tomorrow!' : next.days + ' days';
-      el.textContent = emoji + ' ' + next.title + ' — ' + daysText;
-    }
+    var emoji = next.type==='birthday' ? '🎂' : '🎉';
+    var daysText = next.days === 1 ? 'Tomorrow!' : next.days + ' days';
+    el.textContent = emoji + ' ' + next.title + ' — ' + daysText;
+    el.style.opacity = '1';
+    el.style.color = '';
   }
   if(next.days === 0){
-    // TODAY! Show celebration
-    var el = document.getElementById('glanceAdvice');
-    if(el){
-      var emoji = next.type==='birthday' ? '🎂🎉' : '🎉';
-      el.textContent = emoji + ' ' + next.title + ' is TODAY!';
-      el.style.color = '#FBBF24';
-    }
+    var emoji = next.type==='birthday' ? '🎂🎉' : '🎉';
+    el.textContent = emoji + ' ' + next.title + ' is TODAY!';
+    el.style.opacity = '1';
+    el.style.color = '#FBBF24';
   }
 }
 fetchCountdowns();
