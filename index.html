@@ -175,6 +175,10 @@ body.card-open .persistent-overlay,body.card-open .nav-bar{opacity:0;pointer-eve
 .g-undo b{font-weight:500}
 .g-undo .g-undo-btn{background:rgba(255,255,255,.18);border-radius:100px;padding:8px 16px;font-weight:500}
 .g-empty{font-size:19px;color:var(--tx3);padding:18px 0}
+
+/* Nav bar clearance — cards must not overlap the fixed nav */
+.interleave-card { padding-bottom: 70px; }
+#groceryCard .grocery-add-bar { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
 
 /* ═══ Camera/presence ═══ */
@@ -580,11 +584,7 @@ function showCard(id){
 // never show a cramped widget without event details when the real app
 // is one launch away.
 function openFullCalendar(){
-  if(typeof Greg!=='undefined' && Greg.launchApp){
-    Greg.launchApp('com.google.android.calendar');
-  } else {
-    toggleCard('calendarCard'); // fallback if GregBridge unavailable
-  }
+  toggleCard('calendarCard');  // 7-day card IS the calendar view now
 }
 
 function toggleCard(id){
@@ -592,7 +592,7 @@ function toggleCard(id){
   if(activeCard===id){showCard(null);return;}
   showCard(id);
   // Auto-dismiss after 30s of no interaction
-  cardTimeout=setTimeout(function(){showCard(null)},30000);
+  cardTimeout=setTimeout(function(){showCard(null)}, activeCard==='groceryCard' ? 60000 : 30000);
 }
 
 // Media button touch handlers — Android WebView needs touchend, not onclick
@@ -679,7 +679,7 @@ function fetchCalendar(){
   var monthStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
   var monthEnd=new Date(now.getFullYear(),now.getMonth()+1,0,23,59,59).toISOString();
   var todayStart=now.toISOString();
-  var todayEnd=new Date(now.getTime()+86400000).toISOString();
+  var todayEnd=new Date(now.getTime()+7*86400000).toISOString();
   var allEvents=[],eventDays=[];
   var pending=CFG.CALENDAR_IDS.length*2;
   function done(){if(--pending<=0){buildCalGrid(eventDays);renderCalendar(allEvents)}}
@@ -717,7 +717,8 @@ function fetchCalendar(){
       // Add today's events to the list
       var evDate=ev.event_date;
       var todayStr=now.toISOString().split('T')[0];
-      if(evDate===todayStr){
+      var todayD=todayStr; var weekEnd=new Date(now.getTime()+7*86400000).toISOString().split('T')[0];
+      if(evDate>=todayD && evDate<=weekEnd){
         var start=ev.all_day?ev.event_date:(ev.event_date+'T'+ev.event_time);
         allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2,eventType:ev.event_type||'general'});
       }
@@ -729,14 +730,30 @@ function fetchCalendar(){
 
 function renderCalendar(events){
   var c=document.getElementById('calendarEvents');
-  if(!events||!events.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:4px 0">Nothing scheduled today</div>';return;}
+  if(!events||!events.length){c.innerHTML='<div style="font-size:13px;color:var(--tx3);padding:4px 0">Nothing this week</div>';return;}
   events.sort(function(a,b){return a.start>b.start?1:-1});
+  var today=new Date().toISOString().split('T')[0];
+  var dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var monthNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var lastDay='';
   c.innerHTML=events.map(function(ev){
+    var evDay=(ev.start||'').split('T')[0];
+    var dayHeader='';
+    if(evDay!==lastDay){
+      lastDay=evDay;
+      if(evDay===today) dayHeader='<div style="font-weight:600;font-size:13px;color:var(--greg);padding:8px 0 2px">Today</div>';
+      else {
+        var dd=new Date(evDay+'T12:00:00');
+        var tomorrow=new Date(new Date().getTime()+86400000).toISOString().split('T')[0];
+        var label=evDay===tomorrow?'Tomorrow':dayNames[dd.getDay()]+' '+monthNames[dd.getMonth()]+' '+dd.getDate();
+        dayHeader='<div style="font-weight:500;font-size:12px;color:var(--tx-m);padding:10px 0 2px;border-top:1px solid var(--border2);margin-top:4px">'+label+'</div>';
+      }
+    }
     var t='All day';
     if(ev.start.indexOf('T')>-1){var d=new Date(ev.start);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
     var typeColors={'birthday':'#D4A84B','work':'#6B8E7B','holiday':'#7B8EC4','general':'var(--greg)'};
     var evColor=typeColors[ev.eventType||'general']||'var(--greg)';
-    return '<div class="cal-event cal-type-'+(ev.eventType||'general')+'"><div class="cal-dot" style="background:'+evColor+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
+    return dayHeader+'<div class="cal-event cal-type-'+(ev.eventType||'general')+'"><div class="cal-dot" style="background:'+evColor+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
   }).join('');
 }
 
@@ -752,7 +769,8 @@ function sbFetch(path, opts){
   opts = opts || {};
   var headers = {'apikey':CFG.SUPABASE_ANON,'Authorization':'Bearer '+CFG.SUPABASE_ANON,'Content-Type':'application/json'};
   if(opts.headers) Object.keys(opts.headers).forEach(function(k){headers[k]=opts.headers[k]});
-  return fetch(CFG.SUPABASE_URL+'/rest/v1/'+path, Object.assign({},{headers:headers},opts));
+  delete opts.headers;  // prevent Object.assign from overwriting the merged headers
+  return fetch(CFG.SUPABASE_URL+'/rest/v1/'+path, Object.assign({headers:headers},opts));
 }
 
 // ═══ GROCERY — lifecycle, trays, trips (spec: docs/ux-graph, WG-18/19/38/39) ═══
@@ -1054,6 +1072,12 @@ function setQty(id, delta){
   document.getElementById('groceryIcons').addEventListener('click', function(e){
     var tile=e.target.closest('.g-icon-tile'); if(!tile) return;
     addGroceryItem(tile.getAttribute('data-add'), tile.getAttribute('data-cat'), 'icon');
+  });
+  // Keep the grocery card alive while interacting — it's a working surface, not a glance.
+  // Resets BOTH timer systems (cardTimeout from nav-button open, closeTimer from display-event open).
+  document.getElementById('groceryCard').addEventListener('pointerdown', function(){
+    if (cardTimeout) { clearTimeout(cardTimeout); cardTimeout = setTimeout(function(){ showCard(null); }, 60000); }
+    if (typeof closeTimer !== 'undefined' && closeTimer) { clearTimeout(closeTimer); closeTimer = setTimeout(function(){ showCard(null); }, 60000); }
   });
   ['groceryUsual','groceryRecent'].forEach(function(id){
     document.getElementById(id).addEventListener('click', function(e){
