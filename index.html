@@ -36,17 +36,15 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .glance-event-text{font-family:var(--fu);font-size:16px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .glance-tonight{font-family:var(--fu);font-size:16px;color:var(--tx2);text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
 
-/* ═══ Interleave cards ═══ */
-.card-layer{position:absolute;top:0;right:0;bottom:80px;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
-.interleave-card{position:absolute;right:40px;width:360px;max-height:calc(100vh - 160px);background:var(--card);border:1px solid var(--card-b);border-radius:16px;padding:24px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(20px);transition:opacity 0.6s ease,transform 0.6s ease;overflow-y:auto;pointer-events:none}
-/* Opening something is the personal zone (Vogel & Balakrishnan): someone is
-   standing at the wall, not reading it from across the room. A floating box
-   with 28px text was tuned for the glance distance, not the up-close working
-   distance -- it read as cramped and half-clipped. Any actively-opened card
-   now takes the whole screen: real width for multi-column content, smaller
-   (still touch-friendly) text because the reader is three feet away, not ten. */
-.interleave-card.active{position:fixed;inset:0;right:0;width:100%;max-height:100%;height:100%;border-radius:0;padding:40px 56px 32px;opacity:1;transform:none;transition:opacity .35s ease;pointer-events:auto;z-index:50;background:rgba(20,17,14,.97);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-body.card-open .persistent-overlay,body.card-open .nav-bar{opacity:0;pointer-events:none;transition:opacity .2s ease}
+/* ═══ Interleave cards → FULL SCREEN overlays ═══ */
+.card-layer{position:fixed;inset:0;z-index:8;pointer-events:none}
+.interleave-card{position:fixed;inset:0;width:100vw;height:100vh;background:var(--bg);opacity:0;transform:translateY(12px);transition:opacity 0.25s ease,transform 0.25s ease;overflow-y:auto;pointer-events:none;padding:28px 48px 100px;z-index:30}
+.interleave-card.active{opacity:1;transform:none;pointer-events:auto}
+.card-back{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--tx2);font-family:var(--fu);font-size:14px;margin-bottom:16px;padding:4px 0;width:fit-content;transition:color 0.15s}
+.card-back:active{color:var(--tx)}
+.card-back svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* Hides the glance strip and nav when a card is open */
+body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glance-advice{opacity:0;pointer-events:none;transition:opacity .2s ease}
 .interleave-card::-webkit-scrollbar{display:none}
 .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.05em;margin-bottom:12px}
 .card-title{font-family:var(--fg);font-size:20px;font-weight:400;color:var(--tx);margin-bottom:16px}
@@ -186,16 +184,11 @@ body.card-open .persistent-overlay,body.card-open .nav-bar{opacity:0;pointer-eve
 #groceryCard .grocery-add-bar { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
 
-/* ═══ Kids card — wide layout for landscape (§6: pull levers, don't design) ═══ */
-#kidsCard{width:680px;max-width:90vw}
+/* ═══ Kids card layout ═══ */
 #kidsCard .kids-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 #kidsCard .kids-col{min-width:0}
-/* ═══ Wide cards — use the landscape ═══ */
-#mediaCard{width:520px;max-width:90vw}
-#cookbookCard{width:560px;max-width:90vw}
-#tonightCard{width:520px;max-width:90vw}
-#calendarCard{width:480px;max-width:90vw}
-#groceryCard{width:400px;max-width:90vw}
+/* ═══ Full-screen card content constraints ═══ */
+#kidsCard .card-inner,#mediaCard .card-inner,#cookbookCard .card-inner,#tonightCard .card-inner,#calendarCard .card-inner,#groceryCard .card-inner,#tomorrowCard .card-inner{max-width:900px;margin:0 auto}
 .lilly-tile{background:var(--bg2);border:1.5px solid var(--border);border-radius:16px;padding:24px 16px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:transform 0.15s,border-color 0.15s;min-height:110px;color:var(--tx2)}
 .lilly-tile:active{transform:scale(0.94);border-color:var(--lilly)}
 .lilly-tile .tile-label{font-family:var(--fu);font-size:18px;font-weight:500;color:var(--tx)}
@@ -1535,12 +1528,8 @@ document.addEventListener('touchstart',function(e){
   if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
   paused=true;pi.classList.add('visible');
 },{passive:true});
-// Tap outside card = close it
-document.addEventListener('click',function(e){
-  if(activeCard && !e.target.closest('.interleave-card') && !e.target.closest('.nav-bar') && !e.target.closest('.mode-tile') && !e.target.closest('.tell-greg') && !e.target.closest('.modal-overlay')){
-    showCard(null);
-  }
-});
+// Tap outside card = no longer needed (cards are full-screen, back button closes)
+// Kept as a safety fallback for the glance strip area only
 
 document.addEventListener('touchend',function(e){
   if(e.target.closest('.nav-bar')||e.target.closest('.interleave-card')||e.target.closest('.modal-overlay')) return;
@@ -1569,17 +1558,26 @@ function showCard(id){
   if(id && document.getElementById(id)){
     document.getElementById(id).classList.add('active');
     activeCard=id;
-    var btn=document.querySelector('[data-card="'+id+'"]');
-    if(btn)btn.classList.add('active');
     document.body.classList.add('card-open');
-    if(adviceEl) adviceEl.style.opacity = '0'; // hide advice when card open
+    if(adviceEl) adviceEl.style.opacity = '0';
   } else {
     activeCard=null;
     document.body.classList.remove('card-open');
-    // Restore advice on homescreen only
     if(adviceEl && adviceEl.textContent) adviceEl.style.opacity = adviceEl.textContent.trim() ? '0.85' : '0';
   }
 }
+
+// Universal back button — inject into every card that doesn't have one
+(function wireBackButtons(){
+  document.querySelectorAll('.interleave-card').forEach(function(card){
+    if(card.querySelector('.card-back')) return; // already has one
+    var back = document.createElement('div');
+    back.className = 'card-back';
+    back.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back';
+    back.addEventListener('click', function(e){ e.stopPropagation(); showCard(null); });
+    card.insertBefore(back, card.firstChild);
+  });
+})();
 
 // Dedicated calendar nav button -> full Google Calendar app directly.
 // The small calendarCard widget is for ambient screensaver rotation only
