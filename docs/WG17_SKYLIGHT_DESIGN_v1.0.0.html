@@ -22,269 +22,77 @@
   --walnut-purple: #A78BFA;
   --walnut-pink: #F472B6;
   --walnut-yellow: #FBBF24;
-  --person-angela: #60A5FA;
-  --person-david: #22C55E;
-  --person-dwight: #FBBF24;
-  --person-lilly: #F472B6;
-  --person-grammy: #A78BFA;
+  --person-angela: #FBBF24;
+  --person-david: #60A5FA;
+  --person-dwight: #22C55E;
+  --person-lilly: #A78BFA;
+  --person-grammy: #F472B6;
   --person-greg: #C9956B;
 }
 @media (prefers-color-scheme: light) {
   :root {
-    --walnut-bg: #F5F0EB;
-    --walnut-surface: #FFFFFF;
-    --walnut-elevated: #F0EBE5;
-    --walnut-border: #D6D3D1;
-    --walnut-text: #1C1917;
-    --walnut-muted: #78716C;
+    --walnut-bg: #F5F0EB; --walnut-surface: #FFFFFF; --walnut-elevated: #F0EBE5;
+    --walnut-border: #D6D3D1; --walnut-text: #1C1917; --walnut-muted: #78716C;
   }
 }
 :root:not([data-theme="light"]) {
-  --walnut-bg: #1C1917;
-  --walnut-surface: #292524;
-  --walnut-elevated: #3B3532;
-  --walnut-border: #57534E;
-  --walnut-text: #E7E5E4;
-  --walnut-muted: #A8A29E;
+  --walnut-bg: #1C1917; --walnut-surface: #292524; --walnut-elevated: #3B3532;
+  --walnut-border: #57534E; --walnut-text: #E7E5E4; --walnut-muted: #A8A29E;
 }
 :root[data-theme="dark"] {
-  --walnut-bg: #1C1917;
-  --walnut-surface: #292524;
-  --walnut-elevated: #3B3532;
-  --walnut-border: #57534E;
-  --walnut-text: #E7E5E4;
-  --walnut-muted: #A8A29E;
+  --walnut-bg: #1C1917; --walnut-surface: #292524; --walnut-elevated: #3B3532;
+  --walnut-border: #57534E; --walnut-text: #E7E5E4; --walnut-muted: #A8A29E;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--walnut-bg);
-  color: var(--walnut-text);
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-}
-.container { max-width: 960px; margin: 0 auto; padding: 3rem 2rem 6rem; }
-h1 {
-  font-family: 'Newsreader', serif;
-  font-size: 2.8rem;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin-bottom: 0.5rem;
-  color: var(--walnut-warm);
-}
-.subtitle {
-  font-size: 1rem;
-  color: var(--walnut-muted);
-  margin-bottom: 3rem;
-  border-bottom: 1px solid var(--walnut-border);
-  padding-bottom: 2rem;
-}
-h2 {
-  font-family: 'Newsreader', serif;
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: var(--walnut-warm);
-  margin: 3.5rem 0 1.2rem;
-  letter-spacing: -0.01em;
-}
-h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--walnut-text);
-  margin: 2rem 0 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.85rem;
-}
-h4 {
-  font-family: 'Newsreader', serif;
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--walnut-accent);
-  margin: 1.5rem 0 0.6rem;
-}
-p { margin-bottom: 1rem; }
-.principle {
-  background: var(--walnut-surface);
-  border-left: 3px solid var(--walnut-accent);
-  padding: 1.2rem 1.5rem;
-  margin: 1rem 0;
-  border-radius: 0 8px 8px 0;
-}
-.principle strong { color: var(--walnut-warm); }
-.callout {
-  background: var(--walnut-elevated);
-  border: 1px solid var(--walnut-border);
-  padding: 1.2rem 1.5rem;
-  margin: 1.5rem 0;
-  border-radius: 8px;
-  font-size: 0.95rem;
-}
-.callout-label {
-  font-weight: 700;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--walnut-accent);
-  margin-bottom: 0.4rem;
-}
-.state-card {
-  background: var(--walnut-surface);
-  border: 1px solid var(--walnut-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1rem 0;
-}
-.state-card h4 { margin-top: 0; }
-.persona-tag {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-right: 4px;
-  margin-bottom: 4px;
-}
-.tag-angela { background: var(--person-angela); color: #000; }
-.tag-david { background: var(--person-david); color: #000; }
-.tag-dwight { background: var(--person-dwight); color: #000; }
-.tag-lilly { background: var(--person-lilly); color: #000; }
-.tag-grammy { background: var(--person-grammy); color: #000; }
-.tag-greg { background: var(--person-greg); color: #000; }
-.tag-guest { background: var(--walnut-muted); color: #000; }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-  overflow-x: auto;
-  display: block;
-}
-th, td {
-  padding: 0.6rem 0.8rem;
-  text-align: left;
-  border-bottom: 1px solid var(--walnut-border);
-}
-th {
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--walnut-muted);
-  white-space: nowrap;
-}
-code {
-  background: var(--walnut-elevated);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  font-family: 'SF Mono', 'Consolas', monospace;
-}
-.toc {
-  background: var(--walnut-surface);
-  border: 1px solid var(--walnut-border);
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  margin: 2rem 0;
-}
-.toc a {
-  color: var(--walnut-warm);
-  text-decoration: none;
-  display: block;
-  padding: 0.25rem 0;
-  font-size: 0.95rem;
-}
-.toc a:hover { text-decoration: underline; }
-.toc .indent { padding-left: 1.2rem; font-size: 0.9rem; color: var(--walnut-muted); }
-svg text { font-family: 'Inter', system-ui, sans-serif; }
-.diagram-wrap {
-  background: var(--walnut-surface);
-  border: 1px solid var(--walnut-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  overflow-x: auto;
-}
-.build-item {
-  display: flex;
-  gap: 1rem;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid var(--walnut-border);
-  align-items: flex-start;
-}
-.build-num {
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--walnut-accent);
-  min-width: 28px;
-  text-align: right;
-  padding-top: 2px;
-}
-.build-body { flex: 1; }
-.build-body strong { color: var(--walnut-warm); }
-.build-deps {
-  font-size: 0.8rem;
-  color: var(--walnut-muted);
-  margin-top: 2px;
-}
-.zone-strip {
-  display: flex;
-  gap: 0;
-  margin: 1.5rem 0;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.zone-strip > div {
-  padding: 1rem;
-  flex: 1;
-  text-align: center;
-  font-size: 0.85rem;
-}
-.zone-strip .z1 { background: #292524; }
-.zone-strip .z2 { background: #3B3532; }
-.zone-strip .z3 { background: #57534E; }
-.zone-strip .z4 { background: #78716C; color: #1C1917; }
-.zone-label {
-  font-weight: 700;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 0.3rem;
-}
-.flow-step {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.5rem 0;
-}
-.flow-arrow { color: var(--walnut-accent); font-weight: 700; }
-.metric-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-}
-.metric-card {
-  background: var(--walnut-surface);
-  border: 1px solid var(--walnut-border);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-}
-.metric-value {
-  font-family: 'Newsreader', serif;
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--walnut-warm);
-}
-.metric-label {
-  font-size: 0.75rem;
-  color: var(--walnut-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: 0.3rem;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--walnut-bg); color:var(--walnut-text); line-height:1.7; -webkit-font-smoothing:antialiased; }
+.container { max-width:960px; margin:0 auto; padding:3rem 2rem 6rem; }
+h1 { font-family:'Newsreader',serif; font-size:2.8rem; font-weight:300; letter-spacing:-0.02em; line-height:1.15; margin-bottom:0.5rem; color:var(--walnut-warm); }
+.subtitle { font-size:1rem; color:var(--walnut-muted); margin-bottom:3rem; border-bottom:1px solid var(--walnut-border); padding-bottom:2rem; }
+h2 { font-family:'Newsreader',serif; font-size:1.8rem; font-weight:400; color:var(--walnut-warm); margin:3.5rem 0 1.2rem; letter-spacing:-0.01em; }
+h3 { font-size:0.85rem; font-weight:600; color:var(--walnut-text); margin:2rem 0 0.8rem; text-transform:uppercase; letter-spacing:0.04em; }
+h4 { font-family:'Newsreader',serif; font-size:1.15rem; font-weight:600; color:var(--walnut-accent); margin:1.5rem 0 0.6rem; }
+p { margin-bottom:1rem; }
+.principle { background:var(--walnut-surface); border-left:3px solid var(--walnut-accent); padding:1.2rem 1.5rem; margin:1rem 0; border-radius:0 8px 8px 0; }
+.principle strong { color:var(--walnut-warm); }
+.callout { background:var(--walnut-elevated); border:1px solid var(--walnut-border); padding:1.2rem 1.5rem; margin:1.5rem 0; border-radius:8px; font-size:0.95rem; }
+.callout-label { font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--walnut-accent); margin-bottom:0.4rem; }
+.state-card { background:var(--walnut-surface); border:1px solid var(--walnut-border); border-radius:12px; padding:1.5rem; margin:1rem 0; }
+.state-card h4 { margin-top:0; }
+.persona-tag { display:inline-block; padding:2px 10px; border-radius:100px; font-size:0.75rem; font-weight:600; margin-right:4px; margin-bottom:4px; }
+.tag-angela { background:var(--person-angela); color:#000; }
+.tag-david { background:var(--person-david); color:#000; }
+.tag-dwight { background:var(--person-dwight); color:#000; }
+.tag-lilly { background:var(--person-lilly); color:#000; }
+.tag-grammy { background:var(--person-grammy); color:#000; }
+.tag-greg { background:var(--person-greg); color:#000; }
+.tag-guest { background:var(--walnut-muted); color:#000; }
+table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; overflow-x:auto; display:block; }
+th,td { padding:0.6rem 0.8rem; text-align:left; border-bottom:1px solid var(--walnut-border); }
+th { font-weight:600; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--walnut-muted); white-space:nowrap; }
+code { background:var(--walnut-elevated); padding:2px 6px; border-radius:4px; font-size:0.85em; font-family:'SF Mono','Consolas',monospace; }
+.toc { background:var(--walnut-surface); border:1px solid var(--walnut-border); border-radius:12px; padding:1.5rem 2rem; margin:2rem 0; }
+.toc a { color:var(--walnut-warm); text-decoration:none; display:block; padding:0.25rem 0; font-size:0.95rem; }
+.toc a:hover { text-decoration:underline; }
+.toc .indent { padding-left:1.2rem; font-size:0.9rem; color:var(--walnut-muted); }
+svg text { font-family:'Inter',system-ui,sans-serif; }
+.diagram-wrap { background:var(--walnut-surface); border:1px solid var(--walnut-border); border-radius:12px; padding:1.5rem; margin:1.5rem 0; overflow-x:auto; }
+.build-item { display:flex; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--walnut-border); align-items:flex-start; }
+.build-num { font-weight:700; font-size:0.85rem; color:var(--walnut-accent); min-width:28px; text-align:right; padding-top:2px; }
+.build-body { flex:1; }
+.build-body strong { color:var(--walnut-warm); }
+.build-deps { font-size:0.8rem; color:var(--walnut-muted); margin-top:2px; }
+.zone-strip { display:flex; gap:0; margin:1.5rem 0; border-radius:8px; overflow:hidden; }
+.zone-strip>div { padding:1rem; flex:1; text-align:center; font-size:0.85rem; }
+.zone-strip .z1 { background:#292524; }
+.zone-strip .z2 { background:#3B3532; }
+.zone-strip .z3 { background:#57534E; }
+.zone-strip .z4 { background:#78716C; color:#1C1917; }
+.zone-label { font-weight:700; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.3rem; }
+.metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin:1rem 0; }
+.metric-card { background:var(--walnut-surface); border:1px solid var(--walnut-border); border-radius:8px; padding:1rem; text-align:center; }
+.metric-value { font-family:'Newsreader',serif; font-size:2rem; font-weight:600; color:var(--walnut-warm); }
+.metric-label { font-size:0.75rem; color:var(--walnut-muted); text-transform:uppercase; letter-spacing:0.04em; margin-top:0.3rem; }
+.rev-tag { display:inline-block; background:var(--walnut-accent); color:#000; padding:2px 8px; border-radius:4px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; vertical-align:middle; }
 </style>
 </head>
 <body>
@@ -293,750 +101,414 @@ svg text { font-family: 'Inter', system-ui, sans-serif; }
 <h1>WG-17: The Skylight</h1>
 <div class="subtitle">
   Information Architecture &amp; UX Design Session<br>
-  Gregore-private &middot; 2026-09-07 &middot; v1.0.0<br>
-  Research foundation: 200+ sources, 112 features, 7 personas, 9 arrival contexts, Louvain clustering (Q&asymp;0.09, seed agreement 0.95)
+  Gregore-private &middot; 2026-09-07 &middot; <strong>v1.1.0</strong> <span class="rev-tag">David's corrections applied</span><br>
+  Research: 200+ sources, 112 features, 7 personas, 9 arrival contexts, Louvain (Q&asymp;0.09, seed 0.95)<br>
+  Style guide: Gregore brand (Walnut palette, Newsreader + Inter)
 </div>
 
 <nav class="toc">
-  <strong style="color:var(--walnut-warm); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.06em;">Contents</strong>
+  <strong style="color:var(--walnut-warm);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;">Contents</strong>
   <a href="#vision">1. Design Vision</a>
   <a href="#principles">2. Seven Principles</a>
   <a href="#hardware">3. Hardware Constraints</a>
   <a href="#zones">4. Proximity Zones</a>
-  <a href="#state-machine">5. State Machine</a>
-  <a href="#resting">6. Resting State</a>
-  <a href="#nav">7. Navigation Model</a>
-  <a href="#household">8. Household Mode</a>
-  <a class="indent" href="#grocery">8a. Grocery Lifecycle</a>
-  <a class="indent" href="#meals">8b. Meals / Tonight</a>
-  <a class="indent" href="#intercom">8c. Intercom</a>
-  <a href="#kids">9. Kids Mode</a>
-  <a class="indent" href="#routines">9a. Routines &amp; Rewards</a>
-  <a class="indent" href="#lilly">9b. Lilly Play</a>
-  <a class="indent" href="#dwight">9c. Dwight Curiosity</a>
-  <a href="#plan">10. Plan &amp; Remember</a>
-  <a class="indent" href="#calendar">10a. Calendar</a>
-  <a class="indent" href="#photos">10b. Photos &amp; On This Day</a>
-  <a href="#entertainment">11. Entertainment Mode</a>
-  <a href="#invariants">12. Invariants</a>
-  <a href="#visual">13. Visual Direction</a>
-  <a href="#typography">14. Typography Scale</a>
-  <a href="#persona-flows">15. Persona Flows</a>
-  <a href="#proactive">16. Proactive Speech</a>
-  <a href="#morning">17. Morning Brief</a>
-  <a href="#build-order">18. Build Order</a>
+  <a href="#multi-person">5. Multi-Person Hierarchy</a>
+  <a href="#state-machine">6. State Machine</a>
+  <a href="#resting">7. Resting State &amp; Glance Strip</a>
+  <a href="#nav">8. Navigation Model</a>
+  <a href="#household">9. Household Mode</a>
+  <a class="indent" href="#grocery">9a. Grocery Lifecycle &amp; Cross-List Sharing</a>
+  <a class="indent" href="#meals">9b. Meals / Tonight / Recipe Collection</a>
+  <a class="indent" href="#intercom">9c. Intercom</a>
+  <a href="#kids">10. Kids Mode</a>
+  <a class="indent" href="#routines">10a. Routines, Extras &amp; Earning</a>
+  <a class="indent" href="#lilly">10b. Lilly Play &amp; Activity Chooser</a>
+  <a class="indent" href="#dwight">10c. Dwight: Greg as AI Companion</a>
+  <a href="#plan">11. Plan &amp; Remember</a>
+  <a class="indent" href="#calendar">11a. Calendar</a>
+  <a class="indent" href="#photos">11b. Photos, Push-In &amp; On This Day</a>
+  <a href="#entertainment">12. Entertainment Mode</a>
+  <a href="#invariants">13. Invariants</a>
+  <a href="#visual">14. Visual Direction &amp; Style Guide</a>
+  <a href="#typography">15. Typography Scale</a>
+  <a href="#persona-flows">16. Persona Flows</a>
+  <a href="#proactive">17. Proactive Speech</a>
+  <a href="#morning">18. Morning Brief</a>
+  <a href="#build-order">19. Build Order</a>
 </nav>
 
-<!-- ============================================ -->
 <h2 id="vision">1. Design Vision</h2>
-
 <div class="principle">
   <strong>The Skylight is a kitchen window into the family's day, not a computer on the wall.</strong><br>
   It shows what matters right now, does what you'd otherwise walk across the room for, and disappears when nobody needs it. Greg is behind the glass &mdash; present, warm, never pushy.
 </div>
+<p>The market has converged on calendar + lists + photos + routines (Skylight Calendar 2, Hearth, DAKboard, Nest Hub). Every competitor answers "what are we doing today?" and "what's for dinner?" Our wall answers those too &mdash; but it also has Greg: a face, a voice, device control across the house, memory, cameras that see who walked in, and the ability to learn what the family actually likes. The differentiator is not features. It's that the wall <em>knows the family</em> and <em>acts on their behalf</em>.</p>
 
-<p>The market has converged on calendar + lists + photos + routines (Skylight Calendar 2, Hearth, DAKboard, Nest Hub). Every competitor answers two questions: "what are we doing today?" and "what's for dinner?" Our wall answers those too &mdash; but it also has Greg: a face, a voice, device control, memory, and the cameras to see who walked in. The differentiator is not features. It's that the wall <em>knows the family</em> and <em>acts on their behalf</em>.</p>
-
-<p>No other product on the market can: speak to a family member by name about their specific day, hold up a paper list and have it land on the shared grocery, tell every TV in the house that dinner is ready, play with a 2-year-old as a responsive voice partner, or remember what happened three years ago today and show the photos. Greg can.</p>
-
-<!-- ============================================ -->
 <h2 id="principles">2. Seven Principles</h2>
+<div class="principle"><strong>P1 &mdash; Customer-obsessed.</strong> Rank every feature by steps it removes from the family or moments it brightens. Architectural elegance is not a metric.</div>
+<div class="principle"><strong>P2 &mdash; Visibility.</strong> Every command to the wall echoes visibly. "Add milk" opens the list and shows milk appear. "Turn off the TV" shows a confirmation pill. Silent automation is the anti-pattern. The Skylight is a puppet stage; Greg is the puppeteer.</div>
+<div class="principle"><strong>P3 &mdash; Ambient by default, utility on demand.</strong> 90% of the time the wall is a beautiful photo frame with a thin glance strip. Utility appears when someone walks up, speaks, or taps &mdash; and recedes when they leave.</div>
+<div class="principle"><strong>P4 &mdash; Organised by moment, personalised on approach.</strong> The three modes come from arrival context (dinner prep vs after-school vs evening), not user profiles. Personalisation is what the wall <em>leads with</em> when it identifies a face, not which screen it shows.</div>
+<div class="principle"><strong>P5 &mdash; One more thing is one too many.</strong> Nothing on the wall replaces something the family already does. The win is a quick action or an unnecessary movement removed from a thing they already do.</div>
+<div class="principle"><strong>P6 &mdash; Pre-readers are first-class.</strong> Icons beat words. Targets beat menus. Sound beats silence. Lilly (2) and Grammy share this principle from opposite ends &mdash; if it works for both, it works.</div>
+<div class="principle"><strong>P7 &mdash; Whichever is easier at the time.</strong> Wall = capture, consolidate, print. Paper = shop. Phone = shop when paper isn't there. Voice = the exception report. The best surface for this moment wins.</div>
 
-<div class="principle">
-  <strong>P1 &mdash; Customer-obsessed.</strong> Rank every feature by steps it removes from the family or moments it brightens. Architectural elegance is not a metric.
-</div>
-<div class="principle">
-  <strong>P2 &mdash; Visibility.</strong> Every command to the wall echoes visibly on the wall. "Add milk" opens the list and shows milk appear. "Turn off the TV" shows a confirmation pill. Silent automation is the anti-pattern. The Skylight is a puppet stage; Greg is the puppeteer.
-</div>
-<div class="principle">
-  <strong>P3 &mdash; Ambient by default, utility on demand.</strong> 90% of the time the wall is a beautiful photo frame with a thin glance strip. Utility appears when someone walks up, speaks, or taps &mdash; and recedes when they leave.
-</div>
-<div class="principle">
-  <strong>P4 &mdash; Organised by moment, personalised on approach.</strong> Louvain clustering (Q&asymp;0.09) proves this family's features are shared, not persona-partitioned. The three modes come from arrival context (dinner prep vs after-school vs evening), not from user profiles. Personalization is what the wall <em>leads with</em> when it identifies a face, not which screen it shows.
-</div>
-<div class="principle">
-  <strong>P5 &mdash; One more thing is one too many.</strong> Nothing on the wall replaces something the family already does. "Adding another rotating part is the failure mode" (David). The win is a quick action or an unnecessary movement removed from a thing they already do.
-</div>
-<div class="principle">
-  <strong>P6 &mdash; Pre-readers are first-class.</strong> Icons beat words. Targets beat menus. Sound beats silence. Lilly (2) and Grammy share this principle from opposite ends &mdash; if it works for both, it works.
-</div>
-<div class="principle">
-  <strong>P7 &mdash; Whichever is easier at the time.</strong> Wall = capture, consolidate, print. Paper = shop. Phone = shop when paper isn't there, and the catch-up. Voice = the exception report. Every surface handles the same data; the best surface for this moment wins.
-</div>
-
-<!-- ============================================ -->
 <h2 id="hardware">3. Hardware Constraints</h2>
-
 <div class="metric-grid">
-  <div class="metric-card">
-    <div class="metric-value">15"</div>
-    <div class="metric-label">Skylight 150-CAL</div>
-  </div>
-  <div class="metric-card">
-    <div class="metric-value">1920&times;1080</div>
-    <div class="metric-label">Landscape, Fixed</div>
-  </div>
-  <div class="metric-card">
-    <div class="metric-value">~6 ft</div>
-    <div class="metric-label">Typical viewing distance</div>
-  </div>
-  <div class="metric-card">
-    <div class="metric-value">Capacitive</div>
-    <div class="metric-label">Touch, single-point</div>
-  </div>
+  <div class="metric-card"><div class="metric-value">15"</div><div class="metric-label">Skylight 150-CAL</div></div>
+  <div class="metric-card"><div class="metric-value">1920&times;1080</div><div class="metric-label">Landscape, Fixed</div></div>
+  <div class="metric-card"><div class="metric-value">~6 ft</div><div class="metric-label">Typical viewing</div></div>
+  <div class="metric-card"><div class="metric-value">Capacitive</div><div class="metric-label">Touch</div></div>
 </div>
+<p>Skylight runs <code>com.greg.kiosk</code> loading <code>/sdcard/dashboard.html</code>. Deploy = ADB push + kiosk restart. 12V 2A, on 5:30am&ndash;midnight. Fire HD 8 sits above: Greg's face, camera, mics. Arducam IMX291 (160&deg; 1080p low-light, 2&times; mics) on Skylight via USB OTG. Greg uses BOTH cameras and ALL mics.</p>
 
-<p>The display runs <code>com.greg.kiosk</code> loading <code>/sdcard/dashboard.html</code> locally. No internet required for rendering. Data comes from Supabase (grocery, calendar, family_events) and PLEXUS (weather, suggestions, devices). Deploy = ADB push + kiosk restart. 12V 2A barrel power, schedule-based on/off (5:30am&ndash;midnight).</p>
-
-<p>The Fire HD 8 sits above: Greg's face, camera, mics. It handles voice input, face detection (offloaded to Sentinel), and VAD. The two panels never compete: presence lives above, content lives below.</p>
-
-<p>Input sensors: Arducam IMX291 (160&deg; 1080p low-light, 2&times; mics) on the Skylight via USB OTG, Fire front camera (2MP ~60-70&deg;, 1&times; mic). Greg uses BOTH cameras and ALL mics.</p>
-
-<!-- ============================================ -->
 <h2 id="zones">4. Proximity Zones</h2>
-<p>After Vogel &amp; Balakrishnan (UIST 2004). Their four-zone framework for ambient displays maps directly to a kitchen wall.</p>
-
+<p>After Vogel &amp; Balakrishnan (UIST 2004). Four-zone framework mapped to the kitchen wall.</p>
 <div class="zone-strip">
-  <div class="z1">
-    <div class="zone-label">Ambient</div>
-    <div>&gt;8 ft</div>
-    <div style="margin-top:0.5rem; font-size:0.8rem;">Photos + glance strip. Readable across the room. No interaction possible or expected.</div>
-  </div>
-  <div class="z2">
-    <div class="zone-label">Implicit</div>
-    <div>4&ndash;8 ft</div>
-    <div style="margin-top:0.5rem; font-size:0.8rem;">Presence detected. The glance strip expands gently. If Greg knows who you are, your content starts loading &mdash; no tap needed.</div>
-  </div>
-  <div class="z3">
-    <div class="zone-label">Subtle</div>
-    <div>2&ndash;4 ft</div>
-    <div style="margin-top:0.5rem; font-size:0.8rem;">Face confirmed. The wall shifts to your personalised lead. Mode tiles fade in. Greg may speak ("Morning &mdash; rain by 2, grab an umbrella").</div>
-  </div>
-  <div class="z4">
-    <div class="zone-label">Personal</div>
-    <div>&lt;2 ft</div>
-    <div style="margin-top:0.5rem; font-size:0.8rem;">Touch range. Full interaction available. Cards, lists, calendar, play. The wall is yours.</div>
-  </div>
+  <div class="z1"><div class="zone-label">Ambient</div><div>&gt;8 ft</div><div style="margin-top:0.5rem;font-size:0.8rem;">Photos + glance strip. No interaction.</div></div>
+  <div class="z2"><div class="zone-label">Implicit</div><div>4&ndash;8 ft</div><div style="margin-top:0.5rem;font-size:0.8rem;">Presence detected. Strip expands. Content loading.</div></div>
+  <div class="z3"><div class="zone-label">Subtle</div><div>2&ndash;4 ft</div><div style="margin-top:0.5rem;font-size:0.8rem;">Face confirmed. Personalised lead. Greg may speak.</div></div>
+  <div class="z4"><div class="zone-label">Personal</div><div>&lt;2 ft</div><div style="margin-top:0.5rem;font-size:0.8rem;">Touch range. Full interaction.</div></div>
 </div>
+
+<h2 id="multi-person">5. Multi-Person Hierarchy <span class="rev-tag">v1.1</span></h2>
+<p>When multiple identified people approach the wall simultaneously, the wall must decide what to lead with. The hierarchy is <strong>context-first, then urgency, then the primary scheduler</strong>.</p>
+
+<h4>The Priority Stack</h4>
+<table>
+<tr><th>Priority</th><th>Rule</th><th>Example</th></tr>
+<tr><td>1. Time-sensitive</td><td>Any event within 30 min for ANY present person leads</td><td>Angela + Dwight at 2:40pm &rarr; "Dwight's pickup is in 5 minutes" leads regardless of who's "primary"</td></tr>
+<tr><td>2. Context match</td><td>The person whose context matches the time of day wins the mode default</td><td>3:30pm after-school: Dwight's routine leads even if Angela is also present. 5:30pm dinner prep: Angela/David's Household mode leads even if Dwight is there.</td></tr>
+<tr><td>3. Primary scheduler</td><td>If no time-sensitive event and no strong context signal, the primary scheduler (Angela) leads</td><td>Saturday morning, Angela + David + kids: Angela's agenda glance leads, David's events visible below</td></tr>
+<tr><td>4. Merge</td><td>Everyone's content is visible within the active mode &mdash; person-colour dots distinguish</td><td>Household mode with Angela + David: both lists visible, both events in the strip, colour-coded</td></tr>
+</table>
 
 <div class="callout">
-  <div class="callout-label">Implementation</div>
-  <p>Zone transitions driven by <code>greg-arducam-monitor</code> on Sentinel (<code>/v1/room-presence</code> &mdash; face count + size). Face size (bbox area / frame area) maps roughly to distance. Size thresholds calibrated from the actual Arducam's 160&deg; FOV once mounted at final wall height. Face identification from YuNet on Sentinel (<code>greg-face-detect.service</code>) cross-references Throwbak face clusters when built; until then, unknown = ring 4, enrolled = ring by 2FA. Transitions use CSS <code>transition: opacity 300ms ease</code> &mdash; never instant.</p>
+  <div class="callout-label">The mediator</div>
+  <p>Greg is the tiebreaker. If Lilly is tapping play mode and Dwight walks up wanting his routine, Greg speaks from the Fire: "Dwight's here too &mdash; Lilly, let's finish this round, then Dwight can check his list." The wall doesn't flash between modes. Greg manages the transition with his voice the way a parent would &mdash; warmly, one person at a time. The display log records multi-person conflicts so NIGHTSHIFT can learn common collision patterns and pre-empt them.</p>
 </div>
 
-<!-- ============================================ -->
-<h2 id="state-machine">5. State Machine</h2>
-
-<p>Every screen the wall can show is one of six states. Transitions are smooth (200&ndash;300ms opacity/transform) and always reversible.</p>
-
+<h2 id="state-machine">6. State Machine</h2>
+<p>Every screen is one of six states. Transitions are smooth (200&ndash;300ms) and always reversible.</p>
 <div class="diagram-wrap">
 <svg viewBox="0 0 860 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
-  <!-- Resting -->
+  <defs><marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#57534E"/></marker></defs>
   <rect x="310" y="20" width="240" height="60" rx="12" fill="#292524" stroke="#C9956B" stroke-width="2"/>
   <text x="430" y="56" fill="#D6B98C" font-size="15" font-weight="600" text-anchor="middle">RESTING STATE</text>
-  <text x="430" y="72" fill="#A8A29E" font-size="9" text-anchor="middle">photos + glance strip</text>
-
-  <!-- Morning Brief -->
   <rect x="620" y="20" width="220" height="60" rx="12" fill="#292524" stroke="#60A5FA" stroke-width="1.5"/>
   <text x="730" y="52" fill="#60A5FA" font-size="13" font-weight="500" text-anchor="middle">MORNING BRIEF</text>
-  <text x="730" y="68" fill="#A8A29E" font-size="9" text-anchor="middle">scheduled 6&ndash;8am school days</text>
+  <text x="730" y="68" fill="#A8A29E" font-size="9" text-anchor="middle">6&ndash;11am school days</text>
   <line x1="550" y1="50" x2="620" y2="50" stroke="#57534E" stroke-width="1.5" marker-end="url(#arr)"/>
-  <text x="585" y="44" fill="#78716C" font-size="8" text-anchor="middle">6am cron</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#57534E"/></marker>
-  </defs>
-
-  <!-- Mode tiles -->
   <rect x="60" y="160" width="180" height="55" rx="10" fill="#292524" stroke="#22C55E" stroke-width="1.5"/>
   <text x="150" y="192" fill="#22C55E" font-size="13" font-weight="600" text-anchor="middle">HOUSEHOLD</text>
-
   <rect x="260" y="160" width="180" height="55" rx="10" fill="#292524" stroke="#F472B6" stroke-width="1.5"/>
   <text x="350" y="192" fill="#F472B6" font-size="13" font-weight="600" text-anchor="middle">KIDS</text>
-
   <rect x="460" y="160" width="180" height="55" rx="10" fill="#292524" stroke="#A78BFA" stroke-width="1.5"/>
   <text x="550" y="192" fill="#A78BFA" font-size="13" font-weight="600" text-anchor="middle">PLAN &amp; REMEMBER</text>
-
   <rect x="660" y="160" width="180" height="55" rx="10" fill="#292524" stroke="#FBBF24" stroke-width="1.5"/>
   <text x="750" y="192" fill="#FBBF24" font-size="13" font-weight="600" text-anchor="middle">ENTERTAINMENT</text>
-
-  <!-- Resting to modes -->
   <line x1="350" y1="80" x2="150" y2="160" stroke="#57534E" stroke-width="1" stroke-dasharray="4"/>
   <line x1="400" y1="80" x2="350" y2="160" stroke="#57534E" stroke-width="1" stroke-dasharray="4"/>
   <line x1="460" y1="80" x2="550" y2="160" stroke="#57534E" stroke-width="1" stroke-dasharray="4"/>
   <line x1="500" y1="80" x2="750" y2="160" stroke="#57534E" stroke-width="1" stroke-dasharray="4"/>
-  <text x="430" y="130" fill="#78716C" font-size="9" text-anchor="middle">tap tile / voice / time-of-day default</text>
-
-  <!-- Cards layer -->
   <rect x="60" y="280" width="780" height="55" rx="10" fill="#3B3532" stroke="#57534E" stroke-width="1"/>
-  <text x="450" y="312" fill="#D6B98C" font-size="13" font-weight="500" text-anchor="middle">CARD &mdash; full-screen content within a mode (grocery list, recipe, routine, week view, now-playing...)</text>
-
-  <!-- Mode to card -->
+  <text x="450" y="312" fill="#D6B98C" font-size="13" font-weight="500" text-anchor="middle">CARD &mdash; grocery list, recipe, routine, week view, now-playing, cookbook...</text>
   <line x1="150" y1="215" x2="150" y2="280" stroke="#57534E" stroke-width="1" marker-end="url(#arr)"/>
   <line x1="350" y1="215" x2="350" y2="280" stroke="#57534E" stroke-width="1" marker-end="url(#arr)"/>
   <line x1="550" y1="215" x2="550" y2="280" stroke="#57534E" stroke-width="1" marker-end="url(#arr)"/>
   <line x1="750" y1="215" x2="750" y2="280" stroke="#57534E" stroke-width="1" marker-end="url(#arr)"/>
-  <text x="130" y="252" fill="#78716C" font-size="8">tap item</text>
-
-  <!-- Overlay layer -->
   <rect x="60" y="380" width="780" height="55" rx="10" fill="#292524" stroke="#EF4444" stroke-width="1.5"/>
-  <text x="450" y="412" fill="#EF4444" font-size="13" font-weight="500" text-anchor="middle">OVERLAY &mdash; Greg-pushed content (generated answers, display events, confirmations, intercom)</text>
-
-  <!-- Overlay arrows -->
+  <text x="450" y="412" fill="#EF4444" font-size="13" font-weight="500" text-anchor="middle">OVERLAY &mdash; Greg-pushed content, confirmations, intercom</text>
   <line x1="450" y1="335" x2="450" y2="380" stroke="#EF4444" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
-  <text x="455" y="362" fill="#78716C" font-size="8">Greg pushes / WS display event</text>
-
-  <!-- Dismiss back -->
-  <text x="830" y="360" fill="#78716C" font-size="8" text-anchor="end">dismiss / timeout</text>
   <path d="M820,380 Q860,350 820,335" stroke="#57534E" fill="none" stroke-width="1" marker-end="url(#arr)"/>
-
-  <!-- Back to resting -->
-  <text x="40" y="130" fill="#78716C" font-size="8" text-anchor="start">60s idle</text>
   <path d="M60,160 Q20,100 310,50" stroke="#57534E" fill="none" stroke-width="1" stroke-dasharray="4" marker-end="url(#arr)"/>
-
-  <!-- Sleep -->
+  <text x="40" y="130" fill="#78716C" font-size="8">60s idle</text>
   <rect x="20" y="20" width="160" height="55" rx="10" fill="#1C1917" stroke="#57534E" stroke-width="1"/>
   <text x="100" y="50" fill="#57534E" font-size="13" font-weight="500" text-anchor="middle">SLEEP</text>
   <text x="100" y="65" fill="#57534E" font-size="9" text-anchor="middle">midnight&ndash;5:30am</text>
 </svg>
 </div>
+<p>Voice bypasses navigation entirely &mdash; "add milk" works from any state.</p>
 
-<div class="callout">
-  <div class="callout-label">Transition Rules</div>
-  <p><strong>Resting &rarr; Mode:</strong> tap a mode tile, voice command ("Greg, what's for dinner"), or auto-select by time-of-day + detected person. <strong>Mode &rarr; Card:</strong> tap an item within the mode. <strong>Card &rarr; Mode:</strong> back gesture, home tile, or 60s idle. <strong>Any &rarr; Overlay:</strong> Greg pushes a display event (generated content, confirmation pill, intercom). Overlays have a countdown timer (4&ndash;15s by type) and dismiss on tap. <strong>Any &rarr; Resting:</strong> 60s of no interaction. <strong>Resting &rarr; Sleep:</strong> midnight cron. <strong>Sleep &rarr; Resting:</strong> 5:30am cron. <strong>Always available:</strong> voice input bypasses navigation entirely &mdash; "add milk" works from any state.</p>
-</div>
-
-<!-- ============================================ -->
-<h2 id="resting">6. Resting State</h2>
-
-<p>This is the most important screen. It's what the family sees 90% of the time. It must be beautiful enough to be wall art and informative enough to replace a glance at a phone.</p>
-
-<h3>Composition</h3>
-<p>Full-bleed curated photo (from Google Photos shared albums, Throwbak-curated when built). The photo IS the screen &mdash; no chrome, no borders. Over the photo, a thin <strong>glance strip</strong> at the bottom edge, gradient-protected for readability regardless of photo content.</p>
-
-<h4>Glance Strip (always visible)</h4>
+<h2 id="resting">7. Resting State &amp; Glance Strip</h2>
+<p>The most important screen. 90% of the time. Beautiful enough to be wall art, informative enough to replace a glance at a phone.</p>
+<p>Full-bleed curated photo. The photo IS the screen. Over it, a thin <strong>glance strip</strong> at the bottom edge, gradient-protected (<code>rgba(0,0,0,0.75)</code> fading over 120px).</p>
+<h4>Glance Strip</h4>
 <table>
-<tr><th>Element</th><th>Position</th><th>Example</th><th>Source</th></tr>
-<tr><td>Time</td><td>Left</td><td><strong>7:42</strong></td><td>Local clock</td></tr>
-<tr><td>Weather glyph + temp</td><td>Left-center</td><td>&#9729;&#65039; 68&deg;</td><td>Open-Meteo</td></tr>
-<tr><td>One advice line</td><td>Center</td><td>Umbrella today &mdash; rain by 3pm</td><td>Greg (PLEXUS weather + LLM)</td></tr>
-<tr><td>Next event</td><td>Right-center</td><td><span style="color:var(--person-angela);">&bull;</span> Angela: Parent conf 3pm</td><td>Google Calendar + family_events</td></tr>
-<tr><td>Tonight&rsquo;s dinner</td><td>Right</td><td>Tacos &#127790;</td><td>Meal plan / Greg suggestion</td></tr>
+<tr><th>Element</th><th>Example</th><th>Source</th></tr>
+<tr><td>Time</td><td><strong>7:42</strong></td><td>Local clock</td></tr>
+<tr><td>Weather</td><td>&#9729;&#65039; 68&deg;</td><td>Open-Meteo</td></tr>
+<tr><td>Advice line</td><td>Umbrella today &mdash; rain by 3pm</td><td>Greg / PLEXUS</td></tr>
+<tr><td>Next event</td><td><span style="color:var(--person-angela);">&bull;</span> Angela: Parent conf 3pm</td><td>Google Calendar + family_events</td></tr>
+<tr><td>Tonight</td><td>Tacos &#127790;</td><td>Meal plan / Greg</td></tr>
 </table>
-
-<div class="callout">
-  <div class="callout-label">Design rationale</div>
-  <p>The glance strip is the "10-foot UI" &mdash; readable across the kitchen at 6+ feet. Minimum 22pt (Inter 600) for the advice line, 18pt for secondary elements. The gradient overlay is <code>rgba(0,0,0,0.75)</code> fading to transparent over 120px. Photo transitions: 20s crossfade (slower than the current 15s &mdash; Odom et al. CHI 2014 "Designing for Slowness" found that slower cadence supports anticipation and re-visitation). The photo never moves or zooms &mdash; stillness on a wall is calm (Weiser &amp; Brown, "Calm Technology," 1996).</p>
-</div>
+<p>Photo transitions: 20s crossfade (Odom et al. CHI 2014 "Designing for Slowness"). No zoom, no pan. Stillness on a wall is calm.</p>
 
 <h4>Presence Reveals</h4>
-<p>When the Arducam detects a face (implicit zone), the glance strip gently expands upward to include: the next 3 events by person, a "speak to add" affordance (mic icon with gentle pulse), and the mode tiles (4 rounded rectangles at the bottom). This expansion is 300ms ease-out, feels like the wall waking up. On face identification (subtle/personal zone), the events re-sort to lead with that person's items and Greg may greet.</p>
+<p>Face detected (implicit zone) &rarr; strip expands: next 3 events by person, mode tiles fade in at the bottom. Face identified (subtle zone) &rarr; events re-sort to lead with that person's items. Greg may greet from the Fire above.</p>
 
-<!-- ============================================ -->
-<h2 id="nav">7. Navigation Model</h2>
+<h4>The Talk Affordance <span class="rev-tag">v1.1</span></h4>
+<p>Greg's face is RIGHT ABOVE on the Fire &mdash; a mic icon on the Skylight is redundant. Instead: a small, warm <strong>"Tell Greg"</strong> button nestled among the mode tiles. Tapping it opens conversation mode from touch, for when voice would be disruptive (sleeping baby, phone call, just easier to tap). It's not a mic &mdash; it's an invitation. Greg's face above responds: eyes open, a small "listening" glow. The button disappears when conversation mode is already active (someone said "Hey Greg").</p>
 
-<h3>From 8 icons to 4 tiles + talk</h3>
-<p>The existing 8-icon nav bar (calendar, weather, media, music, commute, Greg, list, download) is too much chrome for a glanceable wall. The GTIA finding: features are shared across personas, so navigation is by <em>moment</em>, not by function.</p>
-
-<h4>Four Mode Tiles</h4>
+<h2 id="nav">8. Navigation Model</h2>
+<h3>From 8 icons to 4 tiles + "Tell Greg"</h3>
 <table>
-<tr><th>Tile</th><th>Label</th><th>Colour</th><th>When it leads</th><th>What's inside</th></tr>
-<tr><td style="color:var(--person-david);">&#9632;</td><td><strong>Household</strong></td><td>Sage green</td><td>Dinner prep, weekend, morning</td><td>Grocery, meals, tonight, voice-add, camera ingest, staples, print</td></tr>
-<tr><td style="color:var(--person-lilly);">&#9632;</td><td><strong>Kids</strong></td><td>Rose pink</td><td>After-school, bedtime, toddler</td><td>Routines, rewards, Lilly play, Dwight curiosity, content-by-name TV</td></tr>
-<tr><td style="color:var(--person-grammy);">&#9632;</td><td><strong>Plan &amp; Remember</strong></td><td>Lavender</td><td>Evening, weekend sit-down</td><td>Week calendar, imports, activity planner, on-this-day, albums</td></tr>
-<tr><td style="color:var(--person-dwight);">&#9632;</td><td><strong>Entertainment</strong></td><td>Amber</td><td>Any &mdash; music, media, Roku</td><td>Spotify, radio, YouTube on Skylight, now-playing, other-room TV control</td></tr>
+<tr><th>Tile</th><th>Label</th><th>Colour</th><th>When it leads</th></tr>
+<tr><td style="color:#22C55E;">&#9632;</td><td><strong>Household</strong></td><td>Green</td><td>Dinner prep, weekend, morning</td></tr>
+<tr><td style="color:#A78BFA;">&#9632;</td><td><strong>Kids</strong></td><td>Lavender</td><td>After-school, bedtime, toddler</td></tr>
+<tr><td style="color:#F472B6;">&#9632;</td><td><strong>Plan &amp; Remember</strong></td><td>Pink</td><td>Evening, weekend sit-down</td></tr>
+<tr><td style="color:#FBBF24;">&#9632;</td><td><strong>Entertainment</strong></td><td>Amber</td><td>Any &mdash; music, media, device control</td></tr>
 </table>
+<p>Tiles appear on presence detection, fade on idle. Time-of-day defaults: <strong>6&ndash;11am</strong> Morning Brief, <strong>3&ndash;5pm</strong> Kids, <strong>5&ndash;7pm</strong> Household, <strong>7&ndash;10pm</strong> Plan &amp; Remember. Defaults replaced by display-log data once measured.</p>
 
-<p>Tiles are 180&times;60px rounded rectangles with an icon + label, sitting in a row at the bottom of the screen over the gradient. They appear on presence detection (implicit zone) and fade on idle. A fifth affordance &mdash; a small mic/talk icon &mdash; sits between the tiles as a reminder that voice works from any state.</p>
-
-<div class="callout">
-  <div class="callout-label">Time-of-day defaults</div>
-  <p>If the wall detects a face and the person doesn't tap or speak within 3s, the wall auto-opens the highest-probability mode for this time:<br>
-  <strong>6&ndash;9am</strong> &rarr; Morning Brief (scheduled state, not a mode)<br>
-  <strong>3&ndash;5pm</strong> &rarr; Kids (after-school)<br>
-  <strong>5&ndash;7pm</strong> &rarr; Household (dinner prep)<br>
-  <strong>7&ndash;10pm</strong> &rarr; Plan &amp; Remember (evening wind-down)<br>
-  <strong>Weekend</strong> &rarr; Household or Entertainment depending on who's detected<br>
-  Defaults are overridden by the display-log (WG-32) once measured data exists. Empty modes (no relevant content for the detected person) don't show their tile.</p>
-</div>
-
-<h4>What happened to the old icons</h4>
-<table>
-<tr><th>Old icon</th><th>Where it went</th></tr>
-<tr><td>Calendar</td><td>Glance strip (today), Plan &amp; Remember (week/month), verb ("add an event")</td></tr>
-<tr><td>Weather</td><td>Glance strip (glyph + temp + advice line), ambient scene in resting state</td></tr>
-<tr><td>Media</td><td>Kids (content-by-name), Entertainment (Roku/TV control)</td></tr>
-<tr><td>Music</td><td>Entertainment (Spotify, radio)</td></tr>
-<tr><td>Commute</td><td>Morning Brief (Angela's commute line &mdash; was missing from the inventory)</td></tr>
-<tr><td>Greg</td><td>The talk affordance (mic icon) + Greg's face above on the Fire</td></tr>
-<tr><td>List</td><td>Household (grocery is the first card)</td></tr>
-<tr><td>Download</td><td>Admin surface: long-press home or "Greg, open the app store" (ring &le; 2)</td></tr>
-</table>
-
-<!-- ============================================ -->
-<h2 id="household">8. Household Mode</h2>
+<h2 id="household">9. Household Mode</h2>
 <p><span class="persona-tag tag-angela">Angela</span> <span class="persona-tag tag-david">David</span> <span class="persona-tag tag-grammy">Grammy</span> <span class="persona-tag tag-greg">Greg</span></p>
 
-<p>The dinner-prep and weekend workspace. This is where the family coordinates the practical business of running a house. Everything here replaces a walk to the phone, a search for the remote, or a shout across the house.</p>
-
-<h3>Mode Layout</h3>
-<p>A horizontal card row at the top (scrollable, 3&ndash;4 visible): Grocery, Tonight, Cook Mode, Staples. Below: the active card fills the screen. Voice commands work without tapping any card &mdash; "add milk" opens Grocery and shows the add.</p>
-
-<h3 id="grocery">8a. Grocery Lifecycle</h3>
-<div class="callout">
-  <div class="callout-label">David's read of the current state</div>
-  <p>"Check means nothing, can't delete." The list accumulates strike-throughs forever.</p>
-</div>
-
-<h4>The lifecycle model (Grocy-inspired, family-simplified)</h4>
+<h3 id="grocery">9a. Grocery Lifecycle &amp; Cross-List Sharing <span class="rev-tag">v1.1</span></h3>
+<h4>Item States</h4>
 <table>
-<tr><th>State</th><th>Visual</th><th>Gesture</th><th>What happens</th></tr>
-<tr><td><strong>Needed</strong></td><td>Full opacity, category colour left-border</td><td>&mdash;</td><td>On the list, needs to be bought</td></tr>
-<tr><td><strong>In cart</strong></td><td>Struck through, dimmed 60%</td><td>Tap the item</td><td>In the cart at the store (phone trip view)</td></tr>
-<tr><td><strong>Bought</strong></td><td>Drops to "Recently bought" tray below</td><td>Close trip / auto on trip close</td><td>Off the active list, one tap to re-add</td></tr>
-<tr><td><strong>Deleted</strong></td><td>Gone (soft delete: <code>deleted_at</code>)</td><td>Swipe left / long-press &rarr; delete</td><td>Never shows again unless manually re-added</td></tr>
+<tr><th>State</th><th>Visual</th><th>Gesture</th></tr>
+<tr><td><strong>Needed</strong></td><td>Full opacity, category colour border</td><td>&mdash;</td></tr>
+<tr><td><strong>In cart</strong></td><td>Struck through, dimmed</td><td>Tap</td></tr>
+<tr><td><strong>Bought</strong></td><td>Drops to "Recently bought" tray</td><td>Close trip / auto</td></tr>
+<tr><td><strong>Deleted</strong></td><td>Gone (soft delete)</td><td>Swipe left / long-press</td></tr>
 </table>
 
-<h4>Recently Bought Tray</h4>
-<p>A collapsed section below the active list: "Recently bought &mdash; tap to re-add." Shows the last ~20 items by <code>bought_at</code>. One tap moves an item back to Needed. This replaces the "check means nothing" problem &mdash; checked items have a destination.</p>
+<h4>Cross-List Sharing (David's directive)</h4>
+<p>Some items appear on BOTH lists &mdash; whoever gets to the store first should be able to grab them. Items can be tagged <strong>"Shared"</strong> via a toggle on each item. When a shared item is bought (checked off) on one list, it's automatically knocked off the other. Visual: shared items show a small link icon and appear with a subtle dashed border to distinguish them from list-specific items. "Greg, put milk on both lists" or "make the eggs shared" &mdash; L0 patterns handle the tagging.</p>
 
-<h4>Staples by Frequency</h4>
-<p>The <code>grocery_staples</code> view (already built, median cadence per item per list, <code>due</code>) surfaces as a "Usual" row above the active list. Soft suggestions only: "You're usually due for eggs" with a one-tap add. Never auto-adds.</p>
+<h4>Staples, Icons, Store Order</h4>
+<p>Recently-bought tray below active list. Staples "Usual" row with soft suggestions. Categories with per-store ordering (drag-reorder). Icon tiles for pre-readers (Lilly, Grammy). Two lists voice-routed. Voice/text/camera input &mdash; all one canon path.</p>
 
-<h4>Categories &amp; Store Order</h4>
-<p>Items auto-categorised on add (existing <code>family.ts</code> logic: Dairy/Produce/Meat/Bakery/Condiments/Drinks/Baby/Pets/Household/Pantry/Other). Store profiles allow re-ordering categories per store (Costco &ne; Trader Joe's &ne; Ralphs) &mdash; a simple drag-reorder in a settings card. The active list groups by the selected store's category order.</p>
-
-<h4>Icon Tiles for Pre-readers</h4>
-<p>Bring!'s lesson: icons beat words for Lilly and Grammy. Each category gets a simple SVG icon (milk carton, apple, chicken leg). High-frequency items get their own icon tile in an "add by picture" row. Tap the milk icon = add milk. No typing, no voice needed.</p>
-
-<h4>Two Lists, Voice-routed</h4>
-<p>Angela &amp; David's list (default) and Grammy's List. "Put prune juice on Grammy's list" &mdash; already working via L0. The card shows a list picker (two tabs) with the active list's name. Grammy's list shows when Grammy is detected.</p>
-
-<h4>Voice / Text / Camera Input</h4>
-<p>Three ways to add: voice at the wall ("add milk and eggs"), text/MMS to Greg's number (+1 831 480 4734, WG-20 shipped), and holding up a paper list to the camera ("Greg, here's the list" &rarr; Arducam capture &rarr; vision extract &rarr; canonical add, WG-21 shipped pending camera fix). All three use the same <code>family.ts</code> add path &mdash; one canon list.</p>
-
-<h3 id="meals">8b. Meals / Tonight</h3>
-<p>The #1 or #2 question kids ask daily: "what's for dinner?" (Forbes, Cubby, Taste of Home). The wall must answer this before anyone asks.</p>
-
+<h3 id="meals">9b. Meals / Tonight / Recipe Collection <span class="rev-tag">v1.1</span></h3>
 <h4>"Tonight" Card</h4>
-<p>Auto-surfaces ~4&ndash;5pm. Shows tonight's meal with a photo (TheMealDB or generated), ingredients, and a "Cook" button that opens cook mode. If no meal is planned, Greg suggests 2&ndash;3 options based on: what's in the pantry (staples model), what the family has eaten recently (don't repeat), dietary constraints (from the family model), and what's quick (weeknight vs weekend). One tap picks a suggestion and sets tonight's meal.</p>
+<p>Auto-surfaces ~4&ndash;5pm. If no meal is planned, Greg suggests 2&ndash;3 options based on: family favourites (learned over time from selections, re-requests, and dismissals), what's been eaten recently (don't repeat), dietary constraints, what's quick, and what ingredients are likely on hand (assume a reasonably stocked kitchen &mdash; don't demand a complete pantry inventory). One tap picks a suggestion.</p>
 
-<h4>Ingredients &rarr; Dish Suggestions (David's directive)</h4>
-<p>"The family often has ingredients and a vague idea but no recipe." Voice: "Greg, we have chicken thighs and rice" &rarr; Greg suggests 3 dishes (Brave search + TheMealDB + LLM) with cook times and difficulty. Tap one to see the recipe. "Add missing ingredients" adds what's needed to the grocery list.</p>
+<h4>Learning Taste Over Time <span class="rev-tag">v1.1</span></h4>
+<p>Every meal selection, re-request, and dismissal is logged. Greg builds a family taste model: "they pick tacos over pasta 3:1", "Grammy's suggestions always include soup", "David likes spicy, the kids don't." Suggestions start generic and get personal. Occasional subtle suggestions BEYOND the usual &mdash; "you guys usually do chicken, but this lamb tagine is dead simple and the kids might love it" &mdash; at a low frequency (1 in 5 suggestions is a stretch pick). If dismissed, don't repeat that stretch for a month.</p>
+
+<h4>Ingredients &rarr; Suggestions</h4>
+<p>"Greg, we have chicken thighs and rice" &rarr; 3 dish suggestions with cook times. Greg assumes other basic ingredients are available (oil, salt, spices, onions, garlic) &mdash; he only asks about specialty items. Tap one to see recipe. "Add missing" puts what's genuinely missing on the grocery list.</p>
+
+<h4>Recipe Collection / Cookbook <span class="rev-tag">v1.1</span></h4>
+<p>The family needs a place to BROWSE saved recipes, not just capture them. A <strong>Cookbook</strong> card in Household mode: all saved recipes (from photo capture, URL import, Greg-generated, and manual entry) in a searchable, browsable collection. Filter by: cuisine, cook time, who likes it, ingredient. "Greg, what did we make with that cilantro chicken?" searches the cookbook. Grammy's handwritten cards live here once captured. Recipes are stored in <code>portfolio.greg_recipes</code> with fields for source (photo/url/greg/manual), ingredients, steps, cook time, family rating (implicit from re-use frequency).</p>
 
 <h4>Cook Mode</h4>
-<p>Full-screen recipe with auto-parsed timers. Step-by-step with large text (24pt minimum &mdash; reading from across the kitchen with wet hands). Timer extracted from recipe text ("simmer 20 minutes" &rarr; a 20-minute timer on screen). Greg reads the current step aloud on voice command ("Greg, next step"). Timer rings and Greg announces.</p>
+<p>Full-screen recipe. Large text (24pt &mdash; reading from across the kitchen with wet hands). Auto-parsed timers from recipe text. Greg reads steps aloud on command. Timer rings and Greg announces.</p>
 
-<h4>Recipe Capture</h4>
-<p>Grammy's handwritten recipe cards. Hold the card up to the Arducam: "Greg, save this recipe" &rarr; vision extract &rarr; structured recipe in the recipe collection. Also works by MMS (photo a cookbook page to Greg's number). Same pattern as the grocery camera ingest.</p>
+<h3 id="intercom">9c. Intercom / "Dinner's Ready"</h3>
+<p>"Greg, dinner's ready" &rarr; pause every playing Roku, Greg speaks it on Fire + Skylight + Roku TVs (Play on Roku channel or sideloaded dev channel) + Fire TV (ADB toast). Grammy's room included (silent method, no audible keypress). Ring &le; 4; no broadcast with unknown faces present.</p>
 
-<h3 id="intercom">8c. Intercom / "Dinner's Ready"</h3>
-<p>One utterance reaches the house. The Echo Show's most-used feature is one-way announcements.</p>
-
-<h4>The flow</h4>
-<p>"Greg, dinner's ready" &rarr; (1) Pause every playing Roku via ECP Play command on playing devices, (2) Greg speaks it on the Fire speaker + Skylight speaker, (3) Roku TVs: attempt "Play on Roku" channel (ECP <code>launch/2213?u={mp3_url}&t=a</code>) &mdash; if the channel isn't available, use a sideloaded Greg dev channel per device that plays audio + shows on-screen text, (4) Fire TV sticks (WG-06): ADB toast. Grammy's <code>.156</code> constraint is <code>no_audible_keypress</code> (no beep on her TV) &mdash; her room still gets the audio announcement through a different path (Sentinel TTS served as MP3).</p>
-
-<div class="callout">
-  <div class="callout-label">Ring gate</div>
-  <p>Intercom is ring &le; 4 (family). At ring 5 (unknown face present), no broadcast.</p>
-</div>
-
-<!-- ============================================ -->
-<h2 id="kids">9. Kids Mode</h2>
+<h2 id="kids">10. Kids Mode</h2>
 <p><span class="persona-tag tag-lilly">Lilly</span> <span class="persona-tag tag-dwight">Dwight</span> <span class="persona-tag tag-greg">Greg</span></p>
 
-<p>The after-school and bedtime mode. This is the wall's differentiator &mdash; no competitor has a responsive voice+face partner for a 2-year-old, and no competitor can enforce "finish your routine to unlock the TV."</p>
-
-<h3 id="routines">9a. Routines &amp; Rewards</h3>
-<p>Hearth's game-changer: picture-step routines that kids operate themselves. Our version adds Greg's voice and device enforcement.</p>
-
+<h3 id="routines">10a. Routines, Extras &amp; Earning <span class="rev-tag">v1.1</span></h3>
 <h4>Dwight's Routines (age 7)</h4>
-<p>Three routines: morning, after-school, bedtime. Each is a vertical list of picture steps (SVG illustration + label, one per line). Walk-up one-tap complete &mdash; no login, no parent needed. Confetti on step completion (informational celebration, not points &mdash; Deci, Koestner &amp; Ryan 1999: tangible contingent rewards undermine intrinsic motivation in children, d = &minus;0.28 to &minus;0.40). Streak tracking ("5 days in a row!") is informational.</p>
+<p>Three core routines: morning, after-school, bedtime. Picture steps, walk-up one-tap complete, no login. Confetti on completion (informational celebration per Deci/Koestner/Ryan 1999). Streak tracking.</p>
 
-<h4>Greg-Enforced Unlocks (David's directive)</h4>
-<p>"Complete X &rarr; unlock Y." Routine completion gates the Roku/content &mdash; Greg literally puts the show on. This is the feature no competitor can close the loop on. Implementation: routine complete &rarr; <code>family_events</code> marks the unlock &rarr; content-by-name requests check the unlock flag &rarr; Greg: "Nice work &mdash; what do you want to watch?" Unlocks attach to CHORES only, never to things Dwight already loves (reading, Legos). The unlock is celebration-adjacent: "you earned this" framing, not "you can't have this until."</p>
-
-<h4>Lilly's Bedtime Ritual (age 2)</h4>
-<p>3 giant icon steps: pajamas, brush teeth, story. Each step is a huge SVG with a single tap to complete. Animation + sound on complete (no confetti &mdash; simpler, a warm glow and Greg saying "yay!"). This is a ritual/participation, not a chore &mdash; celebration, not scorekeeping.</p>
-
-<h4>Today's Feelings (Dwight)</h4>
-<p>Hearth's novel feature: 16 expressive emoji check-in, logged to a parent Insights page. Ours: Greg asks once ("How are you feeling today, buddy?"), Dwight taps an emotion face, Greg responds warmly and it's logged to <code>family_events</code> with type <code>feeling</code>. Never evaluative, never "why?"</p>
-
-<h3 id="lilly">9b. Lilly Play Mode</h3>
-
-<div class="callout">
-  <div class="callout-label">Research foundation</div>
-  <p>Roseberry, Hirsh-Pasek &amp; Golinkoff (Child Development 2014, N=36): 24&ndash;30-month-olds only learned novel verbs in socially contingent interactions. Troseth/Strouse (Frontiers 2018, N=176): responsiveness alone not sufficient without a co-viewer. Sesame Workshop "Best Practices" (2012): large isolated hot spots, immediate payoff, no text. Toca Boca: no rules, no scores, no failure states. Attention span ~4&ndash;6 min per activity at age 2.</p>
+<h4>Expected vs Extra Chores <span class="rev-tag">David's directive</span></h4>
+<p>Dwight doesn't earn rewards for expected routines &mdash; they're supposed to be done anyway. But going above and beyond to earn treats is something he's leaning into. The system has TWO tracks:</p>
+<div class="principle">
+  <strong>Expected:</strong> The three daily routines. Completion = confetti + streak + Greg-enforced unlock (TV/content). No points, no treats. These are the baseline.<br><br>
+  <strong>Extras:</strong> A separate "Extra chores" section with always-available tasks that genuinely need doing (clean the table, pick up toys, help with laundry, water the plants, take out trash). Each extra has a value. Extras STACK &mdash; Dwight can grind. Total earns treats. Treats are defined by Angela/David from the wall or app (screen time, a special dessert, a trip to the park, pick dinner). The wall shows progress toward the next treat. Greg acknowledges extras differently: "That's above and beyond, buddy &mdash; nice."
 </div>
 
-<h4>Design Rules</h4>
-<p>No-fail. No-score. Tap-only (no drag &mdash; fails under age 5). Ignore accidental/multi-touch. Targets &ge;2cm isolated (Sesame Workshop). Immediate audio + visual payoff on every tap. Greg reacts by name with contingent voice ("Good one, Lilly!"). Generous listening &mdash; no rushed timeout. Gesture accepted for speech. NEVER "wrong." Rotate 4&ndash;6 min activities to match attention span.</p>
+<h4>Greg-Enforced Unlocks</h4>
+<p>Expected routine complete &rarr; content unlocked. Greg literally puts the show on. "Nice work &mdash; what do you want to watch?" The unlock gates the Roku, not the extras.</p>
 
-<h4>Activity Rotation (data-driven via <code>greg_views</code>)</h4>
+<h4>Bedtime Rituals &mdash; Soft, Not Mandatory <span class="rev-tag">v1.1</span></h4>
+<p>Lilly's 3-icon bedtime ritual (pajamas, brush teeth, story) and Dwight's bedtime routine are offered, never enforced. Life is messy &mdash; some nights they won't be followed. Greg CANNOT count missed bedtimes against anyone. Nothing negative on the UI &mdash; no "missed" indicators, no broken streaks, no guilt. The routine simply resets the next day. If it works, the family leans in. If it doesn't get used for a week, Greg doesn't mention it. The wall adapts to the family; the family doesn't adapt to the wall.</p>
+
+<h4>Today's Feelings (Dwight)</h4>
+<p>Greg asks once ("How are you feeling today?"), Dwight taps an emotion face, Greg responds warmly. Logged to <code>family_events</code> type <code>feeling</code>. Never evaluative.</p>
+
+<h3 id="lilly">10b. Lilly Play &amp; Activity Chooser <span class="rev-tag">v1.1</span></h3>
+<p>Research: Roseberry et al. 2014 (contingent voice), Sesame Workshop 2012 (hot spots), Toca Boca (no-fail). Targets &ge;2cm. Tap-only. Ignore accidental touch. NEVER "wrong."</p>
+
+<h4>Activity Chooser <span class="rev-tag">v1.1</span></h4>
+<p>Lilly is smart enough to choose. Play mode opens with a grid of <strong>large icon tiles</strong> representing each activity (a cow for Animal Sounds, a crayon for Chalkboard, a bubble for Bubbles, music notes for Sing-Along, etc). She taps the one she wants. No text labels needed &mdash; the icons are the interface. Activities still auto-rotate after the attention window (~4&ndash;6 min), but tapping the activity chooser (a small grid icon in the corner) lets her pick the next one herself.</p>
+
+<h4>Activities</h4>
 <table>
 <tr><th>Activity</th><th>Duration</th><th>Description</th></tr>
-<tr><td>Animal Sounds</td><td>4 min</td><td>Grid of 6 big animal illustrations. Tap &rarr; animal sound + animation + Greg: "That's a cow! Mooo!"</td></tr>
-<tr><td>Peekaboo</td><td>4 min</td><td>Greg's face hides behind objects on screen. Lilly taps to reveal. Greg: "You found me!"</td></tr>
-<tr><td>Where's the X?</td><td>5 min</td><td>3 big colourful objects. Greg: "Where's the red ball?" Tap the ball &rarr; celebration. Wrong &rarr; hint, never penalty.</td></tr>
-<tr><td>Chalkboard</td><td>6 min</td><td>Touch-to-draw. Greg reacts to colours ("Ooh, blue!"). Voice: "Greg, red chalk." Clear on shake gesture.</td></tr>
-<tr><td>Sing-along</td><td>5 min</td><td>Simple melodies with animated visuals. Tap rhythm buttons. Greg sings along.</td></tr>
-<tr><td>Bubbles</td><td>4 min</td><td>Tap to pop. Each pop = a sound + a colour burst. Greg counts along.</td></tr>
+<tr><td>Animal Sounds</td><td>4 min</td><td>Grid of 6 big animal illustrations. Tap &rarr; sound + animation + Greg: "That's a cow, Lilly!"</td></tr>
+<tr><td>Peekaboo</td><td>4 min</td><td>Greg hides behind objects. Tap to reveal. "You found me!"</td></tr>
+<tr><td>Where's the X?</td><td>5 min</td><td>3 colourful objects. Greg asks, Lilly taps. Wrong &rarr; hint, never penalty.</td></tr>
+<tr><td>Chalkboard + Stickers</td><td>6 min</td><td>Touch-to-draw. Greg reacts to colours. Voice: "Greg, red chalk." PLUS a sticker tray &mdash; little images (stars, hearts, animals, flowers, smiley faces) she can drag and stick to the canvas. Stickers as an extension of the chalkboard &mdash; draw + decorate.</td></tr>
+<tr><td>Sing-Along</td><td>5 min</td><td>Pre-selected playlist from her YouTube Kids favourites (curated by Angela/David &mdash; stored in <code>greg_views</code> config). Animated visuals synced to the music. Tap rhythm buttons. Greg sings along.</td></tr>
+<tr><td>Bubbles</td><td>4 min</td><td>Tap to pop. Sound + colour burst. Greg counts along.</td></tr>
 </table>
 
-<p>Activities rotate automatically. Greg introduces each one ("Let's play with animals!"). Joint moments built in: "Show Daddy!" prompts when another face is detected nearby. The play mode is social, not a babysitter &mdash; but it CAN occupy Lilly for 20&ndash;30 minutes of rotating activities while David works nearby.</p>
+<p>Joint moments: "Show Daddy!" when another face detected. The play mode is social, not a babysitter &mdash; but it CAN occupy Lilly for 20&ndash;30 min of rotating activities while David works nearby.</p>
 
-<h3 id="dwight">9c. Dwight Curiosity Mode</h3>
-<p>Greg as a curiosity engine. The market gives 7-year-olds chores and approved content. Nothing gives them a curious adult who remembers what they're into.</p>
+<h3 id="dwight">10c. Dwight: Greg as AI Companion <span class="rev-tag">v1.1</span></h3>
+<p>Dwight has a NUC computer for regular internet searching. The wall gives him something <strong>fundamentally different</strong>: his own gated AI companion. Not a search engine. A thinking partner.</p>
 
-<h4>Features</h4>
-<p>Kid-register "why" answers (Brave search + LLM, never "I don't know" &mdash; Lovato &amp; Piper IDC 2015/2019: dead-ends erode trust). Jokes and fun facts on demand. Science experiments ("what happens if you mix baking soda and vinegar?"). Mental math games with Greg keeping score. 20 questions. Lego build prompts ("build something that can fly &mdash; I'll wait"). Reading practice (Greg reads a sentence, Dwight reads the next). Chess/checkers against Greg. Homework help (Greg explains, never gives answers). All displayed on the Skylight with Greg's voice from the Fire.</p>
+<div class="principle">
+  <strong>This is Dwight's AI journey.</strong> Greg/Claude, gated for a 7-year-old (ring 4, kid register, age-appropriate content filtering). Observed by the parents (display log + ring enforcement), but Dwight's own space. He asks Greg questions and gets real, thoughtful, engaging answers &mdash; not search results. Greg remembers what Dwight asked last week and builds on it. "Last time you asked about volcanoes &mdash; did you know there's one on Mars that's three times taller than Everest?"
+</div>
 
-<!-- ============================================ -->
-<h2 id="plan">10. Plan &amp; Remember</h2>
+<h4>What This Looks Like</h4>
+<p>Conversational, not transactional. Greg explains at kid register (never dumbed down &mdash; respect his intelligence, lose the jargon). Greg asks follow-up questions ("What do you think would happen if...?"). Greg suggests experiments ("Try putting a raisin in soda and watch what happens"). Greg plays games: 20 questions, would-you-rather, mental math challenges, trivia, chess. Greg prompts building: "Build something with Legos that can hold a book &mdash; I'll wait." Greg helps with homework (explains, never gives answers). Greg never dead-ends on "I don't know" (Lovato &amp; Piper: that's what breaks kids' trust). All displayed on the Skylight with Greg's voice from the Fire.</p>
+
+<h2 id="plan">11. Plan &amp; Remember</h2>
 <p><span class="persona-tag tag-angela">Angela</span> <span class="persona-tag tag-david">David</span> <span class="persona-tag tag-grammy">Grammy</span></p>
 
-<p>The evening and weekend sit-down layer. Where the family looks ahead and looks back.</p>
+<h3 id="calendar">11a. Calendar</h3>
+<h4>Colour per Person <span class="rev-tag">v1.1</span></h4>
+<div style="display:flex;gap:4px;margin:1rem 0;">
+  <div style="background:var(--person-angela);padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Angela</div>
+  <div style="background:var(--person-david);padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">David</div>
+  <div style="background:var(--person-dwight);padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Dwight</div>
+  <div style="background:var(--person-lilly);padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Lilly</div>
+  <div style="background:var(--person-grammy);padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Grammy</div>
+</div>
+<p>Views: today's agenda (glance strip), week strip, month grid on tap, per-person filter. Adding: voice, camera import (flyer &rarr; events), read dates aloud. Countdowns: "11 days to Dwight's birthday." Google write-back (WG-02) for full value.</p>
 
-<h3 id="calendar">10a. Calendar</h3>
-
-<h4>Colour per PERSON, not per type</h4>
-<p>The market agrees: colour = who, not what. Angela is blue, David is green, Dwight is amber, Lilly is pink, Grammy is lavender. Events from Google Calendar inherit the person's colour. Family-wide events (holidays, trips) get a neutral warm tone.</p>
-
-<h4>Views</h4>
-<table>
-<tr><th>View</th><th>Where it lives</th><th>What it shows</th></tr>
-<tr><td>Today's agenda</td><td>Glance strip (resting state)</td><td>Next event per person, one line each</td></tr>
-<tr><td>This week</td><td>Plan &amp; Remember (default card)</td><td>7-day strip, events as coloured blocks per person</td></tr>
-<tr><td>Month grid</td><td>Plan &amp; Remember (tap "month")</td><td>Dots per day showing who has events, tap a day to expand</td></tr>
-<tr><td>Per-person filter</td><td>Tap a person's colour dot</td><td>Only their events, with conflicts highlighted</td></tr>
-</table>
-
-<h4>Adding Events</h4>
-<p>Three input paths: (1) Voice at the wall: "Dwight has a dentist appointment Thursday at 3" &rarr; LLM tool resolves the date, confirms, adds to <code>family_events</code> and shows on the wall. Already working. (2) Camera import (WG-28/flyer): hold up a paper flyer &rarr; Arducam &rarr; vision extract &rarr; events proposed &rarr; confirm. This is Skylight's "Magic Import" equivalent using our own cameras. (3) Read dates aloud (David's directive): "Greg, Dwight has soccer practice every Tuesday and Thursday at 4 starting next week" &rarr; recurring event creation.</p>
-
-<h4>Google Write-back (WG-02)</h4>
-<p>Blocked on OAuth client creation. Once live, every <code>family_events</code> write syncs to Google Calendar, reaching Angela's phone instantly. This is what makes the wall a real family coordination tool instead of a display.</p>
-
-<h4>Countdowns</h4>
-<p>"12 days to Dwight's birthday" &mdash; ambient card that appears when relevant. Birthday/holiday events from <code>family_events</code> with type <code>birthday</code>/<code>holiday</code>. Morning-of celebration card with animation. Greg says it once when someone walks in (WG-08).</p>
-
-<h3 id="photos">10b. Photos &amp; On This Day</h3>
-
+<h3 id="photos">11b. Photos, Push-In &amp; On This Day</h3>
 <div class="callout">
   <div class="callout-label">Privacy line (David, 2026-09-07)</div>
-  <p>LIFELOG is David's private diary &mdash; curated to him and him only, ring 0-1. It NEVER reaches the Skylight or any shared surface. On-this-day on the wall = Throwbak METADATA against the photos (who, when, where) &rarr; Google-Photos-style cards ("Remember this trip to Pismo?") + vague family-safe event labels only. No diary text, no private events, no inference from diary into the wall.</p>
+  <p>LIFELOG never reaches the wall. On-this-day = Throwbak metadata only. No diary text, no private events, no inference from diary into the wall.</p>
 </div>
 
 <h4>Photo Frame (Resting State)</h4>
-<p>The resting state IS the photo frame. Design after Nest Hub's ambient photo curation: favour faces (Throwbak clusters when built), suppress blurry/duplicate, match room brightness via the Arducam's ambient light readings (dim at night, brighten on approach). Slow cadence (20s crossfade). Stillness. The goal is "it looks like a print" (Aura's benchmark).</p>
+<p>Auto-curated (Throwbak clusters when built), favour faces, suppress blurry/duplicate, ambient brightness matching. Slow 20s crossfade. "It should look like a print."</p>
 
-<h4>On This Day (WG-14)</h4>
-<p>Throwbak metadata: who's in it, when, where. "3 years ago today" card with the photo and a caption ("Remember this trip to the beach?"). Family-safe labels only. Surfaces in the resting state as an occasional interleave with the regular slideshow (not every cycle &mdash; delight comes from surprise). Greg mentions it once to whoever walks in: "Hey &mdash; three years ago you guys were at the beach."</p>
+<h4>On This Day</h4>
+<p>Throwbak metadata: who's in it, when, where. "3 years ago today" card interleaved with regular photos. Greg mentions it once to whoever walks in.</p>
 
-<h4>Social Features</h4>
-<p>Remote push-in: Grammy can send photos from her phone that appear in the slideshow (Aura's #1 selling feature &mdash; drives 50% of their sales). Kids' artwork gallery: photo a drawing &rarr; it enters the slideshow rotation. On-photo captions for Grammy.</p>
+<h4>Grammy Photo Push-In <span class="rev-tag">v1.1</span></h4>
+<p>Two paths for Grammy (or any remote family) to send photos to the wall:</p>
+<p><strong>Text/MMS:</strong> Send a photo to Greg's number (+1 831 480 4734). The existing <code>greg-sms-inbound</code> pipeline already handles MMS media. A photo that doesn't match the grocery/list pattern gets routed to the slideshow album instead of the grocery ingest. Greg confirms on the wall: "Grammy sent a photo!"</p>
+<p><strong>Email:</strong> Send to Greg's email (greg@silentampersand.com). A new handler watches for attachments with image MIME types, saves to the shared album, and pushes a display event. Same confirmation on the wall.</p>
+<p>Kids' artwork gallery: photo a drawing (camera or MMS) &rarr; tagged as "artwork" &rarr; enters rotation with a special frame treatment. On-photo captions for Grammy.</p>
 
-<!-- ============================================ -->
-<h2 id="entertainment">11. Entertainment Mode</h2>
+<h2 id="entertainment">12. Entertainment Mode <span class="rev-tag">v1.1</span></h2>
 <p><span class="persona-tag tag-david">David</span> <span class="persona-tag tag-angela">Angela</span> <span class="persona-tag tag-dwight">Dwight</span> <span class="persona-tag tag-grammy">Grammy</span></p>
 
-<p>David's correction: the Skylight is itself a TV/radio/entertainment space. Launching and controlling music, radio, YouTube ON the Skylight must never be lost.</p>
-
-<h4>Spotify</h4>
-<p>"Play something for dinner" &rarr; Spotify Connect. The Skylight becomes a Connect target (speakers + screen). Now-playing card with transport controls (play/pause/skip), album art, progress. Verify Premium on the account first (required for Connect API + Web Playback SDK).</p>
-
-<h4>Radio &amp; Podcasts</h4>
-<p>Internet radio streams. "Greg, put on NPR" or "play a cooking podcast." Web Audio API playback with a minimal now-playing card.</p>
-
-<h4>YouTube on the Skylight</h4>
-<p>Embedded YouTube with real controls (per WALL_GREG_SPEC &sect;9). Not a Roku &mdash; the Skylight IS the screen. For content that doesn't need the big TV.</p>
-
-<h4>Other-Room TV Control</h4>
-<p>The existing Roku control surface. "Turn on the living room TV" / "Put on Netflix in Mom's room." Status card shows what's playing on each Roku. Media card is live (PLEXUS wall payload carries <code>devices[]</code> with power/app/playing state).</p>
-
-<h4>Audio-Reactive Visuals</h4>
-<p>When music is playing and nobody is interacting, the resting-state photos get a subtle ambient response to the audio &mdash; a gentle glow that pulses with the music. Implemented via Web Audio AnalyserNode (same approach as the Fire's lip sync). Barely perceptible &mdash; the wall should feel alive, not flashy.</p>
-
-<!-- ============================================ -->
-<h2 id="invariants">12. Invariants</h2>
-<p>These apply in every state, every mode, every interaction.</p>
-
-<h4>12.1 &mdash; Presence Zones</h4>
-<p>Vogel &amp; Balakrishnan zones (section 4). The wall adapts to distance continuously, not on tap.</p>
-
-<h4>12.2 &mdash; Face Personalisation</h4>
-<p>When the wall knows who you are, it leads with YOUR content. Angela sees her events first. Dwight sees his routine status. Lilly triggers play mode if she's alone at the wall. Grammy sees her list and large type.</p>
-
-<h4>12.3 &mdash; Every Command Echoed</h4>
-<p>"Add milk" &rarr; the list opens, milk appears with a brief highlight animation (green flash, 300ms). "Turn off the TV" &rarr; 4-second confirmation pill ("TV off &mdash; undo"). "Dwight has a dentist Thursday" &rarr; calendar opens, event appears. Nothing happens silently.</p>
-
-<h4>12.4 &mdash; Undo</h4>
-<p>Every proactive action and every add has a 10-second undo window. The confirmation pill includes "Undo" as a tap target. Undo reverses the action completely. Horvitz (CHI 1999): minimise the cost of poor guesses.</p>
-
-<h4>12.5 &mdash; Kid Reach-Height Zone</h4>
-<p>At the Skylight's mounted height, the bottom third of the screen is within reach of a 2-year-old standing, and the bottom two-thirds for a 7-year-old. In Kids mode, all interactive targets live in the bottom two-thirds. Adult-only controls (settings, admin) live in the top edge, unreachable without standing on something.</p>
-
-<h4>12.6 &mdash; Display Log</h4>
-<p><code>portfolio.greg_display_log</code> records every push: what was shown, who was detected, tapped/dismissed/timed-out, time of day. This replaces the GTIA persona priors with measured data. Re-run <code>gtia.py</code> monthly with real weights.</p>
-
-<h4>12.7 &mdash; Friction Catalog (WG-36)</h4>
-<p>Greg catalogs every friction point: unrecognised utterances, abandoned taps, repeated commands, dismissed suggestions, "I wish it could..." All stored as gaps (<code>gaps_form</code>, domain <code>wall</code>). Reviewed in NIGHTSHIFT. The wall grows with the family.</p>
-
-<!-- ============================================ -->
-<h2 id="visual">13. Visual Direction</h2>
-
-<h3>The Walnut Palette</h3>
-<p>Already established for Greg surfaces (GregLite/Home). Warm, natural, disappears into the kitchen. The interface should feel like looking through a window, not at a screen.</p>
-
-<div style="display:flex; gap:0; border-radius:8px; overflow:hidden; margin:1rem 0;">
-  <div style="background:#1C1917; padding:1rem; flex:1; text-align:center;">
-    <div style="font-size:0.7rem; color:#A8A29E;">bg</div>
-    <div style="font-size:0.8rem; color:#E7E5E4;">#1C1917</div>
-  </div>
-  <div style="background:#292524; padding:1rem; flex:1; text-align:center;">
-    <div style="font-size:0.7rem; color:#A8A29E;">surface</div>
-    <div style="font-size:0.8rem; color:#E7E5E4;">#292524</div>
-  </div>
-  <div style="background:#3B3532; padding:1rem; flex:1; text-align:center;">
-    <div style="font-size:0.7rem; color:#A8A29E;">elevated</div>
-    <div style="font-size:0.8rem; color:#E7E5E4;">#3B3532</div>
-  </div>
-  <div style="background:#D6B98C; padding:1rem; flex:1; text-align:center;">
-    <div style="font-size:0.7rem; color:#1C1917;">warm</div>
-    <div style="font-size:0.8rem; color:#1C1917;">#D6B98C</div>
-  </div>
-  <div style="background:#C9956B; padding:1rem; flex:1; text-align:center;">
-    <div style="font-size:0.7rem; color:#1C1917;">accent</div>
-    <div style="font-size:0.8rem; color:#1C1917;">#C9956B</div>
-  </div>
+<div class="principle">
+  <strong>Wall Greg controls everything.</strong> Its own Skylight speakers and screen, every Roku in the house, Fire TV sticks, phones, and tablets. The Entertainment mode is the universal remote + the kitchen jukebox + the family's media hub.
 </div>
 
-<div style="display:flex; gap:4px; margin:1rem 0;">
-  <div style="background:var(--person-angela); padding:0.5rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:600; color:#000;">Angela</div>
-  <div style="background:var(--person-david); padding:0.5rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:600; color:#000;">David</div>
-  <div style="background:var(--person-dwight); padding:0.5rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:600; color:#000;">Dwight</div>
-  <div style="background:var(--person-lilly); padding:0.5rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:600; color:#000;">Lilly</div>
-  <div style="background:var(--person-grammy); padding:0.5rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:600; color:#000;">Grammy</div>
+<h4>Skylight Native</h4>
+<p>Spotify (Connect target + Web Playback SDK, Premium required), internet radio/podcasts, YouTube embed with real controls. The Skylight IS a screen with speakers &mdash; it plays media itself, not just controls other devices.</p>
+
+<h4>Whole-House Control</h4>
+<p>Every registered device in <code>portfolio.greg_devices</code>: Rokus (ECP), Fire TV sticks (ADB), phones/tablets (registered in the device registry). "Put on Netflix in the living room." "Play Spotify in Mom's room." "Pause everything." Status card shows what's playing on each device. Now-playing with transport controls (play/pause/skip/volume).</p>
+
+<h4>Audio-Reactive Ambient</h4>
+<p>When music plays and nobody's interacting, a subtle ambient glow responds to the audio via Web Audio AnalyserNode. Barely perceptible. The wall feels alive, not flashy.</p>
+
+<h2 id="invariants">13. Invariants</h2>
+<p><strong>13.1 Presence Zones.</strong> Vogel &amp; Balakrishnan (&sect;4). Continuous, not tap-triggered.</p>
+<p><strong>13.2 Face Personalisation.</strong> Your content leads when the wall knows you.</p>
+<p><strong>13.3 Every Command Echoed.</strong> "Add milk" &rarr; list opens, milk appears (green flash 300ms). "Turn off the TV" &rarr; 4s confirmation pill with undo.</p>
+<p><strong>13.4 Undo.</strong> 10-second window on every proactive action and add. Horvitz CHI 1999.</p>
+<p><strong>13.5 Kid Reach-Height.</strong> Bottom third = toddler reach. Bottom two-thirds = 7-year-old. Adult-only controls in the top edge.</p>
+<p><strong>13.6 Display Log.</strong> <code>greg_display_log</code>: what was shown, who was detected, tapped/dismissed/timed-out. Replaces GTIA priors.</p>
+<p><strong>13.7 Friction Catalog (WG-36).</strong> Unrecognised utterances, abandoned taps, repeated commands, dismissed suggestions. Stored as gaps. The wall grows with the family.</p>
+<p><strong>13.8 Nothing Negative.</strong> <span class="rev-tag">v1.1</span> No missed-routine indicators, no broken streaks, no guilt. The wall never punishes inaction. Unused features quietly recede; used features quietly expand.</p>
+
+<h2 id="visual">14. Visual Direction &amp; Style Guide <span class="rev-tag">v1.1</span></h2>
+<h3>Source: Gregore Brand</h3>
+<p>The Skylight IS Greg's surface. It inherits the Gregore brand identity: the Walnut palette, Newsreader personality font, Inter workhorse font. This is not a generic dashboard &mdash; it's Greg's face on the wall, and the visual language should match his voice.</p>
+
+<h4>Walnut Palette (Gregore canonical)</h4>
+<div style="display:flex;gap:0;border-radius:8px;overflow:hidden;margin:1rem 0;">
+  <div style="background:#1C1917;padding:1rem;flex:1;text-align:center;"><div style="font-size:0.7rem;color:#A8A29E;">bg</div><div style="font-size:0.8rem;color:#E7E5E4;">#1C1917</div></div>
+  <div style="background:#292524;padding:1rem;flex:1;text-align:center;"><div style="font-size:0.7rem;color:#A8A29E;">surface</div><div style="font-size:0.8rem;color:#E7E5E4;">#292524</div></div>
+  <div style="background:#3B3532;padding:1rem;flex:1;text-align:center;"><div style="font-size:0.7rem;color:#A8A29E;">elevated</div><div style="font-size:0.8rem;color:#E7E5E4;">#3B3532</div></div>
+  <div style="background:#D6B98C;padding:1rem;flex:1;text-align:center;"><div style="font-size:0.7rem;color:#1C1917;">warm</div><div style="font-size:0.8rem;color:#1C1917;">#D6B98C</div></div>
+  <div style="background:#C9956B;padding:1rem;flex:1;text-align:center;"><div style="font-size:0.7rem;color:#1C1917;">accent</div><div style="font-size:0.8rem;color:#1C1917;">#C9956B</div></div>
 </div>
 
-<h3>Design Language</h3>
-<p>Dark-mode-first (a kitchen wall at night must not blind). Sustained-use rules from GRAVITY-00: background saturation &lt;10%, no pure black (#1C1917 not #000000), off-white text (#E7E5E4 not #FFFFFF). Colour only when it means something &mdash; person dots, category borders, confirmation green, alert red. Cards have 12px border-radius, 1px border, no shadows deeper than 8px. No emoji anywhere &mdash; SVG only. No continuous animation (breathing, pulsing) in any work area &mdash; the first-screenshot test: if it impresses as a Dribbble shot, it's designed for screenshot 1, not hour 1000.</p>
+<h4>Person Colours <span class="rev-tag">David's picks</span></h4>
+<div style="display:flex;gap:4px;margin:1rem 0;flex-wrap:wrap;">
+  <div style="background:#FBBF24;padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Angela &mdash; Yellow</div>
+  <div style="background:#60A5FA;padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">David &mdash; Blue</div>
+  <div style="background:#22C55E;padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Dwight &mdash; Green</div>
+  <div style="background:#A78BFA;padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Lilly &mdash; Lavender</div>
+  <div style="background:#F472B6;padding:0.5rem 1rem;border-radius:100px;font-size:0.8rem;font-weight:600;color:#000;">Grammy &mdash; Pink</div>
+</div>
 
-<h3>Affect Tint (WG-12)</h3>
-<p>Greg's mood (SNARC phasic relay, already reaching the Skylight via WS) subtly shifts the background warmth. Neutral = the Walnut palette. High valence = warmer undertone. Low valence = cooler undertone. The shift is barely perceptible &mdash; a 5&ndash;10% hue rotation on the background, nothing more. This is a shared family surface, not a mood ring.</p>
+<h4>Design Language</h4>
+<p>Dark-mode-first. Sustained-use (GRAVITY-00): bg saturation &lt;10%, no pure black, off-white text. Colour only when it means something. 12px border-radius, 1px borders, no deep shadows. No emoji &mdash; SVG only. No continuous animation. The invisible interface principle: so unremarkable your eyes slide past it to the content.</p>
 
-<!-- ============================================ -->
-<h2 id="typography">14. Typography Scale</h2>
-<p>For a 15" 1920&times;1080 display read from 3&ndash;8 feet. The "10-foot UI" rules apply partially &mdash; we're closer than a TV but further than a tablet.</p>
+<h4>Affect Tint (WG-12)</h4>
+<p>SNARC phasic relay subtly shifts background warmth. 5&ndash;10% hue rotation. Barely perceptible. Shared family surface, not a mood ring.</p>
 
+<h2 id="typography">15. Typography Scale</h2>
 <table>
 <tr><th>Role</th><th>Font</th><th>Size</th><th>Weight</th><th>Use</th></tr>
-<tr><td>Glance headline</td><td>Newsreader</td><td>36px</td><td>400</td><td>Time, "Good morning Angela"</td></tr>
+<tr><td>Glance headline</td><td>Newsreader</td><td>36px</td><td>400</td><td>Time, greetings</td></tr>
 <tr><td>Card title</td><td>Newsreader</td><td>28px</td><td>400</td><td>Mode headers, "Tonight's Dinner"</td></tr>
-<tr><td>Primary content</td><td>Inter</td><td>22px</td><td>500</td><td>List items, event titles, advice line</td></tr>
-<tr><td>Secondary content</td><td>Inter</td><td>18px</td><td>400</td><td>Event details, recipe steps, descriptions</td></tr>
-<tr><td>Label</td><td>Inter</td><td>14px</td><td>600</td><td>Category headers, timestamps, metadata</td></tr>
-<tr><td>Caption</td><td>Inter</td><td>12px</td><td>400</td><td>Photo captions, footnotes</td></tr>
+<tr><td>Primary content</td><td>Inter</td><td>22px</td><td>500</td><td>List items, events, advice</td></tr>
+<tr><td>Secondary</td><td>Inter</td><td>18px</td><td>400</td><td>Details, recipe steps</td></tr>
+<tr><td>Label</td><td>Inter</td><td>14px</td><td>600</td><td>Categories, timestamps</td></tr>
 </table>
+<p>Grammy legibility: primary &ge;22px, WCAG AAA where possible. Kids mode targets &ge;48px. 36px glance headline readable at 4&ndash;8 ft.</p>
 
-<div class="callout">
-  <div class="callout-label">Grammy legibility</div>
-  <p>Grandparent-first means: primary content &ge;22px, high contrast (WCAG AAA where possible), voice-first alternative for everything. In Kids mode, targets &ge;2cm (approximately &ge;48px at this DPI). The 36px glance headline is readable from the implicit zone (4&ndash;8 ft).</p>
-</div>
-
-<!-- ============================================ -->
-<h2 id="persona-flows">15. Persona Flows</h2>
-
+<h2 id="persona-flows">16. Persona Flows</h2>
 <div class="state-card">
-  <h4>Angela's Morning (6:30am, school day)</h4>
-  <p>Walks into kitchen. Arducam detects face &rarr; implicit zone. Glance strip expands: her events lead (parent conference 3pm, Dwight pickup 2:45pm), weather advice ("Layers today &mdash; 52&deg; this morning, 71&deg; by lunch"), commute line ("22 min to school, clear"). Morning brief state if 6&ndash;8am. Greg speaks once: "Morning, Angela &mdash; rain later, grab an umbrella. Dwight's pickup is at 2:45." She adds to the list: "Greg, add yogurt" &rarr; list opens, yogurt appears. She walks away &rarr; 60s idle &rarr; back to photos.</p>
+  <h4>Angela's Morning (6:30am school day)</h4>
+  <p>Walks in. Face detected, implicit zone. Strip expands with her events leading (yellow dots): parent conference 3pm, Dwight pickup 2:45. Weather: "Layers &mdash; 52&deg; this morning, 71&deg; by lunch." Commute: "22 min to school, clear." Greg speaks once from the Fire: "Morning, Angela &mdash; rain later, grab an umbrella." She adds: "Greg, add yogurt" &rarr; list opens, yogurt appears. Walks away &rarr; 60s idle &rarr; photos.</p>
 </div>
-
 <div class="state-card">
-  <h4>David's Evening (7pm, after dinner)</h4>
-  <p>Walks up. Face confirmed (ring 0 with 2FA when enrolled). Glance strip shows tomorrow's preview. Taps "Plan &amp; Remember." Week view opens: colour-coded events, Dwight's birthday countdown (11 days). "Greg, Dwight has a soccer game Saturday at 10" &rarr; event added, shows on the week view. Taps "On this day" &rarr; 3-years-ago beach trip with the family. Idle &rarr; back to photos.</p>
+  <h4>David's Evening (7pm)</h4>
+  <p>Face confirmed (blue). Plan &amp; Remember auto-opens. Week view: colour-coded, Dwight's birthday countdown (11 days). "Greg, Dwight has soccer Saturday at 10" &rarr; added. Taps "On this day" &rarr; 3-year-ago beach trip. Idle &rarr; photos.</p>
 </div>
-
 <div class="state-card">
-  <h4>Lilly Alone at the Wall (3pm, after-school)</h4>
-  <p>Toddler detected (face size + height-from-ground heuristic, or face cluster match). Kids mode auto-opens. Lilly play mode: giant animal grid fills the screen. She taps the cow &rarr; "MOOO!" + cow bounces + Greg: "That's a cow, Lilly!" After 4 minutes, activity rotates to Peekaboo. Greg hides behind a tree, peeks out. She taps &rarr; "You found me!" David walks up &rarr; Greg: "Show Daddy what you found!" Joint moment. David taps home &rarr; routine check for Dwight shows 4/5 done.</p>
+  <h4>Lilly Alone (3pm)</h4>
+  <p>Toddler detected. Kids mode: activity chooser grid. She taps the cow icon &rarr; Animal Sounds. Taps the cow: "MOOO!" + bounce + "That's a cow, Lilly!" After 4 min, Greg: "Want to play something else?" Chooser grid returns. She taps the crayon: Chalkboard + stickers. Drags a star sticker onto her drawing. David walks up &rarr; "Show Daddy what you made!"</p>
 </div>
-
 <div class="state-card">
   <h4>Dwight After-School (3:30pm)</h4>
-  <p>Face detected. Kids mode opens to his routine: &#9745; homework, &#9745; backpack away, &#9744; snack dishes, &#9744; 20min reading, &#9744; free time. He taps "snack dishes" &rarr; confetti &rarr; Greg: "Three down, two to go." Finishes reading &rarr; routine complete &rarr; Greg: "Nice work, buddy. What do you want to watch?" &rarr; Roku turns on, Netflix launches. Later: "Greg, why is the sky blue?" &rarr; curiosity mode answers at kid register, shows a simple diagram on the Skylight.</p>
+  <p>Kids mode: his routine. &#9745; homework, &#9745; backpack, &#9744; snack dishes, &#9744; reading, &#9744; free time. Taps "snack dishes" &rarr; confetti &rarr; "Three down." Finishes &rarr; "Nice work. What do you want to watch?" Roku turns on. Later sees "Extra chores: clean the table (15pts), take out trash (20pts)." He's 10pts from a special dessert. Cleans the table. Greg: "That's above and beyond, buddy." Later: "Greg, why do earthquakes happen?" &rarr; Greg explains at kid level, shows a diagram on the Skylight, asks "What do you think is under the ground right here?"</p>
 </div>
-
 <div class="state-card">
   <h4>Grammy's Day</h4>
-  <p>Walks into kitchen. Face detected (or unidentified &rarr; ring 4). Glance strip with weather (large text), her events. She wants groceries: "Greg, put prune juice on my list" &rarr; her list opens, prune juice appears. She taps the Household tile &rarr; her list is pre-selected (detected as Grammy). Photos rotate with "on this day" memories and captions she can read from across the room. Everything is voice-first and high-contrast.</p>
+  <p>Face detected (pink). Weather large text, her events. "Greg, put prune juice on my list" &rarr; her list opens. Photos rotate with memories and captions. Sends a photo of the grandkids from her phone &rarr; "Grammy sent a photo!" appears, photo enters rotation.</p>
 </div>
-
 <div class="state-card">
   <h4>Guest</h4>
-  <p>Unknown face &rarr; ring 5. Resting state stays. Glance strip: time, weather, nothing personal. Mode tiles don't appear. The wall is a beautiful photo frame. "Greg, what time is it?" works. Nothing else.</p>
+  <p>Unknown &rarr; ring 5. Photos + time + weather. No personal content. Mode tiles don't appear. Beautiful frame.</p>
+</div>
+<div class="state-card">
+  <h4>Angela + Dwight (3:30pm) <span class="rev-tag">v1.1 multi-person</span></h4>
+  <p>Context says after-school: Dwight's routine leads. Angela's pickup event shows in the strip (time-sensitive, 15 min away). Dwight taps his routine. Angela glances at the strip, sees her 3pm conference. Greg: "Angela, parent conference in 30 &mdash; Dwight's on his routine." Both served, one screen.</p>
 </div>
 
-<!-- ============================================ -->
-<h2 id="proactive">16. Proactive Speech</h2>
+<h2 id="proactive">17. Proactive Speech</h2>
+<p>Two sources by ring: &le; 4 family items (events, reminders, staples, suggestions), &le; 2 David-only items (gaps_queue, builds, beliefs). One topic per initiation. Offer, don't impose. Don't repeat declined items for 24h. Ring-gate everything.</p>
 
-<p>The wall is Greg's proactive surface (canon). He initiates &mdash; not just responds.</p>
+<h2 id="morning">18. Morning Brief <span class="rev-tag">v1.1</span></h2>
+<p>Scheduled state of the resting layer, <strong>6&ndash;11am</strong> school days (extended from 8am per David). Agenda by person (colour-coded), dress hint per person, precipitation, Angela's commute, tonight preview. Greg speaks it once to the first person who walks in, then it stays as a glance card until dismissed or 11am. On weekends, brief is lighter (no commute, no school schedule) and can be dismissed immediately.</p>
 
-<h4>Two Sources by Ring</h4>
-<table>
-<tr><th>Ring</th><th>Audience</th><th>What Greg offers</th></tr>
-<tr><td>&le; 4</td><td>Family (default)</td><td>"Angela, parent conference at 3 and rain at 2 &mdash; umbrella." / "Dwight's birthday is in 11 days." / "You're usually due for eggs &mdash; want me to add them?"</td></tr>
-<tr><td>&le; 2</td><td>David alone, room empty</td><td>gaps_queue items, overnight build results, conversation_seeds, portfolio signals, belief challenges.</td></tr>
-</table>
+<h2 id="build-order">19. Build Order</h2>
+<p>Dependency-respecting, customer-first. The mock IS the build.</p>
+<div class="build-item"><div class="build-num">1</div><div class="build-body"><strong>Grocery lifecycle + cross-list sharing</strong> &mdash; 4-state model, recently-bought tray, shared-item tag, delete, categories, icon tiles, staples. <div class="build-deps">Extends grocery_items schema. Unblocks meals "add missing."</div></div></div>
+<div class="build-item"><div class="build-num">2</div><div class="build-body"><strong>Resting state + glance strip</strong> &mdash; full-bleed photo, gradient, time/weather/advice/event/tonight, 20s crossfade, presence expand. <div class="build-deps">Unblocks all zone behaviour, morning brief.</div></div></div>
+<div class="build-item"><div class="build-num">3</div><div class="build-body"><strong>Nav collapse + "Tell Greg" button</strong> &mdash; 4 mode tiles, time-of-day defaults, presence reveal. <div class="build-deps">Depends on resting state.</div></div></div>
+<div class="build-item"><div class="build-num">4</div><div class="build-body"><strong>Tonight card + meals + taste learning</strong> &mdash; dinner answer, ingredients&rarr;suggestions, taste model, add-missing. <div class="build-deps">Depends on grocery lifecycle.</div></div></div>
+<div class="build-item"><div class="build-num">5</div><div class="build-body"><strong>Recipe collection / cookbook</strong> &mdash; browsable saved recipes, search, filter, Grammy's cards. <div class="build-deps">Depends on recipe capture (existing). New table greg_recipes.</div></div></div>
+<div class="build-item"><div class="build-num">6</div><div class="build-body"><strong>Intercom</strong> &mdash; pause Rokus, speak on all surfaces, Grammy's room. <div class="build-deps">Depends on actuate.ts Roku ECP (shipped).</div></div></div>
+<div class="build-item"><div class="build-num">7</div><div class="build-body"><strong>Countdowns &amp; celebrations</strong> &mdash; Dwight Sep 19 is the forcing function. <div class="build-deps">Depends on family_events typed data (exists).</div></div></div>
+<div class="build-item"><div class="build-num">8</div><div class="build-body"><strong>Tomorrow preview</strong> &mdash; evening ambient card. <div class="build-deps">Depends on glance strip.</div></div></div>
+<div class="build-item"><div class="build-num">9</div><div class="build-body"><strong>Routines + extras + earning</strong> &mdash; expected track + extras track, picture steps, unlocks, treats. <div class="build-deps">New schema: routine_steps, extra_chores, treat_progress.</div></div></div>
+<div class="build-item"><div class="build-num">10</div><div class="build-body"><strong>Lilly play + activity chooser + stickers</strong> &mdash; icon grid, 6 activities, chalkboard+stickers, sing-along from YT Kids favourites. <div class="build-deps">Depends on face detection, greg_views.</div></div></div>
+<div class="build-item"><div class="build-num">11</div><div class="build-body"><strong>Calendar week/month + imports</strong> &mdash; colour per person, camera import, school batch. <div class="build-deps">WG-02 for write-back; read+local-add without it.</div></div></div>
+<div class="build-item"><div class="build-num">12</div><div class="build-body"><strong>Dwight's AI companion</strong> &mdash; Greg/Claude gated for 7yo, kid register, experiments, games, memory. <div class="build-deps">Depends on Brave search + LLM articulation (shipped).</div></div></div>
+<div class="build-item"><div class="build-num">13</div><div class="build-body"><strong>On this day + photo push-in</strong> &mdash; Throwbak metadata, SMS/email push-in for Grammy, artwork gallery. <div class="build-deps">Depends on Throwbak face clusters. Find existing design thread.</div></div></div>
+<div class="build-item"><div class="build-num">14</div><div class="build-body"><strong>Entertainment mode</strong> &mdash; Spotify, radio, YouTube, whole-house control (Rokus + Fire TV + phones + tablets). <div class="build-deps">Spotify Premium verification + OAuth.</div></div></div>
+<div class="build-item"><div class="build-num">15</div><div class="build-body"><strong>Proactive speech + morning brief (6&ndash;11am)</strong> &mdash; presence&rarr;person&rarr;offer, commute line. <div class="build-deps">Speaker enrollment (WG-10) for David ring-2 items.</div></div></div>
+<div class="build-item"><div class="build-num">16</div><div class="build-body"><strong>Multi-person hierarchy</strong> &mdash; priority stack, Greg as mediator, collision logging. <div class="build-deps">Depends on face identification.</div></div></div>
+<div class="build-item"><div class="build-num">17</div><div class="build-body"><strong>Invariants sweep</strong> &mdash; undo, echo, guest mode, grandparent legibility, kid reach-height, nothing-negative audit, display-log, friction catalog. <div class="build-deps">Polish pass after features built.</div></div></div>
 
-<h4>Rules</h4>
-<p>One topic per initiation. Offer, don't impose. Read the room first (presence stable for 3+ seconds, no active conversation). Don't repeat declined items for 24h. Ring-gate everything &mdash; David's build reports never surface with the family present. The highest-salience READY item for THAT audience wins.</p>
-
-<!-- ============================================ -->
-<h2 id="morning">17. Morning Brief</h2>
-<p>A scheduled state of the resting layer (6&ndash;8am school days), not a mode.</p>
-
-<h4>Content</h4>
-<p>Agenda by person (colour-coded). Weather with dress hint per person ("Angela: layers. Dwight: shorts are fine"). Precipitation alert. Angela's commute time. Tonight's dinner preview (if set). "3 things today" summary. Greg speaks it once to whoever walks in first, then the brief stays on screen as a glance card until dismissed or 9am.</p>
-
-<!-- ============================================ -->
-<h2 id="build-order">18. Build Order</h2>
-<p>Dependency-respecting, customer-first. Each item ships independently. The mock IS the build &mdash; the Skylight is HTML, so the spec ships as the real card.</p>
-
-<div class="build-item">
-  <div class="build-num">1</div>
-  <div class="build-body">
-    <strong>Grocery lifecycle</strong> &mdash; needed/in-cart/bought/deleted states, recently-bought tray, delete gesture, categories with store ordering, icon tiles for pre-readers, staples "Usual" row.
-    <div class="build-deps">Depends on: existing grocery_items schema (extend with bought_at, deleted_at). Unblocks: meals "add missing", staples model.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">2</div>
-  <div class="build-body">
-    <strong>Resting state + glance strip</strong> &mdash; full-bleed photo with gradient overlay, time/weather/advice/next-event/tonight strip, slow 20s crossfade, presence-triggered expand.
-    <div class="build-deps">Depends on: existing photos-proxy, PLEXUS wall payload. Unblocks: all proximity zone behaviour, morning brief.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">3</div>
-  <div class="build-body">
-    <strong>Nav collapse</strong> &mdash; replace 8 icons with 4 mode tiles + talk affordance, time-of-day defaults, presence reveal animation.
-    <div class="build-deps">Depends on: resting state (the tiles appear over it). Unblocks: all mode navigation.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">4</div>
-  <div class="build-body">
-    <strong>Tonight card + meals</strong> &mdash; dinner answer at 4&ndash;5pm, ingredients&rarr;suggestions, recipe display, "add missing to list."
-    <div class="build-deps">Depends on: grocery lifecycle (for add-missing). Unblocks: cook mode, meal plan.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">5</div>
-  <div class="build-body">
-    <strong>Intercom / "dinner's ready"</strong> &mdash; pause playing Rokus, Greg speaks on all surfaces, on-screen text on TVs, Grammy's room included.
-    <div class="build-deps">Depends on: existing actuate.ts Roku ECP, TTS. Unblocks: household broadcast pattern.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">6</div>
-  <div class="build-body">
-    <strong>Countdowns &amp; celebrations</strong> &mdash; birthday/holiday ambient cards, countdown display, morning-of animation, Greg announces to first person.
-    <div class="build-deps">Depends on: existing family_events typed data. Dwight's birthday Sep 19 is the forcing function.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">7</div>
-  <div class="build-body">
-    <strong>Tomorrow preview</strong> &mdash; evening ambient card with tomorrow's events, weather, prep reminders.
-    <div class="build-deps">Depends on: glance strip (tomorrow data in same PLEXUS payload).</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">8</div>
-  <div class="build-body">
-    <strong>Routines &amp; rewards</strong> &mdash; Dwight's picture-step routines, one-tap complete, confetti, streak, Greg-enforced unlocks, Lilly's bedtime ritual, Today's Feelings.
-    <div class="build-deps">Depends on: family_events schema extension (routine_steps, completion tracking). Unblocks: unlock-gated content.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">9</div>
-  <div class="build-body">
-    <strong>Lilly play mode</strong> &mdash; 6 rotating activities, giant tap targets, contingent voice, no-fail, joint moments.
-    <div class="build-deps">Depends on: face detection (to detect toddler alone), greg_views registry. Unblocks: David's "Lilly engaged for long stretches."</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">10</div>
-  <div class="build-body">
-    <strong>Calendar week view + imports</strong> &mdash; colour per person, week strip, month grid, camera import (flyer &rarr; events), school calendar batch.
-    <div class="build-deps">Depends on: WG-02 (Google write-back) for full value; can ship read+local-add without it.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">11</div>
-  <div class="build-body">
-    <strong>On this day + photo improvements</strong> &mdash; Throwbak metadata cards, ambient interleave, push-in, artwork gallery, captions, brightness matching.
-    <div class="build-deps">Depends on: Throwbak face clusters (for metadata). Find the existing design thread first.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">12</div>
-  <div class="build-body">
-    <strong>Entertainment mode</strong> &mdash; Spotify Connect, radio, YouTube embed, now-playing card, other-room control, audio-reactive visuals.
-    <div class="build-deps">Depends on: Spotify Premium verification, Connect API OAuth.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">13</div>
-  <div class="build-body">
-    <strong>Proactive speech + morning brief</strong> &mdash; presence&rarr;person&rarr;highest-salience item&rarr;offer, morning brief scheduled state, commute line.
-    <div class="build-deps">Depends on: speaker enrollment (WG-10) for ring &le; 2 David items. Family items work at ring 4 without enrollment.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">14</div>
-  <div class="build-body">
-    <strong>Dwight curiosity mode</strong> &mdash; why-answers, jokes, science, math games, chess, Lego prompts, homework help.
-    <div class="build-deps">Depends on: Brave search (WG-05 shipped), LLM kid-register articulation.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">15</div>
-  <div class="build-body">
-    <strong>Display-log instrumentation</strong> &mdash; every push logged, per-view/per-person/per-hour metrics, replaces GTIA priors.
-    <div class="build-deps">Depends on: greg_display_log table (exists). Unblocks: measured persona weights, NIGHTSHIFT learning.</div>
-  </div>
-</div>
-
-<div class="build-item">
-  <div class="build-num">16</div>
-  <div class="build-body">
-    <strong>Invariants sweep</strong> &mdash; undo on all proactive actions, echo on all commands, guest mode, grandparent legibility pass, kid reach-height audit, friction catalog wiring.
-    <div class="build-deps">Depends on: most features built (this is a polish pass).</div>
-  </div>
-</div>
-
-<div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--walnut-border); color:var(--walnut-muted); font-size:0.85rem;">
-  <p>WG-17 &middot; Skylight IA/UX Design &middot; Gregore-private &middot; 2026-09-07<br>
-  Research: EXTERNAL_RESEARCH_2026-09-07.md (9 searches), EXTERNAL_RESEARCH_DEEP_2026-09-07.md (200+ sources), GTIA_FINDINGS_2026-09-07.md (Louvain, 112 features, 7 personas, 9 contexts). Fresh research: Vogel &amp; Balakrishnan UIST 2004, Hearth Display reviews 2024&ndash;2026, TIDRC framework (Soni et al. IDC 2019), Sesame Workshop 2012, Toca Boca design principles, Samsung Family Hub UX, Roseberry/Hirsh-Pasek/Golinkoff 2014, Odom et al. CHI 2014.<br>
-  Portfolio design system: &sect;0&ndash;&sect;17 applied. Walnut palette (GregLite/Home vocabulary). Newsreader + Inter typography lanes. No emoji. Sustained-use validated.<br>
-  Build order: 16 stages, dependency-respecting, customer-first.</p>
+<div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--walnut-border);color:var(--walnut-muted);font-size:0.85rem;">
+  <p>WG-17 &middot; Skylight IA/UX Design v1.1.0 &middot; Gregore-private &middot; 2026-09-07<br>
+  Corrections applied: multi-person hierarchy, "Tell Greg" button, Gregore brand sourcing, person colours (David's picks), morning brief &rarr; 11am, cross-list grocery sharing, meal taste learning, recipe collection/cookbook, expected vs extras chore model, bedtime non-mandatory, activity chooser + stickers + YT Kids sing-along, Dwight as AI companion (not search), Grammy push-in paths (SMS + email), entertainment controls all devices.<br>
+  Research: GTIA (200+ sources, Louvain Q&asymp;0.09) + Vogel &amp; Balakrishnan + Hearth/Toca Boca/Samsung FamilyHub/TIDRC/Sesame 2012 + Roseberry 2014 + Odom CHI 2014 + Deci/Koestner/Ryan 1999.<br>
+  Style: Gregore brand (Walnut palette, Newsreader + Inter). Build order: 17 stages.</p>
 </div>
 
 </div>
