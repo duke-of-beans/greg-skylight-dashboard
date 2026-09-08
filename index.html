@@ -483,6 +483,15 @@ var CFG = {
     <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
       <div class="tonight-act" onclick="tellGregKids()" style="font-size:14px;padding:8px 16px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg> Tell Greg to change</div>
     </div>
+    <!-- Dwight's AI companion (WG-17 Stage 12) -->
+    <div id="kidChatSection" style="margin-top:16px;border-top:1px solid var(--border2);padding-top:12px;display:none">
+      <div class="card-label" style="margin-bottom:8px;text-align:center">ASK GREG</div>
+      <div id="kidChatHistory" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="kidChatInput" placeholder="Ask me anything…" style="flex:1;padding:10px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:16px;outline:none" onkeydown="if(event.key==='Enter')sendKidChat()">
+        <div class="g-btn" onclick="sendKidChat()" style="min-width:44px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+      </div>
+    </div>
   </div>
   <!-- Tomorrow preview (WG-17 Stage 7) -->
   <div class="interleave-card" id="tomorrowCard">
@@ -930,9 +939,11 @@ function switchKid(kid){
   activeKid = kid;
   document.getElementById('kidPickDwight').style.background = kid==='dwight' ? 'rgba(34,197,94,0.15)' : '';
   document.getElementById('kidPickLilly').style.background = kid==='lilly' ? 'rgba(167,139,250,0.15)' : '';
+  // Show/hide AI chat section (Dwight only)
+  var chatSection = document.getElementById('kidChatSection');
+  if(chatSection) chatSection.style.display = kid==='dwight' ? '' : 'none';
   if(kid === 'lilly'){
     renderLillyPlay();
-    // Hide extras for Lilly (she's 2, no chore tracking yet)
     document.getElementById('kidsExtrasBody').parentElement.style.display = 'none';
   } else {
     document.getElementById('kidsExtrasBody').parentElement.style.display = '';
@@ -1116,9 +1127,76 @@ function getLillyStickerCount(){ return lillyStickerCount; }
 function addLillySticker(){
   lillyStickerCount++;
   gregSpeak('You earned a sticker! That\'s ' + lillyStickerCount + ' sticker' + (lillyStickerCount!==1?'s':'') + '!');
-  // Re-render to show updated count
   if(activeKid === 'lilly') renderLillyPlay();
 }
+
+// ═══════════════════════════════════════════
+// DWIGHT AI COMPANION (WG-17 Stage 12)
+// Gated Claude for a 7-year-old. Ring 4, kid register.
+// All exchanges logged to greg_kid_chats for parent review.
+// ═══════════════════════════════════════════
+var kidChatHistory = [];
+var KID_CHAT_URL = CFG.SUPABASE_URL + '/functions/v1/greg-kid-chat';
+
+function sendKidChat(){
+  var input = document.getElementById('kidChatInput');
+  var q = (input.value || '').trim();
+  if(!q) return;
+  input.value = '';
+  
+  // Show question immediately
+  kidChatHistory.push({role:'kid', text:q});
+  kidChatHistory.push({role:'greg', text:'Thinking...'});
+  renderKidChat();
+  
+  // Call the edge function
+  fetch(KID_CHAT_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({question:q, person:activeKid})
+  })
+  .then(function(r){return r.json()})
+  .then(function(data){
+    // Replace "Thinking..." with actual response
+    kidChatHistory[kidChatHistory.length-1] = {role:'greg', text:data.response || 'Hmm, ask me again?'};
+    renderKidChat();
+    // Speak the response
+    gregSpeak(data.response || 'Hmm, ask me again?');
+  })
+  .catch(function(){
+    kidChatHistory[kidChatHistory.length-1] = {role:'greg', text:'I couldn\'t think right now. Try again?'};
+    renderKidChat();
+  });
+}
+
+function renderKidChat(){
+  var el = document.getElementById('kidChatHistory');
+  if(!kidChatHistory.length){ el.innerHTML = '<div style="text-align:center;color:var(--tx3);font-size:15px;padding:8px">Ask me anything! I love questions.</div>'; return; }
+  var h = '';
+  kidChatHistory.forEach(function(msg){
+    if(msg.role === 'kid'){
+      h += '<div style="text-align:right;margin:6px 0"><span style="display:inline-block;background:rgba(34,197,94,0.15);border-radius:14px 14px 4px 14px;padding:8px 14px;font-size:16px;color:var(--tx);max-width:80%">'+esc(msg.text)+'</span></div>';
+    } else {
+      h += '<div style="text-align:left;margin:6px 0"><span style="display:inline-block;background:var(--bg3);border-radius:14px 14px 14px 4px;padding:8px 14px;font-size:16px;color:var(--tx);max-width:80%">'+esc(msg.text)+'</span></div>';
+    }
+  });
+  el.innerHTML = h;
+  el.scrollTop = el.scrollHeight;
+}
+
+// Load recent chat history on init
+function loadKidChatHistory(){
+  sbGet('greg_kid_chats?person=eq.'+activeKid+'&order=created_at.desc&limit=6').then(function(chats){
+    chats = (chats||[]).reverse();
+    kidChatHistory = [];
+    chats.forEach(function(c){
+      kidChatHistory.push({role:'kid', text:c.question});
+      if(c.response) kidChatHistory.push({role:'greg', text:c.response});
+    });
+    renderKidChat();
+  }).catch(function(){});
+}
+loadKidChatHistory();
 
 // ═══════════════════════════════════════════
 // TOMORROW PREVIEW (WG-17 Stage 7, WG-11)
