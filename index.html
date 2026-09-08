@@ -1236,7 +1236,7 @@ function fetchCalendar(){
       var todayD=todayStr; var weekEnd=new Date(now.getTime()+7*86400000).toISOString().split('T')[0];
       if(evDate>=todayD && evDate<=weekEnd){
         var start=ev.all_day?ev.event_date:(ev.event_date+'T'+ev.event_time);
-        allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2,eventType:ev.event_type||'general'});
+        allEvents.push({summary:ev.title,start:start,location:ev.person||'',calIndex:2,eventType:ev.event_type||'general',person:ev.person||''});
       }
     });
     done();
