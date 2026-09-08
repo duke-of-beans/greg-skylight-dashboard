@@ -182,7 +182,19 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
 /* Nav bar clearance — cards must not overlap the fixed nav */
 .interleave-card { padding-bottom: 70px; }
 #groceryCard .grocery-add-bar { margin-bottom: 8px; }
-@media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
+@media (prefers-reduced-motion: reduce){.grocery-item{transition:none};@keyframes lillyBounce{to{transform:none}};@keyframes lillyPulse{50%{transform:none}};@keyframes lillyDot{50%{opacity:1}}}
+/* Lilly activity animations */
+@keyframes lillyBounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+@keyframes lillyPulse{0%,100%{transform:scale(1);opacity:0.9}50%{transform:scale(1.08);opacity:1}}
+@keyframes lillyDot{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+/* Lilly sticker board */
+@keyframes lillyPop{0%{transform:scale(0) rotate(-20deg);opacity:0}60%{transform:scale(1.2) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
+.lilly-sticker{animation:lillyPop 0.4s ease-out forwards}
+/* Color match card flip */
+.lilly-match-card{width:80px;height:80px;border-radius:12px;margin:0 auto;cursor:pointer;transition:transform 0.15s,background 0.25s,border-color 0.25s;background:var(--bg3);border:2px solid var(--border)}
+.lilly-match-card:active{transform:scale(0.92)}
+.lilly-match-card.revealed{border-width:3px}
+.lilly-match-card.matched{opacity:0.6}
 
 /* ═══ Kids card layout ═══ */
 #kidsCard .kids-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
@@ -995,18 +1007,39 @@ function fetchKidData(){
   });
 }
 
+// ═══ Dwight's fun content — interests-based activities ═══
+var DWIGHT_BUILD_CHALLENGES = [
+  'Build a castle with a secret room',
+  'Make a Roblox obby in real life with pillows',
+  'Design your own Minecraft skin on paper',
+  'Build the tallest tower you can with Legos',
+  'Create a Rainbow Friends trap',
+  'Draw your own FNAF animatronic',
+  'Build a Mario level with blocks and paper',
+  'Make a Digital Circus character from clay',
+  'Design a new Roblox game on paper',
+  'Build a Lego vehicle that can roll down a ramp'
+];
+
+function dwightRandomChallenge(){
+  var pick = DWIGHT_BUILD_CHALLENGES[Math.floor(Math.random() * DWIGHT_BUILD_CHALLENGES.length)];
+  gregSpeak('Here\'s your challenge: ' + pick);
+  var el = document.getElementById('dwightChallenge');
+  if(el) el.textContent = pick;
+}
+
 function renderKidRoutines(routineType){
   var body = document.getElementById('kidsRoutineBody');
   var labels = {morning:'Morning', after_school:'After School', bedtime:'Bedtime'};
   var completedIds = kidCompletions.map(function(c){return c.routine_id});
   var allDone = kidRoutines.length > 0 && kidRoutines.every(function(r){return completedIds.indexOf(r.id) > -1});
   
-  // Two-column layout: routine left, extras right
-  var h = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;text-align:left">';
+  // Two-column landscape layout — routine left, fun stuff right
+  var h = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;text-align:left;max-width:900px;margin:0 auto">';
   
-  // LEFT COLUMN — routine
+  // LEFT COLUMN — routine + extras
   h += '<div>';
-  h += '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:14px">'+(labels[routineType]||routineType)+' Routine</div>';
+  h += '<div style="font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:16px">'+(labels[routineType]||routineType)+' Routine</div>';
   
   if(!kidRoutines.length){
     h += '<div style="color:var(--tx3);font-size:15px">No steps for this time of day</div>';
@@ -1030,9 +1063,19 @@ function renderKidRoutines(routineType){
     }
   }
   h += '</div>';
-  
-  // RIGHT COLUMN — extras with point counter
+
+  // RIGHT COLUMN — Build Challenge + Extras
   h += '<div>';
+  
+  // Build Challenge randomizer (Dwight's interests: Legos, Roblox, Minecraft, Mario, FNAF, Rainbow Friends, Digital Circus)
+  var challenge = DWIGHT_BUILD_CHALLENGES[Math.floor(Math.random() * DWIGHT_BUILD_CHALLENGES.length)];
+  h += '<div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px">';
+  h += '<div style="font-family:var(--fg);font-size:18px;color:var(--son);margin-bottom:8px;display:flex;align-items:center;gap:8px">'+ICO.puzzle(20)+' Build Challenge</div>';
+  h += '<div id="dwightChallenge" style="font-size:16px;color:var(--tx);line-height:1.5;margin-bottom:12px">'+esc(challenge)+'</div>';
+  h += '<div class="tonight-act" onclick="dwightRandomChallenge()" style="font-size:14px;padding:8px 14px;display:inline-flex">'+ICO.star(16)+' New Challenge</div>';
+  h += '</div>';
+  
+  // Extras with point counter
   h += '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:14px">Extras</div>';
   
   var completedChoreIds = kidExtraCompletions.map(function(c){return c.chore_id});
@@ -1105,7 +1148,11 @@ function toggleRoutineStep(routineId, currentlyDone){
 function claimExtra(choreId){
   var today = new Date().toISOString().split('T')[0];
   var already = kidExtraCompletions.find(function(c){return c.chore_id===choreId});
-  if(already) return;
+  if(already){
+    // UNDO — tap again to uncomplete
+    sbFetch('greg_chore_completions?chore_id=eq.'+choreId+'&person=eq.'+activeKid+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
+    return;
+  }
   var chore = kidExtras.find(function(c){return c.id===choreId});
   if(chore) gregSpeak(chore.title + '. Nice work!');
   sbFetch('greg_chore_completions',{method:'POST',body:JSON.stringify({chore_id:choreId,person:activeKid,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
@@ -1152,14 +1199,19 @@ function renderLillyPlay(){
 
 // ═══ Lilly activities — real built-in experiences ═══
 function lillyActivity(action){
-  switch(action){
-    case 'draw': openLillyCanvas(); break;
-    case 'sing': lillyStorySing('sing'); break;
-    case 'story': lillyStorySing('story'); break;
-    case 'colors': lillyColorMatch(); break;
-    case 'watch': lillyWatch(); break;
-    case 'stickers': addLillySticker(); break;
-  }
+  // Defer DOM replacement by one frame to prevent the original touch/click
+  // from propagating to newly-inserted elements (e.g. "Back" button landing
+  // at the same screen coordinates as the tile that was tapped)
+  setTimeout(function(){
+    switch(action){
+      case 'draw': openLillyCanvas(); break;
+      case 'sing': lillySing(); break;
+      case 'story': lillyStoryTime(); break;
+      case 'colors': lillyColorMatch(); break;
+      case 'watch': lillyWatch(); break;
+      case 'stickers': lillyShowStickers(); break;
+    }
+  }, 80);
 }
 
 function openLillyCanvas(){
@@ -1204,88 +1256,216 @@ var LILLY_SONGS = [
   'Row row row your boat, gently down the stream. Merrily merrily merrily merrily, life is but a dream.'
 ];
 
-function lillyStorySing(mode){
-  var items = mode === 'story' ? LILLY_STORIES : LILLY_SONGS;
-  var pick = items[Math.floor(Math.random() * items.length)];
+// ═══ Lilly Sing — audio-visual, no text (she's 2) ═══
+function lillySing(){
+  var pick = LILLY_SONGS[Math.floor(Math.random() * LILLY_SONGS.length)];
   gregSpeak(pick);
   var body = document.getElementById('kidsRoutineBody');
-  var label = mode === 'story' ? 'Story Time' : 'Sing Along';
-  body.innerHTML = '<div style="text-align:center;padding:20px 0"><div style="color:var(--tx2);margin-bottom:16px">'+ICO[mode==='story'?'book':'music'](48)+'</div>'
-    + '<div style="font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:12px">'+label+'</div>'
-    + '<div style="font-size:18px;color:var(--tx2);line-height:1.6;max-width:440px;margin:0 auto;padding:0 16px">'+esc(pick)+'</div>'
-    + '<div style="margin-top:20px;display:flex;gap:10px;justify-content:center">'
-    + '<div class="tonight-act" onclick="lillyStorySing(\''+mode+'\')" style="font-size:14px;padding:8px 16px">Another one</div>'
-    + '<div class="tonight-act" onclick="renderLillyPlay()" style="font-size:14px;padding:8px 16px">Back</div>'
+  // Big bouncing music notes animation — no text, just visual delight
+  body.innerHTML = '<div style="text-align:center;padding:24px 0">'
+    + '<div style="font-size:80px;line-height:1;margin-bottom:20px;animation:lillyBounce 0.6s ease-in-out infinite alternate">'
+    + ICO.music(80) + '</div>'
+    + '<div style="display:flex;justify-content:center;gap:24px;margin-bottom:24px">'
+    + '<div style="color:#E74C3C;animation:lillyBounce 0.5s ease-in-out infinite alternate 0.1s">'+ICO.star(32)+'</div>'
+    + '<div style="color:#3498DB;animation:lillyBounce 0.5s ease-in-out infinite alternate 0.2s">'+ICO.music(32)+'</div>'
+    + '<div style="color:#2ECC71;animation:lillyBounce 0.5s ease-in-out infinite alternate 0.3s">'+ICO.star(32)+'</div>'
+    + '<div style="color:#F1C40F;animation:lillyBounce 0.5s ease-in-out infinite alternate 0.4s">'+ICO.music(32)+'</div>'
+    + '<div style="color:#9B59B6;animation:lillyBounce 0.5s ease-in-out infinite alternate 0.5s">'+ICO.star(32)+'</div>'
+    + '</div>'
+    + '<div style="font-family:var(--fg);font-size:22px;color:var(--lilly)">Greg is singing!</div>'
+    + '<div style="margin-top:28px;display:flex;gap:12px;justify-content:center">'
+    + '<div class="tonight-act" onclick="lillySing()" style="font-size:16px;padding:10px 20px">'+ICO.music(18)+' Another</div>'
+    + '<div class="tonight-act" onclick="renderLillyPlay()" style="font-size:16px;padding:10px 20px">Back</div>'
+    + '</div></div>';
+}
+
+// ═══ Lilly Story — visual scene + TTS, no text (she's 2) ═══
+function lillyStoryTime(){
+  var pick = LILLY_STORIES[Math.floor(Math.random() * LILLY_STORIES.length)];
+  gregSpeak(pick);
+  var body = document.getElementById('kidsRoutineBody');
+  // Big scene illustration with animated elements — Greg reads aloud
+  var scenes = [
+    {icon:'moon', color:'#A78BFA', label:'Bedtime Story'},
+    {icon:'sun', color:'#FBBF24', label:'Adventure Time'},
+    {icon:'star', color:'#22C55E', label:'Story Time'}
+  ];
+  var scene = scenes[Math.floor(Math.random() * scenes.length)];
+  body.innerHTML = '<div style="text-align:center;padding:24px 0">'
+    + '<div style="color:'+scene.color+';margin-bottom:16px;animation:lillyPulse 2s ease-in-out infinite">'+ICO[scene.icon](100)+'</div>'
+    + '<div style="font-family:var(--fg);font-size:26px;color:var(--tx);margin-bottom:8px">'+scene.label+'</div>'
+    + '<div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px">'
+    + '<div style="width:8px;height:8px;border-radius:50%;background:var(--lilly);animation:lillyDot 1.4s ease-in-out infinite"></div>'
+    + '<div style="width:8px;height:8px;border-radius:50%;background:var(--lilly);animation:lillyDot 1.4s ease-in-out infinite 0.2s"></div>'
+    + '<div style="width:8px;height:8px;border-radius:50%;background:var(--lilly);animation:lillyDot 1.4s ease-in-out infinite 0.4s"></div>'
+    + '</div>'
+    + '<div style="font-size:16px;color:var(--tx3)">Greg is reading&hellip;</div>'
+    + '<div style="margin-top:28px;display:flex;gap:12px;justify-content:center">'
+    + '<div class="tonight-act" onclick="lillyStoryTime()" style="font-size:16px;padding:10px 20px">'+ICO.book(18)+' Another</div>'
+    + '<div class="tonight-act" onclick="renderLillyPlay()" style="font-size:16px;padding:10px 20px">Back</div>'
     + '</div></div>';
 }
 
 function lillyColorMatch(){
   var colors = ['#E74C3C','#3498DB','#2ECC71','#F1C40F'];
   var shuffled = colors.concat(colors).sort(function(){return Math.random()-0.5});
-  var found = [];
-  var first = null;
   window._lillyMatchCards = shuffled;
-  window._lillyFound = found;
+  window._lillyFound = [];
   window._lillyFirst = null;
+  window._lillyLocked = false; // lock during non-match reveal
 
-  function renderMatch(){
-    var body = document.getElementById('kidsRoutineBody');
-    var h = '<div style="text-align:center;font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:16px">Find the matching colors!</div>';
-    h += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:400px;margin:0 auto">';
-    shuffled.forEach(function(c,i){
-      var revealed = found.indexOf(i) > -1 || window._lillyFirst === i;
-      h += '<div style="width:80px;height:80px;border-radius:12px;margin:0 auto;cursor:pointer;transition:transform 0.15s;'
-        + (revealed ? 'background:'+c+';border:2px solid '+c : 'background:var(--bg3);border:2px solid var(--border)')
-        + '" onclick="lillyMatchTap('+i+')"></div>';
-    });
-    h += '</div>';
-    if(found.length === shuffled.length){
-      h += '<div style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E">'+ICO.star(20)+' You found them all!</div>';
-    }
-    h += '<div style="margin-top:16px;text-align:center"><div class="tonight-act" onclick="renderLillyPlay()" style="font-size:14px;padding:8px 16px;display:inline-flex">Back</div></div>';
-    body.innerHTML = h;
-  }
-  window._renderLillyMatch = renderMatch;
+  // Build the grid ONCE — then update card styles in-place
+  var body = document.getElementById('kidsRoutineBody');
+  var h = '<div style="text-align:center;font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:20px">Find the matching colors!</div>';
+  h += '<div id="lillyMatchGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:420px;margin:0 auto">';
+  shuffled.forEach(function(c,i){
+    h += '<div class="lilly-match-card" id="lmc'+i+'" data-idx="'+i+'" data-color="'+c+'" ontouchend="lillyMatchTap('+i+')" onclick="lillyMatchTap('+i+')"></div>';
+  });
+  h += '</div>';
+  h += '<div id="lillyMatchMsg" style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E;display:none">'+ICO.star(20)+' You found them all!</div>';
+  h += '<div style="margin-top:20px;text-align:center"><div class="tonight-act" onclick="renderLillyPlay()" style="font-size:16px;padding:10px 20px;display:inline-flex">Back</div></div>';
+  body.innerHTML = h;
   gregSpeak('Find the matching colors! Tap two that are the same.');
-  renderMatch();
+}
+
+function lillyMatchReveal(idx, show){
+  var el = document.getElementById('lmc'+idx);
+  if(!el) return;
+  var color = el.getAttribute('data-color');
+  if(show){
+    el.style.background = color;
+    el.style.borderColor = color;
+    el.classList.add('revealed');
+  } else {
+    el.style.background = '';
+    el.style.borderColor = '';
+    el.classList.remove('revealed');
+  }
 }
 
 function lillyMatchTap(i){
   var cards = window._lillyMatchCards;
   var found = window._lillyFound;
+  if(window._lillyLocked) return; // wait for non-match to flip back
   if(found.indexOf(i) > -1) return; // already matched
+  if(window._lillyFirst === i) return; // same card tapped twice
+
   if(window._lillyFirst === null){
+    // First card of pair
     window._lillyFirst = i;
-    window._renderLillyMatch();
+    lillyMatchReveal(i, true);
   } else {
+    // Second card — check for match
     var first = window._lillyFirst;
     window._lillyFirst = null;
-    if(cards[first] === cards[i] && first !== i){
+    lillyMatchReveal(i, true); // show second card
+
+    if(cards[first] === cards[i]){
+      // Match! Mark both as matched
       found.push(first); found.push(i);
+      var el1 = document.getElementById('lmc'+first);
+      var el2 = document.getElementById('lmc'+i);
+      if(el1) el1.classList.add('matched');
+      if(el2) el2.classList.add('matched');
       gregSpeak('Match!');
-      if(found.length === cards.length){ setTimeout(function(){ gregSpeak('You found them all! Great job, Lilly!'); addLillySticker(); }, 500); }
+      if(found.length === cards.length){
+        var msg = document.getElementById('lillyMatchMsg');
+        if(msg) msg.style.display = '';
+        setTimeout(function(){ gregSpeak('You found them all! Great job, Lilly!'); addLillySticker(); }, 500);
+      }
+    } else {
+      // No match — show both briefly, then flip back
+      window._lillyLocked = true;
+      setTimeout(function(){
+        lillyMatchReveal(first, false);
+        lillyMatchReveal(i, false);
+        window._lillyLocked = false;
+      }, 800);
     }
-    window._renderLillyMatch();
   }
 }
 
 function lillyWatch(){
   var body = document.getElementById('kidsRoutineBody');
-  body.innerHTML = '<div style="text-align:center;font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:16px">What do you want to watch?</div>'
-    + '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:400px;margin:0 auto">'
-    + '<div class="lilly-tile" onclick="quickPlay(\'youtube-kids\')">'+ICO.star(32)+'<div class="tile-label">YouTube Kids</div></div>'
-    + '<div class="lilly-tile" onclick="quickPlay(\'cocomelon\')">'+ICO.film(32)+'<div class="tile-label">Cocomelon</div></div>'
+  // SVG logos a 2-year-old can recognize — red play triangle (YT Kids), green circle (Cocomelon)
+  var ytKidsLogo = '<svg viewBox="0 0 64 64" width="52" height="52"><rect x="4" y="12" width="56" height="40" rx="10" fill="#FF0000"/><polygon points="26,22 26,42 44,32" fill="#fff"/></svg>';
+  var cocomeloLogo = '<svg viewBox="0 0 64 64" width="52" height="52"><circle cx="32" cy="34" r="26" fill="#4CAF50"/><ellipse cx="32" cy="24" rx="12" ry="10" fill="#8BC34A"/><circle cx="26" cy="34" r="4" fill="#fff"/><circle cx="38" cy="34" r="4" fill="#fff"/><circle cx="26" cy="35" r="2" fill="#333"/><circle cx="38" cy="35" r="2" fill="#333"/><path d="M 26 42 Q 32 48 38 42" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  body.innerHTML = '<div style="text-align:center;font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:20px">What do you want to watch?</div>'
+    + '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:420px;margin:0 auto">'
+    + '<div class="lilly-tile" onclick="lillyLaunchWatch(\'youtube-kids\')" style="min-height:130px">'
+    + ytKidsLogo
+    + '<div class="tile-label" style="color:#FF0000;font-size:16px">YouTube Kids</div></div>'
+    + '<div class="lilly-tile" onclick="lillyLaunchWatch(\'cocomelon\')" style="min-height:130px">'
+    + cocomeloLogo
+    + '<div class="tile-label" style="color:#4CAF50;font-size:16px">Cocomelon</div></div>'
     + '</div>'
-    + '<div style="margin-top:16px;text-align:center"><div class="tonight-act" onclick="renderLillyPlay()" style="font-size:14px;padding:8px 16px;display:inline-flex">Back</div></div>';
+    + '<div style="margin-top:24px;text-align:center"><div class="tonight-act" onclick="renderLillyPlay()" style="font-size:16px;padding:10px 20px;display:inline-flex">Back</div></div>';
 }
 
-// Sticker board — simple counter in memory (persists to Supabase later)
+function lillyLaunchWatch(target){
+  // Try native app first, fall back to browser URL
+  var pkgs = {
+    'youtube-kids': {pkg:'com.google.android.apps.youtube.kids', url:'https://www.youtubekids.com'},
+    'cocomelon': {pkg:'com.google.android.apps.youtube.kids', url:'https://www.youtube.com/c/Cocomelon'}
+  };
+  var entry = pkgs[target] || pkgs['youtube-kids'];
+  gregSpeak(target === 'cocomelon' ? 'Putting on Cocomelon!' : 'Opening YouTube Kids!');
+  if(typeof Greg !== 'undefined' && Greg.launchApp){
+    Greg.launchApp(entry.pkg);
+  } else {
+    // Browser fallback for Fire 7 without the Greg bridge
+    window.open(entry.url, '_blank');
+  }
+}
+
+// ═══ Sticker Board — visual reward (she's 2, she needs to SEE it) ═══
 var lillyStickerCount = 0;
+var lillyStickerShapes = []; // persistent array of earned sticker types
+var STICKER_TYPES = [
+  {shape:'star', color:'#F1C40F'},
+  {shape:'star', color:'#E74C3C'},
+  {shape:'star', color:'#9B59B6'},
+  {shape:'star', color:'#3498DB'},
+  {shape:'star', color:'#2ECC71'},
+  {shape:'star', color:'#F472B6'},
+  {shape:'star', color:'#FBBF24'},
+  {shape:'star', color:'#22C55E'}
+];
+
 function getLillyStickerCount(){ return lillyStickerCount; }
+
 function addLillySticker(){
+  var type = STICKER_TYPES[lillyStickerCount % STICKER_TYPES.length];
+  lillyStickerShapes.push(type);
   lillyStickerCount++;
   gregSpeak('You earned a sticker! That\'s ' + lillyStickerCount + ' sticker' + (lillyStickerCount!==1?'s':'') + '!');
-  if(activeKid === 'lilly') renderLillyPlay();
+  // Don't navigate away — update the play menu sticker count in place if visible
+  var sub = document.querySelector('.lilly-tile:last-child .tile-sub');
+  if(sub) sub.textContent = lillyStickerCount + ' earned';
+}
+
+function lillyShowStickers(){
+  var body = document.getElementById('kidsRoutineBody');
+  var h = '<div style="text-align:center;padding:16px 0">';
+  h += '<div style="font-family:var(--fg);font-size:24px;color:var(--tx);margin-bottom:8px">My Stickers</div>';
+  h += '<div style="font-size:16px;color:var(--lilly);margin-bottom:20px">'+lillyStickerCount+' sticker'+(lillyStickerCount!==1?'s':'')+' earned!</div>';
+  
+  if(lillyStickerShapes.length === 0){
+    h += '<div style="color:var(--tx3);font-size:18px;padding:32px 0">Play games to earn stickers!</div>';
+  } else {
+    h += '<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:500px;margin:0 auto;padding:16px;background:var(--bg2);border-radius:16px;border:1px solid var(--border);min-height:120px">';
+    lillyStickerShapes.forEach(function(s, idx){
+      var delay = Math.min(idx * 0.05, 1); // stagger pop-in
+      h += '<div class="lilly-sticker" style="animation-delay:'+delay+'s;color:'+s.color+'">'+ICO.star(36)+'</div>';
+    });
+    h += '</div>';
+  }
+  
+  h += '<div style="margin-top:24px;display:flex;gap:12px;justify-content:center">';
+  h += '<div class="tonight-act" onclick="renderLillyPlay()" style="font-size:16px;padding:10px 20px">Back</div>';
+  h += '</div></div>';
+  body.innerHTML = h;
 }
 
 // ═══════════════════════════════════════════
