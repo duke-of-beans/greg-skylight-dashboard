@@ -133,7 +133,7 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
    multi-column flow uses the space the wall actually has. */
 #groceryCard.interleave-card{display:flex;flex-direction:column}
 #groceryCard .list-pick{font-size:16px;padding:9px 18px;min-height:44px;display:flex;align-items:center}
-.g-body{flex:1;min-height:0;overflow-y:auto;max-width:1500px}
+.g-body{flex:1;min-height:0;overflow-y:auto;max-width:1500px;display:flex;flex-direction:column}
 .g-head{display:flex;align-items:baseline;gap:14px;margin:4px 0 16px;flex-wrap:wrap;justify-content:center}
 .g-count{font-family:var(--fg);font-size:32px;line-height:1;color:var(--tx)}
 .g-count-sub{font-family:var(--fu);font-size:15px;color:var(--tx2)}
@@ -150,7 +150,7 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
 .g-icon-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px;padding:6px 0;border-bottom:1px solid var(--border2)}
 .g-icon-tile{width:56px;height:56px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:transform 0.15s}
 .g-icon-tile:active{transform:scale(0.92);background:var(--bg3)}
-#groceryItems{column-width:330px;column-gap:32px}
+#groceryItems{column-width:330px;column-gap:32px;flex:1}
 .grocery-item{display:flex;align-items:center;gap:10px;min-height:38px;padding:4px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s;break-inside:avoid}
 .grocery-item:last-child{border-bottom:none}
 .grocery-item.pressing{background:var(--bg2);border-radius:10px}
@@ -505,7 +505,7 @@ var CFG = {
       <div id="groceryUsual"></div>
       <div id="groceryIcons" class="g-icon-row" style="display:none"></div>
       <div id="groceryItems"><div class="g-empty">Loading…</div></div>
-      <div id="groceryRecent"></div>
+      <div id="groceryRecent" style="margin-top:auto"></div>
     </div>
     <div class="g-footer">
       <input type="text" id="quickAddInput" placeholder="Add something…" onkeydown="if(event.key==='Enter')quickAddItem()">
