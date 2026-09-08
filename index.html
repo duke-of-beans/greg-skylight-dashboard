@@ -2449,14 +2449,21 @@ function crossListBuy(itemText){
 }
 
 function voiceAddItem(){
-  if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){document.getElementById('quickAddInput').placeholder='Say it to Greg instead';return;}
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  var rec=new SR();rec.lang='en-US';rec.interimResults=false;
-  var input=document.getElementById('quickAddInput');
-  input.placeholder='Listening…';input.style.borderColor='var(--greg)';
-  rec.onresult=function(e){var t=e.results[0][0].transcript;input.placeholder='Add something…';input.style.borderColor='';addGroceryItem(t, guessCategory(t), 'voice');};
-  rec.onerror=function(){input.placeholder='Add something…';input.style.borderColor='';};
-  rec.onend=function(){input.style.borderColor='';};
+  var input = document.getElementById('quickAddInput');
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+    // Fire 7 WebView doesn't support Web Speech API — tell the user clearly
+    gregSpeak('Just say it to me. Add milk, or whatever you need.', true);
+    input.placeholder = 'Say it to Greg — or type here';
+    input.style.borderColor = 'var(--greg)';
+    setTimeout(function(){ input.placeholder = 'Add something…'; input.style.borderColor = ''; }, 4000);
+    return;
+  }
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var rec = new SR(); rec.lang = 'en-US'; rec.interimResults = false;
+  input.placeholder = 'Listening…'; input.style.borderColor = 'var(--greg)';
+  rec.onresult = function(e){ var t = e.results[0][0].transcript; input.placeholder = 'Add something…'; input.style.borderColor = ''; addGroceryItem(t, guessCategory(t), 'voice'); };
+  rec.onerror = function(){ input.placeholder = 'Add something…'; input.style.borderColor = ''; gregSpeak('Didn\'t catch that. Try again or type it.', true); };
+  rec.onend = function(){ input.style.borderColor = ''; };
   rec.start();
 }
 
