@@ -396,9 +396,9 @@ var CFG = {
   <div class="interleave-card" id="mediaCard">
     <div class="card-label">WATCH</div>
     <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-      <div class="tonight-act" onclick="quickPlay('cocomelon')" style="font-size:14px;padding:8px 16px">🧸 Cocomelon</div>
-      <div class="tonight-act" onclick="quickPlay('music')" style="font-size:14px;padding:8px 16px">🎵 Music</div>
-      <div class="tonight-act" onclick="quickPlay('youtube-kids')" style="font-size:14px;padding:8px 16px">⭐ YT Kids</div>
+      <div class="tonight-act" onclick="quickPlay('cocomelon')" style="font-size:14px;padding:8px 16px;display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Cocomelon</div>
+      <div class="tonight-act" onclick="quickPlay('music')" style="font-size:14px;padding:8px 16px;display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music</div>
+      <div class="tonight-act" onclick="quickPlay('youtube-kids')" style="font-size:14px;padding:8px 16px;display:flex;align-items:center;gap:6px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>YT Kids</div>
     </div>
     <div class="media-grid" id="mediaGrid">
       <div class="media-btn" data-pkg="com.netflix.mediaclient"><div class="media-icon" style="background:#E50914"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 2v20l7-7 7 7V2H5z" fill="none" stroke="#fff" stroke-width="0"/><path d="M6 3h3v18l-3-3V3z" fill="#fff"/><path d="M15 3h3v18l-3-3V3z" fill="#fff"/><path d="M6 3l12 18h-3L3 3h3z" fill="#fff"/></svg></div><div class="media-name">Netflix</div></div>
@@ -551,6 +551,56 @@ var CFG = {
 
 <script>
 // ═══════════════════════════════════════════
+// SVG ICON SYSTEM (§3 — No emoji, SVG only)
+// Stroke-width 2, round linecap/linejoin, 24x24, currentColor
+// ═══════════════════════════════════════════
+function svgI(paths, size){
+  size = size || 24;
+  return '<svg viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+paths+'</svg>';
+}
+var ICO = {
+  // Weather
+  sun: function(s){return svgI('<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',s)},
+  cloud: function(s){return svgI('<path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/>',s)},
+  cloudSun: function(s){return svgI('<path d="M12 2v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M20 12h2"/><path d="M17.66 4.93l-1.41 1.41"/><path d="M16 8a4 4 0 00-8 0"/><path d="M17.5 19H9a7 7 0 110-6h8.5a4.5 4.5 0 010 6z"/>',s)},
+  rain: function(s){return svgI('<line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0018 7h-1.26A8 8 0 104 15.25"/>',s)},
+  snow: function(s){return svgI('<path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="8" y1="20" x2="8.01" y2="20"/><line x1="12" y1="18" x2="12.01" y2="18"/><line x1="12" y1="22" x2="12.01" y2="22"/><line x1="16" y1="16" x2="16.01" y2="16"/><line x1="16" y1="20" x2="16.01" y2="20"/>',s)},
+  storm: function(s){return svgI('<path d="M19 16.9A5 5 0 0018 7h-1.26a8 8 0 10-11.62 9"/><polyline points="13 11 9 17 15 17 11 23"/>',s)},
+  fog: function(s){return svgI('<path d="M20 16.2A5 5 0 0018 7h-1.26A8 8 0 104 15.25"/><line x1="4" y1="19" x2="20" y2="19"/><line x1="6" y1="22" x2="18" y2="22"/>',s)},
+  wind: function(s){return svgI('<path d="M9.59 4.59A2 2 0 1111 8H2"/><path d="M12.59 19.41A2 2 0 1014 16H2"/><path d="M17.73 7.73A2.5 2.5 0 1119.5 12H2"/>',s)},
+  // Routines
+  shirt: function(s){return svgI('<path d="M20.38 3.46L16 2 12 5 8 2 3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47A1 1 0 003.85 10H6v10a1 1 0 001 1h10a1 1 0 001-1V10h2.15a1 1 0 00.99-1.16l.58-3.47a2 2 0 00-1.34-2.23z"/>',s)},
+  brush: function(s){return svgI('<path d="M9.5 2H18v6a2 2 0 01-2 2h-4a2 2 0 01-2-2V5.5A3.5 3.5 0 006.5 2H9.5z"/><path d="M12 10v3a4 4 0 01-4 4H7a4 4 0 01-4-4v-1h6"/><rect x="6" y="17" width="6" height="5" rx="1"/>',s)},
+  bowl: function(s){return svgI('<path d="M3 11h18"/><path d="M5 11a7 7 0 0014 0"/><path d="M12 18v3"/><path d="M8 21h8"/>',s)},
+  backpack: function(s){return svgI('<path d="M4 10a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V10z"/><path d="M9 22V12h6v10"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',s)},
+  pencil: function(s){return svgI('<path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>',s)},
+  apple: function(s){return svgI('<path d="M12 2c-1 0-2.5 1-2.5 3S10 7 12 7s2.5-1 2.5-2S13 2 12 2z"/><path d="M12 7c-4 0-7 3-7 7 0 5 3 8 7 8s7-3 7-8c0-4-3-7-7-7z"/>',s)},
+  moon: function(s){return svgI('<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>',s)},
+  book: function(s){return svgI('<path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>',s)},
+  // Chores
+  plate: function(s){return svgI('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',s)},
+  toy: function(s){return svgI('<circle cx="12" cy="8" r="5"/><path d="M12 13v4"/><path d="M8 21h8"/><path d="M10 17h4"/>',s)},
+  laundry: function(s){return svgI('<path d="M3 6h18v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6z"/><path d="M3 6l2-4h14l2 4"/><ellipse cx="12" cy="14" rx="4" ry="3"/>',s)},
+  leaf: function(s){return svgI('<path d="M11 20A7 7 0 019.8 6.9C15.5 4.9 20 .5 20 .5s.7 9.4-4 13.2"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 12 13"/>',s)},
+  dog: function(s){return svgI('<path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75z"/><path d="M4.42 11.247A13.152 13.152 0 008 10.5c1.212 0 2.357.124 3.4.35a13.2 13.2 0 011.2.263 13.2 13.2 0 011.2-.263c1.043-.226 2.188-.35 3.4-.35 1.355 0 2.647.152 3.78.437"/>',s)},
+  bed: function(s){return svgI('<path d="M2 4v16"/><path d="M2 8h18a2 2 0 012 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/>',s)},
+  broom: function(s){return svgI('<path d="M12 2L8 18"/><path d="M4 18c0 2 3 4 8 4s8-2 8-4"/><path d="M12 2l4 16"/>',s)},
+  // Activities
+  paint: function(s){return svgI('<path d="M19 3H5a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"/><path d="M12 11v4"/><path d="M8 15h8"/><path d="M10 15v5a2 2 0 004 0v-5"/>',s)},
+  music: function(s){return svgI('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',s)},
+  puzzle: function(s){return svgI('<path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 01-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 10-3.214 3.214c.446.166.855.497.925.968a.979.979 0 01-.276.837l-1.61 1.61a2.404 2.404 0 01-1.705.707 2.402 2.402 0 01-1.704-.706l-1.568-1.568a1.026 1.026 0 00-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 11-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 00-.289-.877l-1.568-1.568A2.402 2.402 0 011.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 103.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0112 2c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 113.237 3.237c-.464.18-.894.527-.967 1.02z"/>',s)},
+  film: function(s){return svgI('<rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/>',s)},
+  star: function(s){return svgI('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',s)},
+  // UI
+  check: function(s){return svgI('<polyline points="20 6 9 17 4 12"/>',s)},
+  square: function(s){return svgI('<rect x="3" y="3" width="18" height="18" rx="2"/>',s)},
+  checkSquare: function(s){return svgI('<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>',s)},
+  cake: function(s){return svgI('<path d="M2 22h20"/><path d="M3.5 17h17v5h-17z"/><path d="M5 12h14v5H5z"/><path d="M7.5 12V9"/><path d="M12 12V9"/><path d="M16.5 12V9"/><path d="M7.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/><path d="M12 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/><path d="M16.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>',s)},
+  party: function(s){return svgI('<path d="M5.8 11.3L2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="M22 2l-2.24.75a2.9 2.9 0 00-1.96 3.12v.01c.09.6-.07 1.22-.48 1.68l-.38.44"/>',s)},
+  mic: function(s){return svgI('<path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>',s)}
+};
+
+// ═══════════════════════════════════════════
 // TIME
 // ═══════════════════════════════════════════
 function updateTime(){
@@ -570,15 +620,15 @@ var PERSON_COLORS = {
   'lilly':'#A78BFA','grammy':'#F472B6','mom':'#F472B6'
 };
 var WEATHER_ICONS = {
-  'clear':'&#9728;&#65039;','sunny':'&#9728;&#65039;','partly cloudy':'&#9925;','cloudy':'&#9729;&#65039;',
-  'overcast':'&#9729;&#65039;','rain':'&#127783;&#65039;','drizzle':'&#127783;&#65039;','thunderstorm':'&#9928;&#65039;',
-  'snow':'&#10052;&#65039;','fog':'&#127787;&#65039;','mist':'&#127787;&#65039;','wind':'&#127744;','haze':'&#127787;&#65039;'
+  'clear':ICO.sun(22),'sunny':ICO.sun(22),'partly cloudy':ICO.cloudSun(22),'cloudy':ICO.cloud(22),
+  'overcast':ICO.cloud(22),'rain':ICO.rain(22),'drizzle':ICO.rain(22),'thunderstorm':ICO.storm(22),
+  'snow':ICO.snow(22),'fog':ICO.fog(22),'mist':ICO.fog(22),'wind':ICO.wind(22),'haze':ICO.fog(22)
 };
 function weatherIcon(cond){
-  if(!cond) return '&#9728;&#65039;';
+  if(!cond) return ICO.sun(22);
   var c=cond.toLowerCase();
   for(var k in WEATHER_ICONS) if(c.indexOf(k)>-1) return WEATHER_ICONS[k];
-  return '&#9728;&#65039;';
+  return ICO.sun(22);
 }
 function updateGlanceStrip(){
   // Advice line — lower-third, homescreen only
@@ -587,7 +637,7 @@ function updateGlanceStrip(){
   var hour = new Date().getHours();
   
   // Don't overwrite countdown messages
-  if(adviceEl.textContent.indexOf('🎂') > -1 || adviceEl.textContent.indexOf('🎉') > -1){
+  if(adviceEl.textContent.indexOf('Birthday:') > -1 || adviceEl.textContent.indexOf('Coming up:') > -1 || adviceEl.textContent.indexOf('TODAY') > -1){
     // countdown is showing, leave it
   } else if(gregSuggestions.length){
     // Filter out weather-related suggestions at night
@@ -669,15 +719,15 @@ function renderCountdownStrip(){
   var el = document.getElementById('glanceAdvice');
   if(!el) return;
   if(next.days <= 14 && next.days > 0){
-    var emoji = next.type==='birthday' ? '🎂' : '🎉';
+    var prefix = next.type==='birthday' ? 'Birthday: ' : 'Coming up: ';
     var daysText = next.days === 1 ? 'Tomorrow!' : next.days + ' days';
-    el.textContent = emoji + ' ' + next.title + ' — ' + daysText;
+    el.textContent = prefix + next.title + ' — ' + daysText;
     el.style.opacity = '1';
     el.style.color = '';
   }
   if(next.days === 0){
-    var emoji = next.type==='birthday' ? '🎂🎉' : '🎉';
-    el.textContent = emoji + ' ' + next.title + ' is TODAY!';
+    var prefix = next.type==='birthday' ? 'Happy Birthday! ' : 'Today: ';
+    el.textContent = prefix + next.title + ' is TODAY!';
     el.style.opacity = '1';
     el.style.color = '#FBBF24';
   }
@@ -788,7 +838,7 @@ function fetchRecipes(){
 function renderCookbook(recipes){
   var body = document.getElementById('cookbookBody');
   if(!recipes.length){
-    body.innerHTML = '<div style="text-align:center;padding:32px 0"><div style="font-size:28px;margin-bottom:12px">📖</div><div style="font-size:17px;color:var(--tx2);margin-bottom:8px">No recipes yet</div><div style="font-size:14px;color:var(--tx3)">Say "Greg, save this recipe" or tap Tonight\'s meal to save it</div></div>';
+    body.innerHTML = '<div style="text-align:center;padding:32px 0"><div style="margin-bottom:12px;color:var(--tx3)">'+ICO.book(32)+'</div><div style="font-size:17px;color:var(--tx2);margin-bottom:8px">No recipes yet</div><div style="font-size:14px;color:var(--tx3)">Say "Greg, save this recipe" or tap Tonight\'s meal to save it</div></div>';
     return;
   }
   var h = '';
@@ -926,15 +976,17 @@ function renderKidRoutines(routineType){
   } else {
     kidRoutines.forEach(function(r){
       var done = completedIds.indexOf(r.id) > -1;
-      h += '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:50px;justify-content:center;text-align:center" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
-      h += '<div style="font-size:28px;width:40px;text-align:center;flex-shrink:0">'+(done ? '✅' : (r.icon||'⬜'))+'</div>';
-      h += '<div style="font-size:19px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
+      var iconMap = {'👕':ICO.shirt(28),'🪥':ICO.brush(28),'🥣':ICO.bowl(28),'🎒':ICO.backpack(28),'📝':ICO.pencil(28),'🍎':ICO.apple(28),'👗':ICO.shirt(28),'🌙':ICO.moon(28),'📖':ICO.book(28)};
+      var icon = done ? ICO.checkSquare(28) : (iconMap[r.icon] || ICO.square(28));
+      h += '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:50px;justify-content:center;text-align:center;color:'+(done?'var(--tx3)':'var(--tx)')+'" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
+      h += '<div style="width:32px;flex-shrink:0;display:flex;justify-content:center">'+icon+'</div>';
+      h += '<div style="font-size:19px;'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
       h += '</div>';
     });
   }
   
   if(allDone){
-    h += '<div style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E">🌟 All done! Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'!</div>';
+    h += '<div style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E">'+ICO.star(20)+' All done! Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'!</div>';
     // Greg celebrates verbally (only speak once per render by checking a flag)
     if(!window._lastCelebrated || window._lastCelebrated !== activeKid+'-'+routineType){
       window._lastCelebrated = activeKid+'-'+routineType;
@@ -955,14 +1007,16 @@ function renderKidExtras(){
   
   var h = '';
   if(totalPoints > 0){
-    h += '<div style="font-size:15px;color:var(--angela);margin-bottom:10px">⭐ '+totalPoints+' point'+(totalPoints!==1?'s':'')+' earned today</div>';
+    h += '<div style="font-size:15px;color:var(--angela);margin-bottom:10px;display:flex;align-items:center;gap:6px;justify-content:center">'+ICO.star(16)+' '+totalPoints+' point'+(totalPoints!==1?'s':'')+' earned today</div>';
   }
   
   kidExtras.forEach(function(ch){
     var done = completedIds.indexOf(ch.id) > -1;
-    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px;justify-content:center" onclick="claimExtra(\''+ch.id+'\')">';
-    h += '<div style="font-size:24px;width:36px;text-align:center;flex-shrink:0">'+(done ? '✅' : (ch.icon||'⬜'))+'</div>';
-    h += '<div><div style="font-size:17px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
+    var choreIconMap = {'🍽️':ICO.plate(24),'🧸':ICO.toy(24),'🧺':ICO.laundry(24),'🌱':ICO.leaf(24),'🐕':ICO.dog(24),'🛏️':ICO.bed(24),'🧹':ICO.broom(24)};
+    var icon = done ? ICO.checkSquare(24) : (choreIconMap[ch.icon] || ICO.square(24));
+    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px;justify-content:center;color:'+(done?'var(--tx3)':'var(--tx)')+'" onclick="claimExtra(\''+ch.id+'\')">';
+    h += '<div style="width:28px;flex-shrink:0;display:flex;justify-content:center">'+icon+'</div>';
+    h += '<div><div style="font-size:17px;'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
     h += '<div style="font-size:12px;color:var(--tx3)">+'+(ch.points||1)+' point'+(ch.points!==1?'s':'')+'</div></div>';
     h += '</div>';
   });
@@ -1003,12 +1057,12 @@ function tellGregKids(){
 // Big icons she taps herself. Each opens a full-screen overlay or launches an app.
 // ═══════════════════════════════════════════
 var LILLY_ACTIVITIES = [
-  {icon:'🎨', label:'Draw', action:'draw'},
-  {icon:'🎵', label:'Sing', action:'sing'},
-  {icon:'📖', label:'Story', action:'story'},
-  {icon:'🧩', label:'Puzzle', action:'puzzle'},
-  {icon:'🎬', label:'Watch', action:'watch'},
-  {icon:'⭐', label:'Stickers', action:'stickers'}
+  {icon:'paint', label:'Draw', action:'draw'},
+  {icon:'music', label:'Sing', action:'sing'},
+  {icon:'book', label:'Story', action:'story'},
+  {icon:'puzzle', label:'Puzzle', action:'puzzle'},
+  {icon:'film', label:'Watch', action:'watch'},
+  {icon:'star', label:'Stickers', action:'stickers'}
 ];
 
 function renderLillyPlay(){
@@ -1016,15 +1070,14 @@ function renderLillyPlay(){
   var h = '<div style="font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:16px;text-align:center">What do you want to do, Lilly?</div>';
   h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:320px;margin:0 auto">';
   LILLY_ACTIVITIES.forEach(function(a){
-    h += '<div style="background:var(--bg2);border:2px solid var(--border);border-radius:20px;padding:20px 10px;text-align:center;cursor:pointer;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform 0.15s" onclick="lillyActivity(\''+a.action+'\')" ontouchstart="this.style.transform=\'scale(0.92)\'" ontouchend="this.style.transform=\'\'">';
-    h += '<div style="font-size:42px;line-height:1">'+a.icon+'</div>';
+    h += '<div style="background:var(--bg2);border:2px solid var(--border);border-radius:20px;padding:20px 10px;text-align:center;cursor:pointer;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform 0.15s;color:var(--tx2)" onclick="lillyActivity(\''+a.action+'\')" ontouchstart="this.style.transform=\'scale(0.92)\'" ontouchend="this.style.transform=\'\'">';
+    h += '<div style="line-height:1">'+ICO[a.icon](42)+'</div>';
     h += '<div style="font-family:var(--fu);font-size:16px;color:var(--tx);font-weight:500">'+a.label+'</div>';
     h += '</div>';
   });
   h += '</div>';
   
-  // Sticker board preview
-  h += '<div style="margin-top:20px;text-align:center"><div style="font-size:14px;color:var(--tx3)">⭐ Sticker board: '+getLillyStickerCount()+' stickers</div></div>';
+  h += '<div style="margin-top:20px;text-align:center;display:flex;align-items:center;gap:6px;justify-content:center;color:var(--tx3)"><div>'+ICO.star(14)+'</div><div style="font-size:14px">Sticker board: '+getLillyStickerCount()+' stickers</div></div>';
   
   body.innerHTML = h;
 }
@@ -1117,8 +1170,8 @@ function renderTomorrow(){
     // Countdown check for tomorrow
     var tomorrowCountdown = countdownData.find(function(c){return c.date===tStr});
     if(tomorrowCountdown){
-      var emoji = tomorrowCountdown.type==='birthday' ? '🎂' : '🎉';
-      h += '<div style="font-family:var(--fg);font-size:20px;color:var(--angela);padding:12px 0">'+emoji+' '+tomorrowCountdown.title+' is TOMORROW!</div>';
+      var prefix = tomorrowCountdown.type==='birthday' ? 'Birthday: ' : 'Coming up: ';
+      h += '<div style="font-family:var(--fg);font-size:20px;color:var(--angela);padding:12px 0">'+prefix+tomorrowCountdown.title+' is TOMORROW!</div>';
     }
     
     // Prep reminders
@@ -1439,7 +1492,7 @@ function tryMorningBrief(){
   buildMorningBrief().then(function(text){
     // Show the brief text in the advice line
     var el = document.getElementById('glanceAdvice');
-    if(el){ el.textContent = '☀️ ' + text.split('.')[0]; el.style.opacity = '1'; }
+    if(el){ el.textContent = text.split('.')[0]; el.style.opacity = '1'; }
     // Speak it after a short delay (let the screen settle)
     setTimeout(function(){ gregSpeak(text); }, 2000);
   });
