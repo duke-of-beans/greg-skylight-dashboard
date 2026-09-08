@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,16..72,400;0,16..72,500;1,16..72,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1E1A16;--bg2:#28231D;--bg3:#3A332B;--bg-el:#332C24;--border:#4D4438;--border2:#3A332B;--tx:#F0EBE4;--tx2:#A89882;--tx3:#7A6E5D;--tx-m:#4D4438;--greg:#B09AD4;--greg-bg:#2A2340;--david:#5B8DEF;--angela:#D4A84B;--mom:#7BC9A0;--lilly:#E8A0BF;--son:#5BB8C9;--card:rgba(30,26,22,0.92);--card-b:rgba(77,68,56,0.5);--fg:'Newsreader',Georgia,serif;--fu:'Inter',system-ui,sans-serif}
+:root{--bg:#1E1A16;--bg2:#28231D;--bg3:#3A332B;--bg-el:#332C24;--border:#4D4438;--border2:#3A332B;--tx:#F0EBE4;--tx2:#A89882;--tx3:#7A6E5D;--tx-m:#4D4438;--greg:#B09AD4;--greg-bg:#2A2340;--david:#60A5FA;--angela:#FBBF24;--mom:#F472B6;--lilly:#A78BFA;--son:#22C55E;--card:rgba(30,26,22,0.92);--card-b:rgba(77,68,56,0.5);--fg:'Newsreader',Georgia,serif;--fu:'Inter',system-ui,sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);width:100vw;height:100vh;overflow:hidden;user-select:none;-webkit-user-select:none}
 
@@ -41,7 +41,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
    now takes the whole screen: real width for multi-column content, smaller
    (still touch-friendly) text because the reader is three feet away, not ten. */
 .interleave-card.active{position:fixed;inset:0;right:0;width:100%;max-height:100%;height:100%;border-radius:0;padding:40px 56px 32px;opacity:1;transform:none;transition:opacity .35s ease;pointer-events:auto;z-index:50;background:rgba(20,17,14,.97);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-body.card-open .persistent-overlay{opacity:0;pointer-events:none;transition:opacity .2s ease}
+body.card-open .persistent-overlay,body.card-open .nav-bar{opacity:0;pointer-events:none;transition:opacity .2s ease}
 .interleave-card::-webkit-scrollbar{display:none}
 .card-label{font-family:var(--fu);font-size:11px;font-weight:500;color:var(--tx3);letter-spacing:0.05em;margin-bottom:12px}
 .card-title{font-family:var(--fg);font-size:20px;font-weight:400;color:var(--tx);margin-bottom:16px}
@@ -128,31 +128,38 @@ body.card-open .persistent-overlay{opacity:0;pointer-events:none;transition:opac
    multi-column flow uses the space the wall actually has. */
 #groceryCard.interleave-card{display:flex;flex-direction:column}
 #groceryCard .list-pick{font-size:16px;padding:9px 18px;min-height:44px;display:flex;align-items:center}
-.g-body{flex:1;min-height:0;overflow-y:auto;max-width:1400px}
-.g-head{display:flex;align-items:baseline;gap:14px;margin:4px 0 14px;flex-wrap:wrap}
-.g-count{font-family:var(--fg);font-size:40px;line-height:1;color:var(--tx)}
-.g-count-sub{font-family:var(--fu);font-size:17px;color:var(--tx2)}
-.g-sec{font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);margin:14px 0 4px;break-after:avoid}
-.g-tray-label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);margin:12px 0 6px}
-.g-tray{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}
-.g-chip{border:1px solid var(--border);border-radius:100px;padding:9px 16px;font-size:17px;min-height:46px;display:flex;align-items:center;color:var(--tx);background:var(--bg2)}
+.g-body{flex:1;min-height:0;overflow-y:auto;max-width:1500px}
+.g-head{display:flex;align-items:baseline;gap:14px;margin:4px 0 12px;flex-wrap:wrap}
+.g-count{font-family:var(--fg);font-size:32px;line-height:1;color:var(--tx)}
+.g-count-sub{font-family:var(--fu);font-size:15px;color:var(--tx2)}
+.g-sec{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);margin:12px 0 3px;break-after:avoid}
+.g-tray-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);margin:10px 0 5px}
+.g-tray{display:flex;gap:7px;flex-wrap:wrap;margin:3px 0 2px}
+.g-chip{border:1px solid var(--border);border-radius:100px;padding:8px 14px;font-size:15px;min-height:42px;display:flex;align-items:center;color:var(--tx);background:var(--bg2)}
 .g-chip:active{background:var(--bg3)}
 .g-chip.due{border-color:var(--angela);color:var(--angela)}
-#groceryItems{column-width:400px;column-gap:36px}
-.grocery-item{display:flex;align-items:center;gap:12px;min-height:44px;padding:5px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s;break-inside:avoid}
+.grocery-item.shared .grocery-name::before{content:'🔗 ';font-size:13px;opacity:0.6}
+.grocery-item.shared{border-left:2px dashed var(--greg);padding-left:8px}
+.g-shared-toggle{font-size:11px;color:var(--tx3);padding:4px 10px;border:1px solid var(--border2);border-radius:100px;cursor:pointer}
+.g-shared-toggle.on{color:var(--greg);border-color:var(--greg);background:var(--greg-bg)}
+.g-icon-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px;padding:6px 0;border-bottom:1px solid var(--border2)}
+.g-icon-tile{width:56px;height:56px;border-radius:12px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:transform 0.15s}
+.g-icon-tile:active{transform:scale(0.92);background:var(--bg3)}
+#groceryItems{column-width:330px;column-gap:32px}
+.grocery-item{display:flex;align-items:center;gap:10px;min-height:38px;padding:4px 4px;border-bottom:1px solid var(--border2);transition:opacity .2s;break-inside:avoid}
 .grocery-item:last-child{border-bottom:none}
 .grocery-item.pressing{background:var(--bg2);border-radius:10px}
-.grocery-check{width:24px;height:24px;border:2px solid var(--greg);border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg)}
-.grocery-check svg{width:16px;height:16px;display:none}
+.grocery-check{width:20px;height:20px;border:2px solid var(--greg);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg)}
+.grocery-check svg{width:13px;height:13px;display:none}
 .grocery-item.checked .grocery-check{background:var(--greg)}
 .grocery-item.checked .grocery-check svg{display:block}
-.grocery-name{font-size:21px;color:var(--tx);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grocery-name{font-size:17px;color:var(--tx);flex:1;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .grocery-item.checked .grocery-name{color:var(--tx3);text-decoration:line-through}
-.g-qty{font-size:15px;color:var(--tx2);margin-left:6px}
-.g-src{font-size:12px;color:var(--tx3);white-space:nowrap;padding:2px 8px;border:1px solid var(--border2);border-radius:100px}
-#groceryCard.grammy .grocery-name{font-size:26px}
-#groceryCard.grammy .grocery-item{min-height:52px}
-#groceryCard.grammy #groceryItems{column-width:520px}
+.g-qty{font-size:13px;color:var(--tx2);margin-left:5px}
+.g-src{font-size:11px;color:var(--tx3);white-space:nowrap;padding:2px 7px;border:1px solid var(--border2);border-radius:100px}
+#groceryCard.grammy .grocery-name{font-size:22px}
+#groceryCard.grammy .grocery-item{min-height:46px}
+#groceryCard.grammy #groceryItems{column-width:460px}
 .g-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1}
 .g-act{border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:15px;color:var(--tx);background:var(--bg2);min-height:44px;display:flex;align-items:center;gap:6px}
 .g-act:active{background:var(--bg3)}
@@ -367,6 +374,7 @@ var CFG = {
     <div class="g-body">
       <div class="g-head" id="groceryHead"><span class="g-count">…</span></div>
       <div id="groceryUsual"></div>
+      <div id="groceryIcons" class="g-icon-row" style="display:none"></div>
       <div id="groceryItems"><div class="g-empty">Loading…</div></div>
       <div id="groceryRecent"></div>
     </div>
@@ -375,7 +383,7 @@ var CFG = {
       <div class="g-btn" onclick="quickAddItem()">Add</div>
       <div class="g-btn" onclick="voiceAddItem()" title="Say it"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
       <div class="g-btn" onclick="startTripAndPrint()" title="Print the list"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</div>
-      <div class="g-done" id="groceryDone" style="display:none" onclick="doneShopping()">Done shopping</div>
+      <div class="g-done" id="groceryDone" style="display:none" onclick="doneShopping()">✓ Got everything</div>
     </div>
     <div id="groceryUndo"></div>
   </div>
@@ -849,7 +857,7 @@ function renderGrocery(){
       h += '<div class="g-sec">'+esc(sec)+'</div>';
       bySec[sec].sort(function(a,b){return (a.checked?1:0)-(b.checked?1:0)}).forEach(function(it){
         var src = sourceLabel(it);
-        h += '<div class="grocery-item'+(it.checked?' checked':'')+'" data-id="'+it.id+'" data-checked="'+(it.checked?1:0)+'">'
+        h += '<div class="grocery-item'+(it.checked?' checked':'')+(it.shared?' shared':'')+'" data-id="'+it.id+'" data-checked="'+(it.checked?1:0)+'" data-shared="'+(it.shared?1:0)+'">'
            + '<div class="grocery-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'
            + '<div class="grocery-name">'+esc(it.text)+(it.quantity && it.quantity!=='1' ? '<span class="g-qty">×'+esc(it.quantity)+'</span>':'')+'</div>'
            + (src ? '<div class="g-src">'+esc(src)+'</div>' : '')
@@ -876,6 +884,7 @@ function renderGrocery(){
   }
   document.getElementById('groceryRecent').innerHTML = r;
   document.getElementById('groceryDone').style.display = inCart ? 'flex' : 'none';
+  renderIconTiles();
 }
 
 // ── Adds ─────────────────────────────────────────────────────────────
@@ -905,6 +914,38 @@ function guessCategory(t){
   if(/\b(rice|pasta|noodle|cereal|oat|flour|sugar|salt|oil|beans|soup|broth|snack|chips|cracker|cookie|granola|peanut butter|spice)/.test(t))return'Pantry';
   return 'Other';
 }
+// ── Icon tiles for pre-readers (Lilly, Grammy) ─────────────────────
+var ICON_ITEMS = [
+  {icon:'🥛',text:'Milk',cat:'Dairy'},{icon:'🥚',text:'Eggs',cat:'Dairy'},
+  {icon:'🍞',text:'Bread',cat:'Bakery'},{icon:'🍌',text:'Bananas',cat:'Produce'},
+  {icon:'🍎',text:'Apples',cat:'Produce'},{icon:'🧀',text:'Cheese',cat:'Dairy'},
+  {icon:'🍗',text:'Chicken',cat:'Meat'},{icon:'🧻',text:'Paper towels',cat:'Household'},
+  {icon:'💧',text:'Water',cat:'Drinks'},{icon:'🍚',text:'Rice',cat:'Pantry'}
+];
+function renderIconTiles(){
+  var el=document.getElementById('groceryIcons');
+  // Show icons in Grammy mode or when Lilly is detected (future: face detection)
+  var show = activeListId===LIST_IDS.grammy;
+  el.style.display = show ? 'flex' : 'none';
+  if(!show) return;
+  el.innerHTML = ICON_ITEMS.map(function(t){
+    return '<div class="g-icon-tile" data-add="'+esc(t.text)+'" data-cat="'+esc(t.cat)+'" title="'+esc(t.text)+'">'+t.icon+'</div>';
+  }).join('');
+}
+
+// ── Cross-list sharing: buying a shared item knocks it off the other list ──
+function crossListBuy(itemText){
+  var other = activeListId===LIST_IDS.grammy ? LIST_IDS.angela : LIST_IDS.grammy;
+  // Find matching unchecked shared item on the other list
+  sbGet('grocery_items?list_id=eq.'+other+'&deleted_at=is.null&bought_at=is.null&shared=eq.true&text=ilike.'+encodeURIComponent(itemText))
+    .then(function(matches){
+      if(matches && matches.length){
+        // Mark the matching item as bought on the other list too
+        sbPatch('grocery_items?id=eq.'+matches[0].id,{checked:true,checked_at:new Date().toISOString(),bought_at:new Date().toISOString()});
+      }
+    }).catch(function(){});
+}
+
 function voiceAddItem(){
   if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){document.getElementById('quickAddInput').placeholder='Say it to Greg instead';return;}
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -931,6 +972,8 @@ function setChecked(id, checked){
   var it = gState.items.find(function(i){return i.id===id}); if(!it) return;
   it.checked = checked; renderGrocery();
   sbPatch('grocery_items?id=eq.'+id,{checked:checked, checked_at: checked?new Date().toISOString():null}).then(updatePickerCounts);
+  // Cross-list sharing: if this item is shared and being checked, knock it off the other list
+  if (checked && it.shared) crossListBuy(it.text);
   showUndo('<b>'+esc(it.text)+'</b>'+(checked?' in the cart':' back on the list'), function(){ return sbPatch('grocery_items?id=eq.'+id,{checked:!checked}); });
 }
 function openActions(row){
@@ -941,6 +984,7 @@ function openActions(row){
   row.innerHTML = '<div class="grocery-name" style="flex:0 1 auto;max-width:200px">'+esc(it.text)+'</div>'
     + '<div class="g-actions">'
     + '<div class="g-act qty" data-qty="-1">−</div><div class="g-act qty" data-qty="0">'+qty+'</div><div class="g-act qty" data-qty="1">+</div>'
+    + '<div class="g-shared-toggle'+(it.shared?' on':'')+'" data-share="1">'+(it.shared?'Shared ✓':'Share both lists')+'</div>'
     + '<div class="g-act" data-move="'+other+'">Move to '+esc(LIST_LABEL[other])+'</div>'
     + '<div class="g-act danger" data-del="1">Delete</div>'
     + '<div class="g-act" data-cancel="1">Cancel</div>'
@@ -994,10 +1038,23 @@ function setQty(id, delta){
       if (t.hasAttribute('data-qty')) { var d=parseInt(t.getAttribute('data-qty'),10); if(d) setQty(id,d); return; }
       return;
     }
+    // Shared toggle (not inside .g-act)
+    var sh=e.target.closest('.g-shared-toggle');
+    if(sh && gState.openActions===id){
+      var it=gState.items.find(function(i){return i.id===id}); if(!it)return;
+      var newVal=!it.shared; it.shared=newVal;
+      sbPatch('grocery_items?id=eq.'+id,{shared:newVal});
+      sh.classList.toggle('on',newVal); sh.textContent=newVal?'Shared ✓':'Share both lists';
+      return;
+    }
     if (gState.suppressTap){ gState.suppressTap=false; return; }
     setChecked(id, row.getAttribute('data-checked')!=='1');
   });
-  // trays: tap a chip to add
+  // trays + icon tiles: tap a chip/tile to add
+  document.getElementById('groceryIcons').addEventListener('click', function(e){
+    var tile=e.target.closest('.g-icon-tile'); if(!tile) return;
+    addGroceryItem(tile.getAttribute('data-add'), tile.getAttribute('data-cat'), 'icon');
+  });
   ['groceryUsual','groceryRecent'].forEach(function(id){
     document.getElementById(id).addEventListener('click', function(e){
       var chip=e.target.closest('.g-chip'); if(!chip) return;
