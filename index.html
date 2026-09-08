@@ -548,6 +548,51 @@ function updateGlanceStrip(){
 // Run glance strip every 60s and on data refreshes
 setInterval(updateGlanceStrip, 60000);
 
+// ═══════════════════════════════════════════
+// COUNTDOWNS — birthdays and holidays (WG-17 Stage 6, WG-13)
+// ═══════════════════════════════════════════
+var countdownData = [];
+function fetchCountdowns(){
+  var today = new Date();
+  var future = new Date(today.getTime() + 30*86400000); // next 30 days
+  var todayStr = today.toISOString().split('T')[0];
+  var futureStr = future.toISOString().split('T')[0];
+  sbGet('family_events?event_type=in.(birthday,holiday)&event_date=gte.'+todayStr+'&event_date=lte.'+futureStr+'&order=event_date.asc')
+    .then(function(events){
+      countdownData = (events||[]).map(function(ev){
+        var evDate = new Date(ev.event_date+'T00:00:00');
+        var diffMs = evDate.getTime() - new Date(todayStr+'T00:00:00').getTime();
+        var days = Math.round(diffMs / 86400000);
+        return {title:ev.title, type:ev.event_type, person:ev.person, date:ev.event_date, days:days};
+      });
+      renderCountdownStrip();
+    }).catch(function(){});
+}
+function renderCountdownStrip(){
+  if(!countdownData.length) return;
+  var next = countdownData[0];
+  // Show in the glance advice line when there's a close countdown
+  if(next.days <= 14 && next.days > 0){
+    var el = document.getElementById('glanceAdvice');
+    if(el){
+      var emoji = next.type==='birthday' ? '🎂' : '🎉';
+      var daysText = next.days === 1 ? 'Tomorrow!' : next.days + ' days';
+      el.textContent = emoji + ' ' + next.title + ' — ' + daysText;
+    }
+  }
+  if(next.days === 0){
+    // TODAY! Show celebration
+    var el = document.getElementById('glanceAdvice');
+    if(el){
+      var emoji = next.type==='birthday' ? '🎂🎉' : '🎉';
+      el.textContent = emoji + ' ' + next.title + ' is TODAY!';
+      el.style.color = '#FBBF24';
+    }
+  }
+}
+fetchCountdowns();
+setInterval(fetchCountdowns, 300000); // refresh every 5 min
+
 // PHOTO/VIDEO SLIDESHOW
 // Videos <=15s auto-play muted in slideshow rotation.
 // Videos >15s excluded by the photos-proxy edge function.
