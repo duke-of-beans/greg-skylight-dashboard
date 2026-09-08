@@ -26,7 +26,7 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 /* ═══ Persistent overlay → CORNER CLUSTER (WG-17 resting state redesign) ═══ */
 /* Ambient zone: time visible from across the room. Info stacked in one corner,
    not spread as a horizontal dashboard strip. Photo owns the screen. */
-.persistent-overlay{position:absolute;bottom:60px;left:40px;z-index:10;pointer-events:none}
+.persistent-overlay{position:absolute;bottom:76px;left:40px;z-index:10;pointer-events:none}
 .glance-time{font-family:var(--fu);font-weight:500;font-size:48px;line-height:1;color:var(--tx);text-shadow:0 2px 16px rgba(30,26,22,0.8)}
 .glance-date{font-family:var(--fu);font-weight:400;font-size:14px;color:var(--tx2);margin-top:4px;text-shadow:0 2px 8px rgba(30,26,22,0.6)}
 .glance-weather{display:flex;align-items:center;gap:6px;text-shadow:0 2px 12px rgba(30,26,22,0.7);margin-top:6px}
@@ -420,7 +420,7 @@ var CFG = {
   <div class="mode-tile kids" onclick="openMode('kids')"><div class="tile-dot"></div>Kids</div>
   <div class="mode-tile plan" onclick="openMode('plan')"><div class="tile-dot"></div>Plan &amp; Remember</div>
   <div class="mode-tile entertainment" onclick="openMode('entertainment')"><div class="tile-dot"></div>Entertainment</div>
-  <div class="tell-greg" onclick="tellGreg()"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>Tell Greg</div>
+  <div class="tell-greg" onclick="askGreg()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Greg</div>
 </div>
 
 <!-- ═══ Card layer ═══ -->
@@ -1849,26 +1849,42 @@ function openMode(mode){
   }
 }
 
-function tellGreg(){
-  // Greg responds from the wall via Web Speech API
+// ═══ ASK GREG — context-aware launcher ═══
+// Opens Greg's conversation surface (Fire HD 8 above the Skylight when mounted).
+// Sends current page/card context so Greg has a head start on what the user needs.
+function askGreg(){
   var btn = document.querySelector('.tell-greg');
   if(btn){ btn.style.borderColor = 'var(--greg)'; btn.style.background = 'var(--greg-bg)'; 
     setTimeout(function(){ btn.style.borderColor = ''; btn.style.background = ''; }, 3000); }
   
-  // Context-aware greeting
-  var hour = new Date().getHours();
-  var greetings;
-  if(hour >= 5 && hour < 12) greetings = ["Good morning. What can I do for you?","Morning! What's on your mind?","Hey there. How can I help?"];
-  else if(hour >= 12 && hour < 17) greetings = ["Hey, what's up?","What do you need?","I'm here. What can I help with?"];
-  else if(hour >= 17 && hour < 21) greetings = ["Hey. What do you need?","What's up?","I'm listening."];
-  else greetings = ["Hey. What do you need?","I'm here.","What's going on?"];
+  // Build context payload — what page is the user on?
+  var context = {
+    source: 'skylight-ask',
+    card: activeCard || 'home',
+    kid: activeCard === 'kidsCard' ? activeKid : null,
+    time: new Date().toISOString()
+  };
   
-  var msg = greetings[Math.floor(Math.random() * greetings.length)];
-  gregSpeak(msg, true); // force=true: explicit invocation always speaks
+  // Context-aware greeting based on what the user is looking at
+  var greeting;
+  if(activeCard === 'groceryCard') greeting = "What do you need on the list?";
+  else if(activeCard === 'kidsCard' && activeKid === 'lilly') greeting = "What does Lilly need?";
+  else if(activeCard === 'kidsCard') greeting = "What's up with Dwight?";
+  else if(activeCard === 'tonightCard') greeting = "Need help with dinner?";
+  else if(activeCard === 'calendarCard') greeting = "Looking at the calendar?";
+  else if(activeCard === 'mediaCard') greeting = "What do you want to watch?";
+  else {
+    var hour = new Date().getHours();
+    if(hour >= 5 && hour < 12) greeting = "Good morning. What do you need?";
+    else if(hour >= 17 && hour < 21) greeting = "Hey. What's up?";
+    else greeting = "I'm here. What do you need?";
+  }
   
-  // Also signal CORTEX if WS is connected
+  gregSpeak(greeting, true); // force=true: explicit invocation always speaks
+  
+  // Signal CORTEX with page context (for when the Fire HD 8 conversation surface is live)
   if(typeof cortexWs !== 'undefined' && cortexWs && cortexWs.readyState === 1){
-    cortexWs.send(JSON.stringify({type:'wake', source:'skylight-touch'}));
+    cortexWs.send(JSON.stringify({type:'wake', context:context}));
   }
 }
 
