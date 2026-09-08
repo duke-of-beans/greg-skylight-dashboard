@@ -185,6 +185,36 @@ body.card-open .persistent-overlay,body.card-open .nav-bar{opacity:0;pointer-eve
 #groceryCard .grocery-add-bar { margin-bottom: 8px; }
 @media (prefers-reduced-motion: reduce){.grocery-item{transition:none}}
 
+/* ═══ Tonight card (WG-17 Stage 4) ═══ */
+#tonightCard .tonight-hero{display:flex;gap:24px;align-items:flex-start;margin-bottom:20px}
+#tonightCard .tonight-img{width:240px;height:180px;border-radius:12px;background:var(--bg3);object-fit:cover;flex-shrink:0}
+#tonightCard .tonight-info{flex:1;min-width:0}
+#tonightCard .tonight-name{font-family:var(--fg);font-size:28px;color:var(--tx);margin-bottom:8px}
+#tonightCard .tonight-meta{font-size:14px;color:var(--tx2);margin-bottom:12px}
+#tonightCard .tonight-desc{font-size:16px;color:var(--tx);line-height:1.6}
+#tonightCard .tonight-ingredients{column-width:200px;column-gap:24px;margin:16px 0}
+#tonightCard .tonight-ingredients li{font-size:15px;color:var(--tx);padding:3px 0;break-inside:avoid;list-style:none}
+#tonightCard .tonight-ingredients li::before{content:'· ';color:var(--tx3)}
+.tonight-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.tonight-act{padding:12px 20px;border-radius:100px;font-size:15px;border:1px solid var(--border);color:var(--tx);background:var(--bg2);cursor:pointer;display:flex;align-items:center;gap:6px;min-height:44px}
+.tonight-act:active{background:var(--bg3)}
+.tonight-act.primary{background:var(--greg);color:var(--bg);border-color:var(--greg)}
+.tonight-act.primary:active{opacity:0.85}
+
+/* ═══ Tomorrow card (WG-17 Stage 7) ═══ */
+#tomorrowCard .tomorrow-section{margin-bottom:16px}
+#tomorrowCard .tomorrow-label{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--tx3);margin-bottom:6px}
+#tomorrowCard .tomorrow-event{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
+#tomorrowCard .tomorrow-event:last-child{border-bottom:none}
+#tomorrowCard .tomorrow-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+#tomorrowCard .tomorrow-time{font-size:14px;color:var(--tx2);min-width:50px}
+#tomorrowCard .tomorrow-title{font-size:17px;color:var(--tx);flex:1}
+#tomorrowCard .tomorrow-weather{display:flex;align-items:center;gap:12px;padding:14px 0}
+#tomorrowCard .tomorrow-weather-icon{font-size:32px}
+#tomorrowCard .tomorrow-weather-info{flex:1}
+#tomorrowCard .tomorrow-weather-temp{font-size:24px;color:var(--tx)}
+#tomorrowCard .tomorrow-weather-desc{font-size:14px;color:var(--tx2)}
+
 /* ═══ Camera/presence ═══ */
 .camera-feed{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
 .presence-indicator{position:absolute;top:20px;left:20px;z-index:20;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity 0.6s}
@@ -410,6 +440,24 @@ var CFG = {
     </div>
     <div id="groceryUndo"></div>
   </div>
+  <!-- Tonight's dinner (WG-17 Stage 4) -->
+  <div class="interleave-card" id="tonightCard">
+    <div class="card-label">TONIGHT</div>
+    <div id="tonightBody">
+      <div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">
+        Greg's thinking about dinner…
+      </div>
+    </div>
+  </div>
+  <!-- Tomorrow preview (WG-17 Stage 7) -->
+  <div class="interleave-card" id="tomorrowCard">
+    <div class="card-label">TOMORROW</div>
+    <div id="tomorrowBody">
+      <div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">
+        Loading tomorrow…
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ Pause indicator ═══ -->
@@ -593,6 +641,178 @@ function renderCountdownStrip(){
 fetchCountdowns();
 setInterval(fetchCountdowns, 300000); // refresh every 5 min
 
+// ═══════════════════════════════════════════
+// TONIGHT CARD (WG-17 Stage 4, WG-22)
+// Shows the meal suggestion/plan with recipe, ingredients, add-missing
+// ═══════════════════════════════════════════
+var tonightMeal = null;
+
+function renderTonight(){
+  var body = document.getElementById('tonightBody');
+  if(!tonightMeal){
+    body.innerHTML = '<div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">No dinner plan yet. Say "Greg, what\'s for dinner?"</div>';
+    return;
+  }
+  var m = tonightMeal;
+  var h = '<div class="tonight-hero">';
+  if(m.image) h += '<img class="tonight-img" src="'+esc(m.image)+'" alt="'+esc(m.name)+'" onerror="this.style.display=\'none\'">';
+  h += '<div class="tonight-info">';
+  h += '<div class="tonight-name">'+esc(m.name)+'</div>';
+  var meta = [];
+  if(m.area) meta.push(esc(m.area));
+  if(m.category) meta.push(esc(m.category));
+  if(m.cookTime) meta.push(esc(m.cookTime));
+  if(meta.length) h += '<div class="tonight-meta">'+meta.join(' · ')+'</div>';
+  if(m.description) h += '<div class="tonight-desc">'+esc(m.description)+'</div>';
+  h += '</div></div>';
+  
+  // Ingredients
+  if(m.ingredients && m.ingredients.length){
+    h += '<div style="font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--tx3);margin:16px 0 6px">Ingredients</div>';
+    h += '<ul class="tonight-ingredients">';
+    m.ingredients.forEach(function(ing){
+      h += '<li>'+esc(ing)+'</li>';
+    });
+    h += '</ul>';
+  }
+  
+  // Actions
+  h += '<div class="tonight-actions">';
+  h += '<div class="tonight-act primary" onclick="addMissingIngredients()">Add missing to list</div>';
+  h += '<div class="tonight-act" onclick="toggleCard(\'tonightCard\')">Close</div>';
+  h += '</div>';
+  
+  body.innerHTML = h;
+}
+
+function addMissingIngredients(){
+  if(!tonightMeal || !tonightMeal.ingredients) return;
+  // Add each ingredient that isn't already on the list
+  var existing = (gState.items||[]).map(function(i){return normKey(i.text)});
+  var added = 0;
+  tonightMeal.ingredients.forEach(function(ing){
+    // Skip basic pantry items the family likely has
+    var skip = /^(salt|pepper|oil|olive oil|butter|water|garlic|onion)$/i.test(ing.trim());
+    if(skip) return;
+    if(existing.indexOf(normKey(ing)) === -1){
+      addGroceryItem(ing, guessCategory(ing), 'recipe');
+      added++;
+    }
+  });
+  if(added){
+    var el = document.querySelector('.tonight-act.primary');
+    if(el){ el.textContent = '✓ Added '+added+' to the list'; el.style.opacity='0.6'; }
+  }
+}
+
+// Populate tonight from PLEXUS meal data
+function updateTonight(){
+  if(plexusData && plexusData.extras && plexusData.extras.meal_idea){
+    var mi = plexusData.extras.meal_idea;
+    tonightMeal = {
+      name: mi.name || 'Dinner',
+      area: mi.area || '',
+      category: mi.category || '',
+      image: mi.image || '',
+      description: mi.instructions ? mi.instructions.substring(0, 200) + '…' : '',
+      ingredients: mi.ingredients || [],
+      cookTime: mi.cookTime || ''
+    };
+  } else {
+    // Fallback: generate a simple suggestion
+    tonightMeal = null;
+  }
+  renderTonight();
+}
+
+// ═══════════════════════════════════════════
+// TOMORROW PREVIEW (WG-17 Stage 7, WG-11)
+// Evening ambient card: tomorrow's events + weather + prep reminders
+// ═══════════════════════════════════════════
+function renderTomorrow(){
+  var body = document.getElementById('tomorrowBody');
+  var tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  var tStr = tomorrow.toISOString().split('T')[0];
+  var DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dayLabel = DOW[tomorrow.getDay()] + ', ' + MO[tomorrow.getMonth()] + ' ' + tomorrow.getDate();
+  
+  // Fetch tomorrow's events
+  sbGet('family_events?event_date=eq.'+tStr+'&order=event_time.asc').then(function(events){
+    events = events || [];
+    var h = '<div style="font-family:var(--fg);font-size:24px;color:var(--tx);margin-bottom:16px">'+dayLabel+'</div>';
+    
+    // Weather for tomorrow
+    if(plexusData && plexusData.weather && plexusData.weather.daily && plexusData.weather.daily.length >= 2){
+      var tw = plexusData.weather.daily[1]; // index 1 = tomorrow
+      h += '<div class="tomorrow-section"><div class="tomorrow-weather">';
+      h += '<div class="tomorrow-weather-icon">'+weatherIcon(tw.condition)+'</div>';
+      h += '<div class="tomorrow-weather-info">';
+      h += '<div class="tomorrow-weather-temp">'+Math.round(tw.high)+'° / '+Math.round(tw.low)+'°</div>';
+      h += '<div class="tomorrow-weather-desc">'+(tw.condition||'Clear')+'</div>';
+      h += '</div></div></div>';
+    }
+    
+    // Events
+    if(events.length){
+      h += '<div class="tomorrow-section"><div class="tomorrow-label">Events</div>';
+      events.forEach(function(ev){
+        var person = (ev.person||'').toLowerCase();
+        var color = PERSON_COLORS[person] || '#A8A29E';
+        var time = ev.event_time ? ev.event_time.substring(0,5) : 'All day';
+        h += '<div class="tomorrow-event">';
+        h += '<div class="tomorrow-dot" style="background:'+color+'"></div>';
+        h += '<div class="tomorrow-time">'+time+'</div>';
+        h += '<div class="tomorrow-title">'+esc(ev.title)+'</div>';
+        h += '</div>';
+      });
+      h += '</div>';
+    } else {
+      h += '<div class="tomorrow-section"><div style="font-size:17px;color:var(--tx2);padding:8px 0">Nothing scheduled — open day</div></div>';
+    }
+    
+    // Countdown check for tomorrow
+    var tomorrowCountdown = countdownData.find(function(c){return c.date===tStr});
+    if(tomorrowCountdown){
+      var emoji = tomorrowCountdown.type==='birthday' ? '🎂' : '🎉';
+      h += '<div style="font-family:var(--fg);font-size:20px;color:var(--angela);padding:12px 0">'+emoji+' '+tomorrowCountdown.title+' is TOMORROW!</div>';
+    }
+    
+    // Prep reminders
+    h += '<div class="tomorrow-section"><div class="tomorrow-label">Reminders</div>';
+    h += '<div style="font-size:15px;color:var(--tx2);padding:4px 0">';
+    var hour = new Date().getHours();
+    if(hour >= 19 && hour < 23){
+      h += 'Pack lunches · Check backpacks · Set out clothes';
+    } else {
+      h += 'Preview loaded for the evening';
+    }
+    h += '</div></div>';
+    
+    body.innerHTML = h;
+  }).catch(function(){
+    body.innerHTML = '<div style="font-size:17px;color:var(--tx3);padding:24px 0">Could not load tomorrow</div>';
+  });
+}
+
+// Make the glance strip tonight text tappable
+document.getElementById('glanceTonight').style.cursor = 'pointer';
+document.getElementById('glanceTonight').style.pointerEvents = 'auto';
+document.getElementById('glanceTonight').addEventListener('click', function(){
+  if(tonightMeal) toggleCard('tonightCard');
+});
+
+// Auto-show tomorrow card in the evening (7-10pm) as a suggestion
+function checkEveningPreview(){
+  var hour = new Date().getHours();
+  if(hour >= 19 && hour <= 22){
+    renderTomorrow(); // pre-render so it's ready if opened
+  }
+}
+setInterval(checkEveningPreview, 300000);
+checkEveningPreview();
+
 // PHOTO/VIDEO SLIDESHOW
 // Videos <=15s auto-play muted in slideshow rotation.
 // Videos >15s excluded by the photos-proxy edge function.
@@ -692,7 +912,7 @@ document.addEventListener('touchend',function(e){
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard'];
+var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard','tonightCard','tomorrowCard'];
 var activeCard = null;
 var cardTimeout = null;
 
@@ -733,28 +953,25 @@ function toggleCard(id){
 // Maps mode names to existing card IDs
 // ═══════════════════════════════════════════
 var MODE_CARDS = {
-  household: 'groceryCard',
-  kids: null,             // placeholder — Kids mode cards not yet built
-  plan: 'calendarCard',
+  household: function(){ var h=new Date().getHours(); return (h>=16 && h<19 && tonightMeal) ? 'tonightCard' : 'groceryCard'; },
+  kids: null,
+  plan: function(){ var h=new Date().getHours(); return (h>=19) ? 'tomorrowCard' : 'calendarCard'; },
   entertainment: 'mediaCard'
 };
 var activeMode = null;
 
 function openMode(mode){
-  // Highlight the active tile
   document.querySelectorAll('.mode-tile').forEach(function(t){t.classList.remove('active')});
   var tile = document.querySelector('.mode-tile.'+mode);
   if(tile) tile.classList.add('active');
   activeMode = mode;
   
-  var cardId = MODE_CARDS[mode];
+  var target = MODE_CARDS[mode];
+  var cardId = typeof target === 'function' ? target() : target;
   if(cardId){
     toggleCard(cardId);
   } else {
-    // Mode exists but card not built yet — show a placeholder overlay
     showCard(null);
-    // For Kids mode, in the future this opens the kids card
-    // For now, signal that it was tapped but nothing opens
     console.log('Mode "'+mode+'" tapped — card not built yet');
   }
 }
@@ -1517,6 +1734,8 @@ function fetchPlexusFeed() {
     
     // Update the glance strip with fresh data
     updateGlanceStrip();
+    // Update tonight card with meal data
+    updateTonight();
   })
   .catch(function(e) { console.log('PLEXUS feed error:', e); });
 }
