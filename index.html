@@ -470,15 +470,18 @@ var CFG = {
   </div>
   <!-- Kids routines (WG-17 Stage 9) -->
   <div class="interleave-card" id="kidsCard">
-    <div class="card-label">KIDS</div>
-    <div style="display:flex;gap:8px;margin-bottom:14px">
+    <div class="card-label" style="text-align:center">KIDS</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;justify-content:center">
       <div class="g-btn" id="kidPickDwight" onclick="switchKid('dwight')" style="border-color:#22C55E">Dwight</div>
       <div class="g-btn" id="kidPickLilly" onclick="switchKid('lilly')" style="border-color:#A78BFA">Lilly</div>
     </div>
-    <div id="kidsRoutineBody"></div>
-    <div style="margin-top:16px;border-top:1px solid var(--border2);padding-top:12px">
+    <div id="kidsRoutineBody" style="text-align:center"></div>
+    <div style="margin-top:16px;border-top:1px solid var(--border2);padding-top:12px;text-align:center">
       <div class="card-label" style="margin-bottom:8px">EXTRAS — earn treats!</div>
       <div id="kidsExtrasBody"></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <div class="tonight-act" onclick="tellGregKids()" style="font-size:14px;padding:8px 16px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg> Tell Greg to change</div>
     </div>
   </div>
   <!-- Tomorrow preview (WG-17 Stage 7) -->
@@ -578,18 +581,29 @@ function weatherIcon(cond){
   return '&#9728;&#65039;';
 }
 function updateGlanceStrip(){
-  // Advice line — lower-third, from Greg suggestions or weather
+  // Advice line — lower-third, homescreen only
+  // Countdowns take priority (set by renderCountdownStrip), so only update if no countdown is active
   var adviceEl = document.getElementById('glanceAdvice');
-  if(gregSuggestions.length){
-    adviceEl.textContent = gregSuggestions[0];
-    adviceEl.style.opacity = '1';
+  var hour = new Date().getHours();
+  
+  // Don't overwrite countdown messages
+  if(adviceEl.textContent.indexOf('🎂') > -1 || adviceEl.textContent.indexOf('🎉') > -1){
+    // countdown is showing, leave it
+  } else if(gregSuggestions.length){
+    // Filter out weather-related suggestions at night
+    var suggestion = gregSuggestions[0];
+    var isWeatherAdvice = /blind|hot|cold|rain|umbrella|sunscreen/i.test(suggestion);
+    if(isWeatherAdvice && (hour < 6 || hour >= 20)){
+      adviceEl.textContent = ''; adviceEl.style.opacity = '0';
+    } else {
+      adviceEl.textContent = suggestion;
+      if(!activeCard) adviceEl.style.opacity = '1';
+    }
   } else {
-    var temp = parseInt(document.getElementById('weatherTemp').textContent)||70;
-    var hour = new Date().getHours();
-    if(hour >= 6 && hour < 11){ adviceEl.textContent = 'Good morning'; adviceEl.style.opacity = '0.85'; }
-    else if(temp > 85){ adviceEl.textContent = 'Hot one — '+temp+'° out there'; adviceEl.style.opacity = '0.85'; }
-    else if(temp < 55){ adviceEl.textContent = 'Bundle up — '+temp+'° today'; adviceEl.style.opacity = '0.85'; }
-    else { adviceEl.textContent = ''; adviceEl.style.opacity = '0'; }
+    // Time-based messages — sensible and brief
+    if(hour >= 6 && hour < 11){ adviceEl.textContent = 'Good morning'; if(!activeCard) adviceEl.style.opacity = '0.85'; }
+    else if(hour >= 21 || hour < 6){ adviceEl.textContent = ''; adviceEl.style.opacity = '0'; } // night = nothing
+    else { adviceEl.textContent = ''; adviceEl.style.opacity = '0'; } // default = nothing
   }
 
   // Next event — first upcoming event today from any person
@@ -898,15 +912,15 @@ function renderKidRoutines(routineType){
   var completedIds = kidCompletions.map(function(c){return c.routine_id});
   var allDone = kidRoutines.length > 0 && kidRoutines.every(function(r){return completedIds.indexOf(r.id) > -1});
   
-  var h = '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:12px">'+(labels[routineType]||routineType)+' Routine</div>';
+  var h = '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:12px;text-align:center">'+(labels[routineType]||routineType)+' Routine</div>';
   
   if(!kidRoutines.length){
     h += '<div style="color:var(--tx3);font-size:15px">No routine steps yet</div>';
   } else {
     kidRoutines.forEach(function(r){
       var done = completedIds.indexOf(r.id) > -1;
-      h += '<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:50px" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
-      h += '<div style="font-size:28px;width:40px;text-align:center">'+(done ? '✅' : (r.icon||'⬜'))+'</div>';
+      h += '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:50px;justify-content:center;text-align:center" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
+      h += '<div style="font-size:28px;width:40px;text-align:center;flex-shrink:0">'+(done ? '✅' : (r.icon||'⬜'))+'</div>';
       h += '<div style="font-size:19px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
       h += '</div>';
     });
@@ -939,9 +953,9 @@ function renderKidExtras(){
   
   kidExtras.forEach(function(ch){
     var done = completedIds.indexOf(ch.id) > -1;
-    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px" onclick="claimExtra(\''+ch.id+'\')">';
-    h += '<div style="font-size:24px;width:36px;text-align:center">'+(done ? '✅' : (ch.icon||'⬜'))+'</div>';
-    h += '<div style="flex:1"><div style="font-size:17px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
+    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px;justify-content:center" onclick="claimExtra(\''+ch.id+'\')">';
+    h += '<div style="font-size:24px;width:36px;text-align:center;flex-shrink:0">'+(done ? '✅' : (ch.icon||'⬜'))+'</div>';
+    h += '<div><div style="font-size:17px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
     h += '<div style="font-size:12px;color:var(--tx3)">+'+(ch.points||1)+' point'+(ch.points!==1?'s':'')+'</div></div>';
     h += '</div>';
   });
@@ -969,6 +983,14 @@ function claimExtra(choreId){
 
 // Initial load
 switchKid('dwight');
+
+function tellGregKids(){
+  gregSpeak('Sure! What do you want to change? You can add or remove routines and chores. Just tell me.');
+  // Also signal CORTEX
+  if(typeof cortexWs !== 'undefined' && cortexWs && cortexWs.readyState === 1){
+    cortexWs.send(JSON.stringify({type:'wake', source:'skylight-kids-edit', kid:activeKid}));
+  }
+}
 
 // ═══════════════════════════════════════════
 // TOMORROW PREVIEW (WG-17 Stage 7, WG-11)
@@ -1164,15 +1186,19 @@ var cardTimeout = null;
 function showCard(id){
   if(activeCard && document.getElementById(activeCard)) document.getElementById(activeCard).classList.remove('active');
   document.querySelectorAll('.mode-tile').forEach(function(b){b.classList.remove('active')});
+  var adviceEl = document.getElementById('glanceAdvice');
   if(id && document.getElementById(id)){
     document.getElementById(id).classList.add('active');
     activeCard=id;
     var btn=document.querySelector('[data-card="'+id+'"]');
     if(btn)btn.classList.add('active');
     document.body.classList.add('card-open');
+    if(adviceEl) adviceEl.style.opacity = '0'; // hide advice when card open
   } else {
     activeCard=null;
     document.body.classList.remove('card-open');
+    // Restore advice on homescreen only
+    if(adviceEl && adviceEl.textContent) adviceEl.style.opacity = adviceEl.textContent.trim() ? '0.85' : '0';
   }
 }
 
