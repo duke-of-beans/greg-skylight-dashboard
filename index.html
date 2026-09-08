@@ -1258,6 +1258,91 @@ function gregSpeak(text){
 // Pre-load voices (some browsers need this)
 if('speechSynthesis' in window) window.speechSynthesis.getVoices();
 
+// ═══════════════════════════════════════════
+// MORNING BRIEF (WG-17 Stage 15)
+// Proactive speech: Greg greets the first person 6-11am
+// Speaks weather, today's events, countdowns, reminders
+// ═══════════════════════════════════════════
+var morningBriefDelivered = false;
+
+function buildMorningBrief(){
+  var parts = [];
+  var hour = new Date().getHours();
+  var DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var dayName = DOW[new Date().getDay()];
+  
+  // Greeting
+  if(hour < 9) parts.push('Good morning! Happy ' + dayName + '.');
+  else parts.push('Hey! Here\'s what\'s going on today.');
+  
+  // Weather
+  if(plexusData && plexusData.weather){
+    var w = plexusData.weather;
+    var temp = w.current_temp || w.temp;
+    var cond = w.condition || 'clear';
+    if(temp) parts.push('It\'s ' + Math.round(temp) + ' degrees and ' + cond.toLowerCase() + ' outside.');
+    if(w.daily && w.daily[0]){
+      var hi = Math.round(w.daily[0].high || temp);
+      parts.push('High of ' + hi + ' today.');
+    }
+  }
+  
+  // Countdowns
+  if(countdownData.length){
+    var next = countdownData[0];
+    if(next.days === 0){
+      parts.push(next.title + ' is today! Happy ' + (next.type==='birthday'?'birthday':'day') + '!');
+    } else if(next.days === 1){
+      parts.push(next.title + ' is tomorrow!');
+    } else if(next.days <= 7){
+      parts.push(next.title + ' is in ' + next.days + ' days.');
+    }
+  }
+  
+  // Today's events (first 3)
+  var todayStr = new Date().toISOString().split('T')[0];
+  return sbGet('family_events?event_date=eq.'+todayStr+'&order=event_time.asc&limit=3').then(function(events){
+    events = events || [];
+    if(events.length === 1){
+      parts.push('You have one thing today: ' + events[0].title + '.');
+    } else if(events.length > 1){
+      parts.push('You have ' + events.length + ' things today. ' + events.map(function(e){return e.title}).join(', ') + '.');
+    } else {
+      parts.push('Nothing on the calendar today. Open day.');
+    }
+    
+    return parts.join(' ');
+  }).catch(function(){ return parts.join(' '); });
+}
+
+function tryMorningBrief(){
+  var hour = new Date().getHours();
+  if(hour < 6 || hour >= 11) return;
+  if(morningBriefDelivered) return;
+  
+  // Only deliver once per day — use a date key
+  var todayKey = 'brief-' + new Date().toISOString().split('T')[0];
+  if(window._briefKey === todayKey) return;
+  
+  // Wait for PLEXUS data to be loaded
+  if(!plexusData) return;
+  
+  morningBriefDelivered = true;
+  window._briefKey = todayKey;
+  
+  buildMorningBrief().then(function(text){
+    // Show the brief text in the advice line
+    var el = document.getElementById('glanceAdvice');
+    if(el){ el.textContent = '☀️ ' + text.split('.')[0]; el.style.opacity = '1'; }
+    // Speak it after a short delay (let the screen settle)
+    setTimeout(function(){ gregSpeak(text); }, 2000);
+  });
+}
+
+// Check for morning brief every 2 min
+setInterval(tryMorningBrief, 120000);
+// Also try on PLEXUS data load (wired below)
+
 // Aurora Store: long-press on any mode tile for 1.5s opens it (admin, ring ≤ 2)
 (function wireAdminLongPress(){
   var timer = null;
@@ -2005,6 +2090,8 @@ function fetchPlexusFeed() {
     updateGlanceStrip();
     // Update tonight card with meal data
     updateTonight();
+    // Try morning brief (needs PLEXUS data for weather)
+    tryMorningBrief();
   })
   .catch(function(e) { console.log('PLEXUS feed error:', e); });
 }
