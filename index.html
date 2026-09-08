@@ -371,7 +371,7 @@ var CFG = {
     <div class="card-label">CALENDAR</div>
     <div id="calMonth" style="font-family:var(--fu);font-size:15px;font-weight:500;color:var(--tx);margin-bottom:10px"></div>
     <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px"></div>
-    <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#D4A84B"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Birthday</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#6B8E7B"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Work</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#7B8EC4"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Holiday</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:var(--greg)"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Event</span></div></div><div style="margin-top:12px;border-top:1px solid var(--border2);padding-top:10px">
+    <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#FBBF24"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Angela</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#60A5FA"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">David</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Dwight</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#A78BFA"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Lilly</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#F472B6"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Grammy</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:6px;height:6px;border-radius:50%;background:#C9956B"></div><span style="font-size:9px;color:var(--tx3);font-family:var(--fu)">Family</span></div></div><div style="margin-top:12px;border-top:1px solid var(--border2);padding-top:10px">
       <div class="card-label" style="margin-bottom:8px">TODAY</div>
       <div id="calendarEvents"><div style="font-size:13px;color:var(--tx3)">No events today</div></div>
     </div>
@@ -447,6 +447,18 @@ var CFG = {
       <div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">
         Greg's thinking about dinner…
       </div>
+    </div>
+  </div>
+  <!-- Cookbook / Recipe collection (WG-17 Stage 5) -->
+  <div class="interleave-card" id="cookbookCard">
+    <div class="card-label">COOKBOOK</div>
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <input type="text" id="recipeSearch" placeholder="Search recipes…" style="flex:1;min-width:180px;padding:10px 16px;background:var(--bg);border:1px solid var(--border2);border-radius:100px;color:var(--tx);font-family:var(--fu);font-size:16px;outline:none" oninput="searchRecipes(this.value)">
+      <div class="g-btn" onclick="filterRecipes('all')">All</div>
+      <div class="g-btn" onclick="filterRecipes('favorites')">Favorites</div>
+    </div>
+    <div id="cookbookBody" style="column-width:280px;column-gap:20px">
+      <div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">Loading recipes…</div>
     </div>
   </div>
   <!-- Tomorrow preview (WG-17 Stage 7) -->
@@ -679,7 +691,8 @@ function renderTonight(){
   // Actions
   h += '<div class="tonight-actions">';
   h += '<div class="tonight-act primary" onclick="addMissingIngredients()">Add missing to list</div>';
-  h += '<div class="tonight-act" onclick="toggleCard(\'tonightCard\')">Close</div>';
+  h += '<div class="tonight-act" onclick="saveCurrentMealToRecipes()">Save to Cookbook</div>';
+  h += '<div class="tonight-act" onclick="toggleCard(\'cookbookCard\')">Browse Cookbook</div>';
   h += '</div>';
   
   body.innerHTML = h;
@@ -719,11 +732,107 @@ function updateTonight(){
       cookTime: mi.cookTime || ''
     };
   } else {
-    // Fallback: generate a simple suggestion
     tonightMeal = null;
   }
   renderTonight();
 }
+
+// ═══════════════════════════════════════════
+// COOKBOOK / RECIPE COLLECTION (WG-17 Stage 5, WG-22)
+// Browsable saved recipes from greg_recipes table
+// ═══════════════════════════════════════════
+var allRecipes = [];
+var recipeFilter = 'all';
+
+function fetchRecipes(){
+  sbGet('greg_recipes?order=times_made.desc,created_at.desc&limit=50').then(function(data){
+    allRecipes = data || [];
+    renderCookbook(allRecipes);
+  }).catch(function(){
+    document.getElementById('cookbookBody').innerHTML = '<div style="font-size:15px;color:var(--tx3);padding:16px 0">Could not load recipes</div>';
+  });
+}
+
+function renderCookbook(recipes){
+  var body = document.getElementById('cookbookBody');
+  if(!recipes.length){
+    body.innerHTML = '<div style="text-align:center;padding:32px 0"><div style="font-size:28px;margin-bottom:12px">📖</div><div style="font-size:17px;color:var(--tx2);margin-bottom:8px">No recipes yet</div><div style="font-size:14px;color:var(--tx3)">Say "Greg, save this recipe" or tap Tonight\'s meal to save it</div></div>';
+    return;
+  }
+  var h = '';
+  recipes.forEach(function(r){
+    h += '<div style="break-inside:avoid;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border2);border-radius:14px;overflow:hidden;cursor:pointer" onclick="openRecipe(\''+r.id+'\')">';
+    if(r.image_url) h += '<img src="'+esc(r.image_url)+'" style="width:100%;height:140px;object-fit:cover" onerror="this.style.display=\'none\'">';
+    h += '<div style="padding:14px">';
+    h += '<div style="font-family:var(--fg);font-size:19px;color:var(--tx)">'+esc(r.name)+'</div>';
+    var meta = [];
+    if(r.cuisine) meta.push(esc(r.cuisine));
+    if(r.cook_time) meta.push(esc(r.cook_time));
+    if(r.times_made) meta.push('Made '+r.times_made+'×');
+    if(meta.length) h += '<div style="font-size:13px;color:var(--tx2);margin-top:4px">'+meta.join(' · ')+'</div>';
+    h += '</div></div>';
+  });
+  body.innerHTML = h;
+}
+
+function searchRecipes(q){
+  q = q.toLowerCase().trim();
+  if(!q){ renderCookbook(filterList(allRecipes)); return; }
+  var results = allRecipes.filter(function(r){
+    return r.name.toLowerCase().indexOf(q) > -1 || (r.cuisine||'').toLowerCase().indexOf(q) > -1 || (r.category||'').toLowerCase().indexOf(q) > -1;
+  });
+  renderCookbook(results);
+}
+
+function filterRecipes(f){
+  recipeFilter = f;
+  renderCookbook(filterList(allRecipes));
+}
+
+function filterList(recipes){
+  if(recipeFilter === 'favorites') return recipes.filter(function(r){return r.times_made >= 2;});
+  return recipes;
+}
+
+function openRecipe(id){
+  var r = allRecipes.find(function(x){return x.id===id});
+  if(!r) return;
+  // Populate tonight card with this recipe's data and open it
+  tonightMeal = {
+    name: r.name,
+    area: r.cuisine || '',
+    category: r.category || '',
+    image: r.image_url || '',
+    description: '',
+    ingredients: (r.ingredients || []),
+    cookTime: r.cook_time || ''
+  };
+  renderTonight();
+  toggleCard('tonightCard');
+}
+
+function saveCurrentMealToRecipes(){
+  if(!tonightMeal) return;
+  var payload = {
+    name: tonightMeal.name,
+    source: 'greg',
+    cuisine: tonightMeal.area || null,
+    category: tonightMeal.category || null,
+    cook_time: tonightMeal.cookTime || null,
+    image_url: tonightMeal.image || null,
+    ingredients: tonightMeal.ingredients || [],
+    times_made: 1,
+    last_made_at: new Date().toISOString()
+  };
+  sbFetch('greg_recipes',{method:'POST',body:JSON.stringify(payload),headers:{'Prefer':'return=representation'}})
+    .then(function(r){return r.json()})
+    .then(function(data){
+      if(data && data.length) allRecipes.unshift(data[0]);
+      renderCookbook(allRecipes);
+    }).catch(function(){});
+}
+
+fetchRecipes();
 
 // ═══════════════════════════════════════════
 // TOMORROW PREVIEW (WG-17 Stage 7, WG-11)
@@ -912,7 +1021,7 @@ document.addEventListener('touchend',function(e){
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard','tonightCard','tomorrowCard'];
+var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard','tonightCard','cookbookCard','tomorrowCard'];
 var activeCard = null;
 var cardTimeout = null;
 
@@ -1158,9 +1267,9 @@ function renderCalendar(events){
     }
     var t='All day';
     if(ev.start.indexOf('T')>-1){var d=new Date(ev.start);t=(d.getHours()%12||12)+':'+(d.getMinutes()<10?'0':'')+d.getMinutes()+' '+(d.getHours()>=12?'PM':'AM');}
-    var typeColors={'birthday':'#D4A84B','work':'#6B8E7B','holiday':'#7B8EC4','general':'var(--greg)'};
-    var evColor=typeColors[ev.eventType||'general']||'var(--greg)';
-    return dayHeader+'<div class="cal-event cal-type-'+(ev.eventType||'general')+'"><div class="cal-dot" style="background:'+evColor+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
+    var personColors={'angela':'#FBBF24','david':'#60A5FA','dwight':'#22C55E','son':'#22C55E','lilly':'#A78BFA','grammy':'#F472B6','mom':'#F472B6','family':'#C9956B'};
+    var evColor=personColors[(ev.person||'').toLowerCase()]||personColors[ev.eventType||'']||'var(--greg)';
+    return dayHeader+'<div class="cal-event cal-type-'+(ev.eventType||'general')+'"><div class="cal-dot" style="background:'+evColor+';height:24px"></div><div><div class="cal-time">'+t+'</div><div class="cal-name">'+ev.summary+'</div>'+(ev.person?'<div style="font-size:11px;color:'+evColor+'">'+ev.person.charAt(0).toUpperCase()+ev.person.slice(1)+'</div>':'')+(ev.location?'<div style="font-size:11px;color:var(--tx-m)">'+ev.location+'</div>':'')+'</div></div>';
   }).join('');
 }
 
