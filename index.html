@@ -463,6 +463,19 @@ var CFG = {
       <div style="font-size:17px;color:var(--tx3);padding:24px 0;text-align:center">Loading recipes…</div>
     </div>
   </div>
+  <!-- Kids routines (WG-17 Stage 9) -->
+  <div class="interleave-card" id="kidsCard">
+    <div class="card-label">KIDS</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <div class="g-btn" id="kidPickDwight" onclick="switchKid('dwight')" style="border-color:#22C55E">Dwight</div>
+      <div class="g-btn" id="kidPickLilly" onclick="switchKid('lilly')" style="border-color:#A78BFA">Lilly</div>
+    </div>
+    <div id="kidsRoutineBody"></div>
+    <div style="margin-top:16px;border-top:1px solid var(--border2);padding-top:12px">
+      <div class="card-label" style="margin-bottom:8px">EXTRAS — earn treats!</div>
+      <div id="kidsExtrasBody"></div>
+    </div>
+  </div>
   <!-- Tomorrow preview (WG-17 Stage 7) -->
   <div class="interleave-card" id="tomorrowCard">
     <div class="card-label">TOMORROW</div>
@@ -835,6 +848,119 @@ function saveCurrentMealToRecipes(){
 fetchRecipes();
 
 // ═══════════════════════════════════════════
+// KIDS ROUTINES & EXTRAS (WG-17 Stage 9, WG-09)
+// Expected routines (no reward) + extra chores (earn treats)
+// ═══════════════════════════════════════════
+var activeKid = 'dwight';
+var kidRoutines = [];
+var kidCompletions = [];
+var kidExtras = [];
+var kidExtraCompletions = [];
+
+function switchKid(kid){
+  activeKid = kid;
+  document.getElementById('kidPickDwight').style.background = kid==='dwight' ? 'rgba(34,197,94,0.15)' : '';
+  document.getElementById('kidPickLilly').style.background = kid==='lilly' ? 'rgba(167,139,250,0.15)' : '';
+  fetchKidData();
+}
+
+function fetchKidData(){
+  var today = new Date().toISOString().split('T')[0];
+  // Determine which routine type to show based on time
+  var hour = new Date().getHours();
+  var routineType = hour < 12 ? 'morning' : (hour < 16 ? 'after_school' : 'bedtime');
+  
+  Promise.all([
+    sbGet('greg_routines?person=eq.'+activeKid+'&routine_type=eq.'+routineType+'&order=sort_order.asc'),
+    sbGet('greg_routine_completions?person=eq.'+activeKid+'&completed_date=eq.'+today),
+    sbGet('greg_extra_chores?or=(person.eq.'+activeKid+',person.is.null)&always_available=eq.true&order=points.asc'),
+    sbGet('greg_chore_completions?person=eq.'+activeKid+'&completed_date=eq.'+today)
+  ]).then(function(res){
+    kidRoutines = res[0] || [];
+    kidCompletions = res[1] || [];
+    kidExtras = res[2] || [];
+    kidExtraCompletions = res[3] || [];
+    renderKidRoutines(routineType);
+    renderKidExtras();
+  }).catch(function(){ 
+    document.getElementById('kidsRoutineBody').innerHTML = '<div style="color:var(--tx3)">Could not load</div>';
+  });
+}
+
+function renderKidRoutines(routineType){
+  var body = document.getElementById('kidsRoutineBody');
+  var labels = {morning:'Morning', after_school:'After School', bedtime:'Bedtime'};
+  var completedIds = kidCompletions.map(function(c){return c.routine_id});
+  var allDone = kidRoutines.length > 0 && kidRoutines.every(function(r){return completedIds.indexOf(r.id) > -1});
+  
+  var h = '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:12px">'+(labels[routineType]||routineType)+' Routine</div>';
+  
+  if(!kidRoutines.length){
+    h += '<div style="color:var(--tx3);font-size:15px">No routine steps yet</div>';
+  } else {
+    kidRoutines.forEach(function(r){
+      var done = completedIds.indexOf(r.id) > -1;
+      h += '<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:50px" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
+      h += '<div style="font-size:28px;width:40px;text-align:center">'+(done ? '✅' : (r.icon||'⬜'))+'</div>';
+      h += '<div style="font-size:19px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
+      h += '</div>';
+    });
+  }
+  
+  if(allDone){
+    h += '<div style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E">🌟 All done! Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'!</div>';
+  }
+  
+  body.innerHTML = h;
+}
+
+function renderKidExtras(){
+  var body = document.getElementById('kidsExtrasBody');
+  var completedIds = kidExtraCompletions.map(function(c){return c.chore_id});
+  var totalPoints = kidExtraCompletions.filter(function(c){return c.approved}).reduce(function(sum,c){
+    var ch = kidExtras.find(function(e){return e.id===c.chore_id});
+    return sum + (ch ? ch.points : 0);
+  }, 0);
+  
+  var h = '';
+  if(totalPoints > 0){
+    h += '<div style="font-size:15px;color:var(--angela);margin-bottom:10px">⭐ '+totalPoints+' point'+(totalPoints!==1?'s':'')+' earned today</div>';
+  }
+  
+  kidExtras.forEach(function(ch){
+    var done = completedIds.indexOf(ch.id) > -1;
+    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px" onclick="claimExtra(\''+ch.id+'\')">';
+    h += '<div style="font-size:24px;width:36px;text-align:center">'+(done ? '✅' : (ch.icon||'⬜'))+'</div>';
+    h += '<div style="flex:1"><div style="font-size:17px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
+    h += '<div style="font-size:12px;color:var(--tx3)">+'+(ch.points||1)+' point'+(ch.points!==1?'s':'')+'</div></div>';
+    h += '</div>';
+  });
+  
+  body.innerHTML = h || '<div style="color:var(--tx3);font-size:15px">No extras available</div>';
+}
+
+function toggleRoutineStep(routineId, currentlyDone){
+  var today = new Date().toISOString().split('T')[0];
+  if(currentlyDone){
+    // Un-complete: delete the completion
+    sbFetch('greg_routine_completions?routine_id=eq.'+routineId+'&completed_date=eq.'+today,{method:'DELETE',headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
+  } else {
+    // Complete: insert
+    sbFetch('greg_routine_completions',{method:'POST',body:JSON.stringify({routine_id:routineId,person:activeKid,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
+  }
+}
+
+function claimExtra(choreId){
+  var today = new Date().toISOString().split('T')[0];
+  var already = kidExtraCompletions.find(function(c){return c.chore_id===choreId});
+  if(already) return; // already claimed today
+  sbFetch('greg_chore_completions',{method:'POST',body:JSON.stringify({chore_id:choreId,person:activeKid,completed_date:today}),headers:{'Prefer':'return=minimal'}}).then(function(){fetchKidData()});
+}
+
+// Initial load
+switchKid('dwight');
+
+// ═══════════════════════════════════════════
 // TOMORROW PREVIEW (WG-17 Stage 7, WG-11)
 // Evening ambient card: tomorrow's events + weather + prep reminders
 // ═══════════════════════════════════════════
@@ -1021,7 +1147,7 @@ document.addEventListener('touchend',function(e){
 // ═══════════════════════════════════════════
 // CARD CYCLING
 // ═══════════════════════════════════════════
-var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard','tonightCard','cookbookCard','tomorrowCard'];
+var cardIds = ['calendarCard','weatherCard','mediaCard','spotifyCard','commuteCard','suggestionCard','groceryCard','tonightCard','cookbookCard','kidsCard','tomorrowCard'];
 var activeCard = null;
 var cardTimeout = null;
 
@@ -1063,7 +1189,7 @@ function toggleCard(id){
 // ═══════════════════════════════════════════
 var MODE_CARDS = {
   household: function(){ var h=new Date().getHours(); return (h>=16 && h<19 && tonightMeal) ? 'tonightCard' : 'groceryCard'; },
-  kids: null,
+  kids: 'kidsCard',
   plan: function(){ var h=new Date().getHours(); return (h>=19) ? 'tomorrowCard' : 'calendarCard'; },
   entertainment: 'mediaCard'
 };
