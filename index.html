@@ -909,6 +909,11 @@ function renderKidRoutines(routineType){
   
   if(allDone){
     h += '<div style="text-align:center;padding:16px 0;font-family:var(--fg);font-size:20px;color:#22C55E">🌟 All done! Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'!</div>';
+    // Greg celebrates verbally (only speak once per render by checking a flag)
+    if(!window._lastCelebrated || window._lastCelebrated !== activeKid+'-'+routineType){
+      window._lastCelebrated = activeKid+'-'+routineType;
+      setTimeout(function(){ gregSpeak('Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'! All done with your '+(labels[routineType]||'')+' routine.'); }, 300);
+    }
   }
   
   body.innerHTML = h;
@@ -1212,17 +1217,46 @@ function openMode(mode){
 }
 
 function tellGreg(){
-  // Open conversation mode — same as "Hey Greg" but via touch
-  // Send a wake signal to the Fire via CORTEX WS if connected
+  // Greg responds from the wall via Web Speech API
+  var btn = document.querySelector('.tell-greg');
+  if(btn){ btn.style.borderColor = 'var(--greg)'; btn.style.background = 'var(--greg-bg)'; 
+    setTimeout(function(){ btn.style.borderColor = ''; btn.style.background = ''; }, 3000); }
+  
+  // Context-aware greeting
+  var hour = new Date().getHours();
+  var greetings;
+  if(hour >= 5 && hour < 12) greetings = ["Good morning. What can I do for you?","Morning! What's on your mind?","Hey there. How can I help?"];
+  else if(hour >= 12 && hour < 17) greetings = ["Hey, what's up?","What do you need?","I'm here. What can I help with?"];
+  else if(hour >= 17 && hour < 21) greetings = ["Hey. What do you need?","What's up?","I'm listening."];
+  else greetings = ["Hey. What do you need?","I'm here.","What's going on?"];
+  
+  var msg = greetings[Math.floor(Math.random() * greetings.length)];
+  gregSpeak(msg);
+  
+  // Also signal CORTEX if WS is connected
   if(typeof cortexWs !== 'undefined' && cortexWs && cortexWs.readyState === 1){
     cortexWs.send(JSON.stringify({type:'wake', source:'skylight-touch'}));
   }
-  // Visual feedback: brief glow on the Tell Greg button
-  var btn = document.querySelector('.tell-greg');
-  if(btn){ btn.style.borderColor = 'var(--greg)'; btn.style.background = 'var(--greg-bg)'; 
-    setTimeout(function(){ btn.style.borderColor = ''; btn.style.background = ''; }, 2000); }
-  console.log('Tell Greg tapped — conversation mode requested');
 }
+
+// ═══ Greg TTS — voice from the wall ═══
+function gregSpeak(text){
+  if(!('speechSynthesis' in window)) { console.log('No TTS:', text); return; }
+  window.speechSynthesis.cancel(); // stop any current speech
+  var utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.95;
+  utter.pitch = 0.9;
+  utter.volume = 1.0;
+  // Pick a natural-sounding voice if available
+  var voices = window.speechSynthesis.getVoices();
+  var preferred = voices.find(function(v){ return v.name.indexOf('Google') > -1 && v.lang.indexOf('en') === 0; })
+    || voices.find(function(v){ return v.lang.indexOf('en-US') === 0; })
+    || voices[0];
+  if(preferred) utter.voice = preferred;
+  window.speechSynthesis.speak(utter);
+}
+// Pre-load voices (some browsers need this)
+if('speechSynthesis' in window) window.speechSynthesis.getVoices();
 
 // Aurora Store: long-press on any mode tile for 1.5s opens it (admin, ring ≤ 2)
 (function wireAdminLongPress(){
