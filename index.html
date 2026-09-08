@@ -22,14 +22,18 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .photo-gradient{position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,rgba(30,26,22,0.92) 0%,rgba(30,26,22,0.5) 40%,transparent 100%);z-index:2;pointer-events:none}
 .photo-gradient-top{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(30,26,22,0.5) 0%,transparent 100%);z-index:2;pointer-events:none}
 
-/* ═══ Persistent overlay ═══ */
-.persistent-overlay{position:absolute;bottom:56px;left:0;right:0;padding:28px 40px;z-index:10;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none}
-.time-block{text-shadow:0 2px 16px rgba(30,26,22,0.6)}
-.time-display{font-family:var(--fu);font-weight:400;font-size:72px;line-height:1;letter-spacing:-2px;color:var(--tx)}
-.date-display{font-family:var(--fu);font-weight:400;font-size:16px;color:var(--tx2);margin-top:6px}
-.weather-block{text-align:right;text-shadow:0 2px 16px rgba(30,26,22,0.6)}
-.weather-temp{font-family:var(--fu);font-weight:400;font-size:48px;line-height:1;color:var(--tx)}
-.weather-desc{font-family:var(--fu);font-weight:400;font-size:14px;color:var(--tx2);margin-top:6px}
+/* ═══ Persistent overlay → GLANCE STRIP (WG-17 Stage 2) ═══ */
+.persistent-overlay{position:absolute;bottom:56px;left:0;right:0;padding:16px 40px;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:24px;pointer-events:none}
+.glance-time{font-family:var(--fu);font-weight:500;font-size:36px;line-height:1;color:var(--tx);text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
+.glance-date{font-family:var(--fu);font-weight:400;font-size:13px;color:var(--tx2);margin-top:2px;text-shadow:0 2px 8px rgba(30,26,22,0.6)}
+.glance-weather{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
+.glance-weather-icon{font-size:22px}
+.glance-weather-temp{font-family:var(--fu);font-weight:500;font-size:28px;color:var(--tx)}
+.glance-advice{font-family:var(--fu);font-weight:400;font-size:18px;color:var(--tx);text-shadow:0 2px 12px rgba(30,26,22,0.7);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.glance-event{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap;max-width:320px;overflow:hidden}
+.glance-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.glance-event-text{font-family:var(--fu);font-size:16px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.glance-tonight{font-family:var(--fu);font-size:16px;color:var(--tx2);text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
 
 /* ═══ Interleave cards ═══ */
 .card-layer{position:absolute;top:0;right:0;bottom:80px;z-index:8;display:flex;align-items:center;justify-content:flex-end;padding:24px 32px;pointer-events:none}
@@ -259,7 +263,7 @@ var CFG = {
   LON: -118.78,
   
   // Timing
-  PHOTO_INTERVAL: 15000,
+  PHOTO_INTERVAL: 20000,
   CARD_SHOW: 10000,
   CARD_GAP: 5000,
   WEATHER_REFRESH: 1800000,
@@ -291,16 +295,22 @@ var CFG = {
 <div class="photo-gradient"></div>
 <div class="photo-gradient-top"></div>
 
-<!-- ═══ Persistent Time + Weather ═══ -->
+<!-- ═══ Glance Strip (WG-17 Stage 2) ═══ -->
 <div class="persistent-overlay">
-  <div class="time-block">
-    <div class="time-display" id="timeDisplay">--:--</div>
-    <div class="date-display" id="dateDisplay"></div>
+  <div style="flex-shrink:0">
+    <div class="glance-time" id="timeDisplay">--:--</div>
+    <div class="glance-date" id="dateDisplay"></div>
   </div>
-  <div class="weather-block">
-    <div class="weather-temp" id="weatherTemp">--°</div>
-    <div class="weather-desc" id="weatherDesc"></div>
+  <div class="glance-weather">
+    <span class="glance-weather-icon" id="weatherIcon">&#9728;&#65039;</span>
+    <span class="glance-weather-temp" id="weatherTemp">--°</span>
   </div>
+  <div class="glance-advice" id="glanceAdvice">Good morning</div>
+  <div class="glance-event" id="glanceEvent">
+    <div class="glance-event-dot" id="glanceEventDot" style="background:var(--angela)"></div>
+    <div class="glance-event-text" id="glanceEventText"></div>
+  </div>
+  <div class="glance-tonight" id="glanceTonight"></div>
 </div>
 
 <!-- ═══ Mode dots ═══ -->
@@ -459,6 +469,75 @@ function updateTime(){
   document.getElementById('dateDisplay').textContent=d[n.getDay()]+', '+mo[n.getMonth()]+' '+n.getDate();
 }
 updateTime(); setInterval(updateTime,10000);
+
+// ═══════════════════════════════════════════
+// GLANCE STRIP — advice, next event, tonight (WG-17 Stage 2)
+// ═══════════════════════════════════════════
+var PERSON_COLORS = {
+  'angela':'#FBBF24','david':'#60A5FA','dwight':'#22C55E','son':'#22C55E',
+  'lilly':'#A78BFA','grammy':'#F472B6','mom':'#F472B6'
+};
+var WEATHER_ICONS = {
+  'clear':'&#9728;&#65039;','sunny':'&#9728;&#65039;','partly cloudy':'&#9925;','cloudy':'&#9729;&#65039;',
+  'overcast':'&#9729;&#65039;','rain':'&#127783;&#65039;','drizzle':'&#127783;&#65039;','thunderstorm':'&#9928;&#65039;',
+  'snow':'&#10052;&#65039;','fog':'&#127787;&#65039;','mist':'&#127787;&#65039;','wind':'&#127744;','haze':'&#127787;&#65039;'
+};
+function weatherIcon(cond){
+  if(!cond) return '&#9728;&#65039;';
+  var c=cond.toLowerCase();
+  for(var k in WEATHER_ICONS) if(c.indexOf(k)>-1) return WEATHER_ICONS[k];
+  return '&#9728;&#65039;';
+}
+function updateGlanceStrip(){
+  // Advice line — from Greg suggestions or weather
+  var adviceEl = document.getElementById('glanceAdvice');
+  if(gregSuggestions.length){
+    adviceEl.textContent = gregSuggestions[0];
+  } else {
+    var temp = parseInt(document.getElementById('weatherTemp').textContent)||70;
+    var hour = new Date().getHours();
+    if(hour < 10) adviceEl.textContent = 'Good morning';
+    else if(temp > 85) adviceEl.textContent = 'Hot one — '+temp+'° out there';
+    else if(temp < 55) adviceEl.textContent = 'Bundle up — '+temp+'° today';
+    else adviceEl.textContent = 'Beautiful day — '+temp+'°';
+  }
+
+  // Next event — first upcoming event today from any person
+  var eventEl = document.getElementById('glanceEvent');
+  var now = new Date();
+  var todayStr = now.toISOString().split('T')[0];
+  Promise.all([
+    sbGet('family_events?event_date=eq.'+todayStr+'&order=event_time.asc').catch(function(){return []})
+  ]).then(function(r){
+    var events = (r[0]||[]).filter(function(ev){
+      if(!ev.event_time) return true; // all-day events
+      var evTime = new Date(todayStr+'T'+ev.event_time);
+      return evTime > now; // only future events
+    });
+    if(events.length){
+      var ev = events[0];
+      var person = (ev.person||'').toLowerCase();
+      var color = PERSON_COLORS[person] || '#A8A29E';
+      document.getElementById('glanceEventDot').style.background = color;
+      var timeStr = ev.event_time ? ev.event_time.substring(0,5) : '';
+      var name = (ev.person ? ev.person.charAt(0).toUpperCase()+ev.person.slice(1)+': ' : '');
+      document.getElementById('glanceEventText').textContent = name + ev.title + (timeStr ? ' · '+timeStr : '');
+      eventEl.style.display = 'flex';
+    } else {
+      eventEl.style.display = 'none';
+    }
+  });
+
+  // Tonight's dinner — from greg suggestions or meal plan
+  var tonightEl = document.getElementById('glanceTonight');
+  if(plexusData && plexusData.extras && plexusData.extras.meal_idea){
+    tonightEl.textContent = 'Tonight: ' + plexusData.extras.meal_idea.name;
+  } else {
+    tonightEl.textContent = '';
+  }
+}
+// Run glance strip every 60s and on data refreshes
+setInterval(updateGlanceStrip, 60000);
 
 // PHOTO/VIDEO SLIDESHOW
 // Videos <=15s auto-play muted in slideshow rotation.
@@ -1273,7 +1352,7 @@ function fetchPlexusFeed() {
     if (data.weather) {
       var w = data.weather;
       document.getElementById('weatherTemp').textContent = Math.round(w.temperature) + '°';
-      document.getElementById('weatherDesc').textContent = w.condition || 'Clear';
+      document.getElementById('weatherIcon').innerHTML = weatherIcon(w.condition);
       var grid = document.getElementById('weatherGrid');
       if (grid && w.daily && w.daily.length >= 2) {
         var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -1324,6 +1403,9 @@ function fetchPlexusFeed() {
         slides = layer.querySelectorAll('.photo-slide');
       }
     }
+    
+    // Update the glance strip with fresh data
+    updateGlanceStrip();
   })
   .catch(function(e) { console.log('PLEXUS feed error:', e); });
 }
