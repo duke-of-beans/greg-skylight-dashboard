@@ -510,7 +510,6 @@ var CFG = {
     <div class="g-footer">
       <input type="text" id="quickAddInput" placeholder="Add something…" onkeydown="if(event.key==='Enter')quickAddItem()">
       <div class="g-btn" onclick="quickAddItem()">Add</div>
-      <div class="g-btn" onclick="voiceAddItem()" title="Say it"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
       <div class="g-btn" onclick="startTripAndPrint()" title="Print the list"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</div>
       <div class="g-done" id="groceryDone" style="display:none" onclick="doneShopping()">✓ Got everything</div>
     </div>
@@ -549,9 +548,6 @@ var CFG = {
     <div id="kidsRoutineBody" style="text-align:center"></div>
     <div id="kidsExtrasSection" style="display:none">
       <div id="kidsExtrasBody"></div>
-    </div>
-    <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <div class="tonight-act" onclick="tellGregKids()" style="font-size:15px;padding:10px 20px"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg> Tell Greg to change</div>
     </div>
     <!-- Dwight's AI companion (WG-17 Stage 12) -->
     <div id="kidChatSection" style="margin-top:24px;border-top:1px solid var(--border2);padding-top:16px;display:none">
@@ -1077,109 +1073,113 @@ function dwightRandomChallenge(){
   if(el) el.textContent = pick;
 }
 
+// ═══ Dwight's placeholder rewards (parents define from the wall later → greg_rewards table) ═══
+var DWIGHT_REWARDS = [
+  {name:'30 min screen time', cost:10},
+  {name:'Pick what\'s for dinner', cost:15},
+  {name:'Ice cream', cost:20},
+  {name:'Stay up 30 min late', cost:25}
+];
+
 function renderKidRoutines(routineType){
   var body = document.getElementById('kidsRoutineBody');
   var labels = {morning:'Morning', after_school:'After School', bedtime:'Bedtime'};
   var completedIds = kidCompletions.map(function(c){return c.routine_id});
   var allDone = kidRoutines.length > 0 && kidRoutines.every(function(r){return completedIds.indexOf(r.id) > -1});
-  
-  // Two-column landscape layout — routine left, fun stuff right
-  var h = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;text-align:left;max-width:900px;margin:0 auto">';
-  
-  // LEFT COLUMN — routine + extras
-  h += '<div>';
-  h += '<div style="font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:16px">'+(labels[routineType]||routineType)+' Routine</div>';
-  
-  if(!kidRoutines.length){
-    h += '<div style="color:var(--tx3);font-size:15px">No steps for this time of day</div>';
-  } else {
-    kidRoutines.forEach(function(r){
-      var done = completedIds.indexOf(r.id) > -1;
-      var iconMap = {'👕':ICO.shirt(24),'🪥':ICO.brush(24),'🥣':ICO.bowl(24),'🎒':ICO.backpack(24),'📝':ICO.pencil(24),'🍎':ICO.apple(24),'👗':ICO.shirt(24),'🌙':ICO.moon(24),'📖':ICO.book(24)};
-      var icon = done ? ICO.checkSquare(24) : (iconMap[r.icon] || ICO.square(24));
-      h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:46px;color:'+(done?'var(--tx3)':'var(--tx)')+'" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
-      h += '<div style="width:28px;flex-shrink:0;display:flex;justify-content:center">'+icon+'</div>';
-      h += '<div style="font-size:17px;'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
-      h += '</div>';
-    });
-  }
-  
-  if(allDone){
-    h += '<div style="padding:14px 0;font-family:var(--fg);font-size:18px;color:#22C55E;display:flex;align-items:center;gap:6px">'+ICO.star(18)+' All done!</div>';
-    if(!window._lastCelebrated || window._lastCelebrated !== activeKid+'-'+routineType){
-      window._lastCelebrated = activeKid+'-'+routineType;
-      setTimeout(function(){ gregSpeak('Great job, '+(activeKid==='dwight'?'Davy':'Lilly')+'! All done with your '+(labels[routineType]||'')+' routine.'); }, 300);
-    }
-  }
-  h += '</div>';
-
-  // RIGHT COLUMN — Build Challenge + Extras
-  h += '<div>';
-  
-  // Build Challenge randomizer (Dwight's interests: Legos, Roblox, Minecraft, Mario, FNAF, Rainbow Friends, Digital Circus)
-  var challenge = DWIGHT_BUILD_CHALLENGES[Math.floor(Math.random() * DWIGHT_BUILD_CHALLENGES.length)];
-  h += '<div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px">';
-  h += '<div style="font-family:var(--fg);font-size:18px;color:var(--son);margin-bottom:8px;display:flex;align-items:center;gap:8px">'+ICO.puzzle(20)+' Build Challenge</div>';
-  h += '<div id="dwightChallenge" style="font-size:16px;color:var(--tx);line-height:1.5;margin-bottom:12px">'+esc(challenge)+'</div>';
-  h += '<div class="tonight-act" onclick="dwightRandomChallenge()" style="font-size:14px;padding:8px 14px;display:inline-flex">'+ICO.star(16)+' New Challenge</div>';
-  h += '</div>';
-  
-  // Extras with point counter
-  h += '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:14px">Extras</div>';
-  
   var completedChoreIds = kidExtraCompletions.map(function(c){return c.chore_id});
   var totalPoints = kidExtraCompletions.reduce(function(sum,c){
     var ch = kidExtras.find(function(e){return e.id===c.chore_id});
     return sum + (ch ? ch.points : 0);
   }, 0);
-  
-  if(totalPoints > 0){
-    h += '<div style="font-size:15px;color:var(--angela);margin-bottom:12px;display:flex;align-items:center;gap:6px">'+ICO.star(16)+' '+totalPoints+' point'+(totalPoints!==1?'s':'')+' today</div>';
-  }
-  
-  kidExtras.forEach(function(ch){
-    var done = completedChoreIds.indexOf(ch.id) > -1;
-    var choreIconMap = {'🍽️':ICO.plate(22),'🧸':ICO.toy(22),'🧺':ICO.laundry(22),'🌱':ICO.leaf(22),'🐕':ICO.dog(22),'🛏️':ICO.bed(22),'🧹':ICO.broom(22)};
-    var icon = done ? ICO.checkSquare(22) : (choreIconMap[ch.icon] || ICO.square(22));
-    h += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2);cursor:pointer;min-height:40px;color:'+(done?'var(--tx3)':'var(--tx)')+'" onclick="claimExtra(\''+ch.id+'\')">';
-    h += '<div style="width:26px;flex-shrink:0;display:flex;justify-content:center">'+icon+'</div>';
-    h += '<div style="flex:1"><div style="font-size:15px;'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div></div>';
-    h += '<div style="font-size:12px;color:var(--tx3)">+'+ch.points+'</div>';
+
+  // Find the next reward the kid is working toward
+  var nextReward = DWIGHT_REWARDS.find(function(r){ return r.cost > totalPoints; }) || DWIGHT_REWARDS[DWIGHT_REWARDS.length-1];
+  var progress = nextReward ? Math.min(100, Math.round((totalPoints / nextReward.cost) * 100)) : 100;
+  var pointsToGo = nextReward ? Math.max(0, nextReward.cost - totalPoints) : 0;
+
+  var h = '';
+
+  // ═══ HERO: Points + Progress ═══
+  h += '<div style="text-align:center;margin-bottom:24px;padding:20px 0">';
+  h += '<div style="font-family:var(--fg);font-size:52px;color:var(--son);line-height:1">'+totalPoints+'</div>';
+  h += '<div style="font-size:14px;color:var(--tx2);margin-top:4px">point'+(totalPoints!==1?'s':'')+' earned today</div>';
+  if(nextReward && pointsToGo > 0){
+    h += '<div style="max-width:360px;margin:16px auto 0">';
+    h += '<div style="height:8px;background:var(--bg3);border-radius:100px;overflow:hidden">';
+    h += '<div style="height:100%;width:'+progress+'%;background:var(--son);border-radius:100px;transition:width 0.4s"></div>';
     h += '</div>';
-  });
-  
-  if(!kidExtras.length) h += '<div style="color:var(--tx3);font-size:14px">No extras</div>';
+    h += '<div style="font-size:13px;color:var(--tx3);margin-top:6px">'+pointsToGo+' more → '+esc(nextReward.name)+'</div>';
+    h += '</div>';
+  } else if(totalPoints > 0){
+    h += '<div style="font-size:15px;color:var(--son);margin-top:8px">'+ICO.star(16)+' You earned a reward!</div>';
+  }
   h += '</div>';
-  
+
+  // ═══ TWO-COLUMN LAYOUT ═══
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;text-align:left;max-width:900px;margin:0 auto">';
+
+  // LEFT: Routine checklist
+  h += '<div>';
+  h += '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:14px">'+(labels[routineType]||routineType)+' Routine</div>';
+  if(!kidRoutines.length){
+    h += '<div style="color:var(--tx3);font-size:15px;padding:8px 0">Nothing right now</div>';
+  } else {
+    kidRoutines.forEach(function(r){
+      var done = completedIds.indexOf(r.id) > -1;
+      var iconMap = {'👕':ICO.shirt(22),'🪥':ICO.brush(22),'🥣':ICO.bowl(22),'🎒':ICO.backpack(22),'📝':ICO.pencil(22),'🍎':ICO.apple(22),'👗':ICO.shirt(22),'🌙':ICO.moon(22),'📖':ICO.book(22)};
+      var icon = done ? ICO.checkSquare(22) : (iconMap[r.icon] || ICO.square(22));
+      h += '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:6px;border-radius:10px;cursor:pointer;background:'+(done?'rgba(34,197,94,0.08)':'var(--bg2)')+';border:1px solid '+(done?'rgba(34,197,94,0.2)':'var(--border2)')+';color:'+(done?'var(--tx3)':'var(--tx)')+';transition:background 0.2s" onclick="toggleRoutineStep(\''+r.id+'\',' + done + ')">';
+      h += '<div style="flex-shrink:0">'+icon+'</div>';
+      h += '<div style="font-size:16px;'+(done?'text-decoration:line-through':'')+'">'+esc(r.title)+'</div>';
+      h += '</div>';
+    });
+  }
+  if(allDone){
+    h += '<div style="padding:12px 0;font-family:var(--fg);font-size:18px;color:#22C55E;display:flex;align-items:center;gap:6px">'+ICO.star(18)+' All done!</div>';
+    if(!window._lastCelebrated || window._lastCelebrated !== activeKid+'-'+routineType){
+      window._lastCelebrated = activeKid+'-'+routineType;
+      setTimeout(function(){ gregSpeak('Great job, Davy! All done with your '+(labels[routineType]||'')+' routine.'); }, 300);
+    }
+  }
+  h += '</div>';
+
+  // RIGHT: Earn More (extra chore cards) + Build Challenge
+  h += '<div>';
+  h += '<div style="font-family:var(--fg);font-size:20px;color:var(--tx);margin-bottom:14px">Earn More</div>';
+  if(!kidExtras.length){
+    h += '<div style="color:var(--tx3);font-size:15px;padding:8px 0">No extras today</div>';
+  } else {
+    h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">';
+    kidExtras.forEach(function(ch){
+      var done = completedChoreIds.indexOf(ch.id) > -1;
+      var choreIconMap = {'🍽️':ICO.plate(24),'🧸':ICO.toy(24),'🧺':ICO.laundry(24),'🌱':ICO.leaf(24),'🐕':ICO.dog(24),'🛏️':ICO.bed(24),'🧹':ICO.broom(24)};
+      var icon = choreIconMap[ch.icon] || ICO.star(24);
+      h += '<div style="background:'+(done?'rgba(34,197,94,0.1)':'var(--bg2)')+';border:1px solid '+(done?'rgba(34,197,94,0.25)':'var(--border)')+';border-radius:12px;padding:14px;cursor:pointer;text-align:center;transition:background 0.2s" onclick="claimExtra(\''+ch.id+'\')">';
+      h += '<div style="color:'+(done?'var(--son)':'var(--tx2)')+';margin-bottom:6px">'+(done?ICO.checkSquare(28):icon)+'</div>';
+      h += '<div style="font-size:14px;color:'+(done?'var(--tx3)':'var(--tx)')+';'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
+      h += '<div style="font-size:18px;font-weight:500;color:'+(done?'var(--tx3)':'var(--son)')+';margin-top:4px">+'+(ch.points||1)+'</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  // Build Challenge
+  var challenge = DWIGHT_BUILD_CHALLENGES[Math.floor(Math.random() * DWIGHT_BUILD_CHALLENGES.length)];
+  h += '<div style="background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:14px">';
+  h += '<div style="font-size:13px;color:var(--son);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px">'+ICO.puzzle(16)+' Build Challenge</div>';
+  h += '<div id="dwightChallenge" style="font-size:15px;color:var(--tx);line-height:1.4;margin-bottom:10px">'+esc(challenge)+'</div>';
+  h += '<div class="tonight-act" onclick="dwightRandomChallenge()" style="font-size:13px;padding:6px 12px;display:inline-flex">New Challenge</div>';
+  h += '</div>';
+
+  h += '</div>'; // close right column
   h += '</div>'; // close grid
+
   body.innerHTML = h;
 }
 
 function renderKidExtras(){
-  var body = document.getElementById('kidsExtrasBody');
-  var completedIds = kidExtraCompletions.map(function(c){return c.chore_id});
-  var totalPoints = kidExtraCompletions.reduce(function(sum,c){
-    var ch = kidExtras.find(function(e){return e.id===c.chore_id});
-    return sum + (ch ? ch.points : 0);
-  }, 0);
-  
-  var h = '';
-  if(totalPoints > 0){
-    h += '<div style="font-size:15px;color:var(--angela);margin-bottom:10px;display:flex;align-items:center;gap:6px;justify-content:center">'+ICO.star(16)+' '+totalPoints+' point'+(totalPoints!==1?'s':'')+' earned today</div>';
-  }
-  
-  kidExtras.forEach(function(ch){
-    var done = completedIds.indexOf(ch.id) > -1;
-    var choreIconMap = {'🍽️':ICO.plate(24),'🧸':ICO.toy(24),'🧺':ICO.laundry(24),'🌱':ICO.leaf(24),'🐕':ICO.dog(24),'🛏️':ICO.bed(24),'🧹':ICO.broom(24)};
-    var icon = done ? ICO.checkSquare(24) : (choreIconMap[ch.icon] || ICO.square(24));
-    h += '<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border2);cursor:pointer;min-height:44px;justify-content:center;color:'+(done?'var(--tx3)':'var(--tx)')+'" onclick="claimExtra(\''+ch.id+'\')">';
-    h += '<div style="width:28px;flex-shrink:0;display:flex;justify-content:center">'+icon+'</div>';
-    h += '<div><div style="font-size:17px;'+(done?'text-decoration:line-through':'')+'">'+esc(ch.title)+'</div>';
-    h += '<div style="font-size:12px;color:var(--tx3)">+'+(ch.points||1)+' point'+(ch.points!==1?'s':'')+'</div></div>';
-    h += '</div>';
-  });
-  
-  body.innerHTML = h || '<div style="color:var(--tx3);font-size:15px">No extras available</div>';
+  // Extras are now rendered inside renderKidRoutines() as cards.
+  // This function kept as no-op for compatibility with fetchKidData().
 }
 
 function toggleRoutineStep(routineId, currentlyDone){
