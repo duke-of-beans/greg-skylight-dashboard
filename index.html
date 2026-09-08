@@ -395,6 +395,11 @@ var CFG = {
   <!-- Media launcher -->
   <div class="interleave-card" id="mediaCard">
     <div class="card-label">WATCH</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="tonight-act" onclick="quickPlay('cocomelon')" style="font-size:14px;padding:8px 16px">🧸 Cocomelon</div>
+      <div class="tonight-act" onclick="quickPlay('music')" style="font-size:14px;padding:8px 16px">🎵 Music</div>
+      <div class="tonight-act" onclick="quickPlay('youtube-kids')" style="font-size:14px;padding:8px 16px">⭐ YT Kids</div>
+    </div>
     <div class="media-grid" id="mediaGrid">
       <div class="media-btn" data-pkg="com.netflix.mediaclient"><div class="media-icon" style="background:#E50914"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 2v20l7-7 7 7V2H5z" fill="none" stroke="#fff" stroke-width="0"/><path d="M6 3h3v18l-3-3V3z" fill="#fff"/><path d="M15 3h3v18l-3-3V3z" fill="#fff"/><path d="M6 3l12 18h-3L3 3h3z" fill="#fff"/></svg></div><div class="media-name">Netflix</div></div>
       <div class="media-btn" data-pkg="com.disney.disneyplus"><div class="media-icon" style="background:#113CCF"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2l1 4h2l1-3h1l.5 5h1l.5-6h1v8H5V2h1l.5 6h1L8 3h1l1 3h2l1-4z" fill="#fff"/><path d="M4 10h16v2H4z" fill="#fff"/><ellipse cx="12" cy="16" rx="8" ry="4" fill="none" stroke="#fff" stroke-width="1.5"/></svg></div><div class="media-name">Disney+</div></div>
@@ -1342,6 +1347,27 @@ function tryMorningBrief(){
 // Check for morning brief every 2 min
 setInterval(tryMorningBrief, 120000);
 // Also try on PLEXUS data load (wired below)
+
+// ═══ Quick Play shortcuts (WG-17 Stage 14) ═══
+function quickPlay(target){
+  if(typeof Greg === 'undefined' || !Greg.launchApp) { console.log('Greg bridge not available for quickPlay:', target); return; }
+  switch(target){
+    case 'cocomelon':
+      gregSpeak('Putting on Cocomelon for Lilly.');
+      Greg.launchApp('com.google.android.apps.youtube.kids');
+      break;
+    case 'music':
+      gregSpeak('Opening Spotify.');
+      Greg.launchApp('com.spotify.music');
+      break;
+    case 'youtube-kids':
+      gregSpeak('Opening YouTube Kids.');
+      Greg.launchApp('com.google.android.apps.youtube.kids');
+      break;
+    default:
+      console.log('Unknown quickPlay target:', target);
+  }
+}
 
 // Aurora Store: long-press on any mode tile for 1.5s opens it (admin, ring ≤ 2)
 (function wireAdminLongPress(){
