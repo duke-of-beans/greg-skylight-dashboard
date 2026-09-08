@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1280, height=800">
 <title>Skylight — Greg's Family Wall</title>
-<style>html,body{background:#1E1A16;margin:0;padding:0}</style>
+<style>html,body{background:#1E1A16;margin:0;padding:0}.interleave-card{opacity:0 !important;pointer-events:none}.interleave-card.active{opacity:1 !important;pointer-events:auto}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,16..72,400;0,16..72,500;1,16..72,400&display=swap" rel="stylesheet">
@@ -2097,8 +2097,7 @@ var navBar=document.getElementById('navBar');
 navBar.addEventListener('touchstart',function(){navBar.classList.add('touched')},{passive:true});
 navBar.addEventListener('touchend',function(){setTimeout(function(){if(!activeCard)navBar.classList.remove('touched')},3000)});
 // Auto-cycle removed per §7 — cards are on-demand via bottom nav
-// Show calendar briefly on load, then ambient
-setTimeout(function(){showCard('calendarCard');setTimeout(function(){showCard(null)},8000)},5000);
+// No auto-show on load — the resting state (photo + corner cluster + advice) is the default
 
 // ═══════════════════════════════════════════
 // WEATHER
