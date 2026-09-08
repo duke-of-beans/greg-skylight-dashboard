@@ -20,21 +20,23 @@ body{font-family:var(--fu);font-weight:400;background:var(--bg);color:var(--tx);
 .photo-slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo-slide video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo-slide.gradient{background-size:cover}
-.photo-gradient{position:absolute;bottom:0;left:0;right:0;height:300px;background:linear-gradient(to top,rgba(30,26,22,0.92) 0%,rgba(30,26,22,0.5) 40%,transparent 100%);z-index:2;pointer-events:none}
+.photo-gradient{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(30,26,22,0.85) 0%,rgba(30,26,22,0.35) 40%,transparent 100%);z-index:2;pointer-events:none}
 .photo-gradient-top{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(30,26,22,0.5) 0%,transparent 100%);z-index:2;pointer-events:none}
 
-/* ═══ Persistent overlay → GLANCE STRIP (WG-17 Stage 2) ═══ */
-.persistent-overlay{position:absolute;bottom:56px;left:0;right:0;padding:16px 40px;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:24px;pointer-events:none}
-.glance-time{font-family:var(--fu);font-weight:500;font-size:36px;line-height:1;color:var(--tx);text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
-.glance-date{font-family:var(--fu);font-weight:400;font-size:13px;color:var(--tx2);margin-top:2px;text-shadow:0 2px 8px rgba(30,26,22,0.6)}
-.glance-weather{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
-.glance-weather-icon{font-size:22px}
-.glance-weather-temp{font-family:var(--fu);font-weight:500;font-size:28px;color:var(--tx)}
-.glance-advice{font-family:var(--fg);font-weight:400;font-size:22px;color:var(--tx);text-shadow:0 2px 16px rgba(30,26,22,0.8),0 0 40px rgba(30,26,22,0.5);position:absolute;bottom:33%;left:0;right:0;text-align:center;padding:0 60px;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.8s;line-height:1.4}
-.glance-event{display:flex;align-items:center;gap:8px;text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap;max-width:320px;overflow:hidden}
-.glance-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.glance-event-text{font-family:var(--fu);font-size:16px;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.glance-tonight{font-family:var(--fu);font-size:16px;color:var(--tx2);text-shadow:0 2px 12px rgba(30,26,22,0.7);white-space:nowrap}
+/* ═══ Persistent overlay → CORNER CLUSTER (WG-17 resting state redesign) ═══ */
+/* Ambient zone: time visible from across the room. Info stacked in one corner,
+   not spread as a horizontal dashboard strip. Photo owns the screen. */
+.persistent-overlay{position:absolute;bottom:60px;left:40px;z-index:10;pointer-events:none}
+.glance-time{font-family:var(--fu);font-weight:500;font-size:48px;line-height:1;color:var(--tx);text-shadow:0 2px 16px rgba(30,26,22,0.8)}
+.glance-date{font-family:var(--fu);font-weight:400;font-size:14px;color:var(--tx2);margin-top:4px;text-shadow:0 2px 8px rgba(30,26,22,0.6)}
+.glance-weather{display:flex;align-items:center;gap:6px;text-shadow:0 2px 12px rgba(30,26,22,0.7);margin-top:6px}
+.glance-weather-icon{font-size:18px}
+.glance-weather-temp{font-family:var(--fu);font-weight:400;font-size:18px;color:var(--tx2)}
+/* Advice / countdown — the ONE ambient voice, centered and higher */
+.glance-advice{font-family:var(--fg);font-weight:400;font-size:22px;color:var(--tx);text-shadow:0 2px 16px rgba(30,26,22,0.8),0 0 40px rgba(30,26,22,0.5);position:absolute;bottom:42%;left:0;right:0;text-align:center;padding:0 80px;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.8s;line-height:1.4}
+/* Event and tonight folded into the advice cycle — hide standalone elements */
+.glance-event{display:none}
+.glance-tonight{display:none}
 
 /* ═══ Interleave cards → FULL SCREEN overlays ═══ */
 .card-layer{position:fixed;inset:0;z-index:8;pointer-events:none}
@@ -284,8 +286,8 @@ body.card-open .persistent-overlay,body.card-open .nav-bar,body.card-open .glanc
 .pause-text{font-size:12px;color:var(--tx2)}
 
 /* ═══ Mode tiles (WG-17 Stage 3) ═══ */
-.nav-bar{position:absolute;bottom:8px;left:0;right:0;z-index:15;display:flex;justify-content:center;gap:10px;padding:10px 20px;pointer-events:auto;opacity:0.35;transition:opacity 0.4s}
-.nav-bar:hover,.nav-bar:active,.nav-bar.touched{opacity:1}
+.nav-bar{position:absolute;bottom:8px;left:0;right:0;z-index:15;display:flex;justify-content:center;gap:10px;padding:10px 20px;pointer-events:auto;opacity:0.2;transition:opacity 0.4s}
+.nav-bar:hover,.nav-bar:active,.nav-bar.touched{opacity:0.9}
 .mode-tile{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;font-family:var(--fu);font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all 0.2s;border:1px solid transparent;background:rgba(30,26,22,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);min-height:44px;letter-spacing:0.01em}
 .mode-tile:active,.mode-tile.active{border-color:var(--card-b);color:var(--tx)}
 .mode-tile .tile-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -705,66 +707,91 @@ function weatherIcon(cond){
   for(var k in WEATHER_ICONS) if(c.indexOf(k)>-1) return WEATHER_ICONS[k];
   return ICO.sun(22);
 }
+// ═══ Ambient advice cycle — one centered line that rotates ═══
+// Folds countdowns, Greg suggestions, next event, and tonight dinner into
+// one cycling text. No more separate horizontal strip elements.
+var _adviceCycle = []; // populated by updateGlanceStrip
+var _adviceCycleIdx = 0;
+var _adviceCycleTimer = null;
+
+function cycleAdviceLine(){
+  var el = document.getElementById('glanceAdvice');
+  if(activeCard || !_adviceCycle.length){ el.style.opacity = '0'; return; }
+  _adviceCycleIdx = (_adviceCycleIdx + 1) % _adviceCycle.length;
+  el.style.opacity = '0';
+  setTimeout(function(){
+    el.textContent = _adviceCycle[_adviceCycleIdx];
+    if(!activeCard) el.style.opacity = '0.85';
+  }, 800); // fade out, swap text, fade in
+}
+
 function updateGlanceStrip(){
-  // Advice line — lower-third, homescreen only
-  // Countdowns take priority (set by renderCountdownStrip), so only update if no countdown is active
-  var adviceEl = document.getElementById('glanceAdvice');
   var hour = new Date().getHours();
-  
-  // Don't overwrite countdown messages
-  if(adviceEl.textContent.indexOf('Birthday:') > -1 || adviceEl.textContent.indexOf('Coming up:') > -1 || adviceEl.textContent.indexOf('TODAY') > -1){
-    // countdown is showing, leave it
-  } else if(gregSuggestions.length){
-    // Filter out weather-related suggestions at night
-    var suggestion = gregSuggestions[0];
-    var isWeatherAdvice = /blind|hot|cold|rain|umbrella|sunscreen/i.test(suggestion);
-    if(isWeatherAdvice && (hour < 6 || hour >= 20)){
-      adviceEl.textContent = ''; adviceEl.style.opacity = '0';
-    } else {
-      adviceEl.textContent = suggestion;
-      if(!activeCard) adviceEl.style.opacity = '1';
-    }
-  } else {
-    // Time-based messages — sensible and brief
-    if(hour >= 6 && hour < 11){ adviceEl.textContent = 'Good morning'; if(!activeCard) adviceEl.style.opacity = '0.85'; }
-    else if(hour >= 21 || hour < 6){ adviceEl.textContent = ''; adviceEl.style.opacity = '0'; } // night = nothing
-    else { adviceEl.textContent = ''; adviceEl.style.opacity = '0'; } // default = nothing
+  var items = [];
+
+  // 1. Countdowns (highest priority — birthday, holiday)
+  if(countdownData && countdownData.length){
+    countdownData.forEach(function(cd){
+      if(cd.days === 0){ items.push(cd.title + ' is TODAY!'); }
+      else { items.push(cd.title + ' — ' + cd.days + ' day' + (cd.days!==1?'s':'')); }
+    });
   }
 
-  // Next event — first upcoming event today from any person
-  var eventEl = document.getElementById('glanceEvent');
+  // 2. Greg suggestions (filtered: no weather advice at night)
+  if(gregSuggestions && gregSuggestions.length){
+    gregSuggestions.forEach(function(s){
+      var isWeatherAdvice = /blind|hot|cold|rain|umbrella|sunscreen/i.test(s);
+      if(!(isWeatherAdvice && (hour < 6 || hour >= 20))) items.push(s);
+    });
+  }
+
+  // 3. Next event today
   var now = new Date();
   var todayStr = now.toISOString().split('T')[0];
-  Promise.all([
-    sbGet('family_events?event_date=eq.'+todayStr+'&order=event_time.asc').catch(function(){return []})
-  ]).then(function(r){
-    var events = (r[0]||[]).filter(function(ev){
-      if(!ev.event_time) return true; // all-day events
-      var evTime = new Date(todayStr+'T'+ev.event_time);
-      return evTime > now; // only future events
+  sbGet('family_events?event_date=eq.'+todayStr+'&order=event_time.asc').then(function(events){
+    (events||[]).filter(function(ev){
+      if(!ev.event_time) return true;
+      return new Date(todayStr+'T'+ev.event_time) > now;
+    }).slice(0,2).forEach(function(ev){
+      var name = ev.person ? ev.person.charAt(0).toUpperCase()+ev.person.slice(1)+': ' : '';
+      var timeStr = ev.event_time ? ' at '+ev.event_time.substring(0,5) : '';
+      items.push(name + ev.title + timeStr);
     });
-    if(events.length){
-      var ev = events[0];
-      var person = (ev.person||'').toLowerCase();
-      var color = PERSON_COLORS[person] || '#A8A29E';
-      document.getElementById('glanceEventDot').style.background = color;
-      var timeStr = ev.event_time ? ev.event_time.substring(0,5) : '';
-      var name = (ev.person ? ev.person.charAt(0).toUpperCase()+ev.person.slice(1)+': ' : '');
-      document.getElementById('glanceEventText').textContent = name + ev.title + (timeStr ? ' · '+timeStr : '');
-      eventEl.style.display = 'flex';
+
+    // 4. Tonight's dinner
+    if(plexusData && plexusData.extras && plexusData.extras.meal_idea){
+      items.push('Tonight: ' + plexusData.extras.meal_idea.name);
+    }
+
+    // 5. Fallback time-based
+    if(!items.length){
+      if(hour >= 6 && hour < 11) items.push('Good morning');
+      // night + afternoon = no message (photo stands alone)
+    }
+
+    _adviceCycle = items;
+    // Show first item immediately
+    var el = document.getElementById('glanceAdvice');
+    if(items.length && !activeCard){
+      _adviceCycleIdx = 0;
+      el.textContent = items[0];
+      el.style.opacity = '0.85';
     } else {
-      eventEl.style.display = 'none';
+      el.textContent = '';
+      el.style.opacity = '0';
+    }
+  }).catch(function(){
+    // Even without events, show what we have
+    _adviceCycle = items;
+    var el = document.getElementById('glanceAdvice');
+    if(items.length && !activeCard){
+      el.textContent = items[0];
+      el.style.opacity = '0.85';
     }
   });
-
-  // Tonight's dinner — from greg suggestions or meal plan
-  var tonightEl = document.getElementById('glanceTonight');
-  if(plexusData && plexusData.extras && plexusData.extras.meal_idea){
-    tonightEl.textContent = 'Tonight: ' + plexusData.extras.meal_idea.name;
-  } else {
-    tonightEl.textContent = '';
-  }
 }
+// Cycle the advice line every 8 seconds
+setInterval(cycleAdviceLine, 8000);
 // Run glance strip every 60s and on data refreshes
 setInterval(updateGlanceStrip, 60000);
 
@@ -789,23 +816,9 @@ function fetchCountdowns(){
     }).catch(function(){});
 }
 function renderCountdownStrip(){
-  if(!countdownData.length) return;
-  var next = countdownData[0];
-  var el = document.getElementById('glanceAdvice');
-  if(!el) return;
-  if(next.days <= 14 && next.days > 0){
-    var prefix = next.type==='birthday' ? 'Birthday: ' : 'Coming up: ';
-    var daysText = next.days === 1 ? 'Tomorrow!' : next.days + ' days';
-    el.textContent = prefix + next.title + ' — ' + daysText;
-    el.style.opacity = '1';
-    el.style.color = '';
-  }
-  if(next.days === 0){
-    var prefix = next.type==='birthday' ? 'Happy Birthday! ' : 'Today: ';
-    el.textContent = prefix + next.title + ' is TODAY!';
-    el.style.opacity = '1';
-    el.style.color = '#FBBF24';
-  }
+  // Countdowns are now folded into the advice cycle by updateGlanceStrip().
+  // Just trigger a refresh so countdowns appear in the rotation immediately.
+  updateGlanceStrip();
 }
 fetchCountdowns();
 setInterval(fetchCountdowns, 300000); // refresh every 5 min
