@@ -880,7 +880,14 @@ function switchKid(kid){
   activeKid = kid;
   document.getElementById('kidPickDwight').style.background = kid==='dwight' ? 'rgba(34,197,94,0.15)' : '';
   document.getElementById('kidPickLilly').style.background = kid==='lilly' ? 'rgba(167,139,250,0.15)' : '';
-  fetchKidData();
+  if(kid === 'lilly'){
+    renderLillyPlay();
+    // Hide extras for Lilly (she's 2, no chore tracking yet)
+    document.getElementById('kidsExtrasBody').parentElement.style.display = 'none';
+  } else {
+    document.getElementById('kidsExtrasBody').parentElement.style.display = '';
+    fetchKidData();
+  }
 }
 
 function fetchKidData(){
@@ -986,10 +993,78 @@ switchKid('dwight');
 
 function tellGregKids(){
   gregSpeak('Sure! What do you want to change? You can add or remove routines and chores. Just tell me.');
-  // Also signal CORTEX
   if(typeof cortexWs !== 'undefined' && cortexWs && cortexWs.readyState === 1){
     cortexWs.send(JSON.stringify({type:'wake', source:'skylight-kids-edit', kid:activeKid}));
   }
+}
+
+// ═══════════════════════════════════════════
+// LILLY PLAY — Activity Chooser (WG-17 Stage 10)
+// Big icons she taps herself. Each opens a full-screen overlay or launches an app.
+// ═══════════════════════════════════════════
+var LILLY_ACTIVITIES = [
+  {icon:'🎨', label:'Draw', action:'draw'},
+  {icon:'🎵', label:'Sing', action:'sing'},
+  {icon:'📖', label:'Story', action:'story'},
+  {icon:'🧩', label:'Puzzle', action:'puzzle'},
+  {icon:'🎬', label:'Watch', action:'watch'},
+  {icon:'⭐', label:'Stickers', action:'stickers'}
+];
+
+function renderLillyPlay(){
+  var body = document.getElementById('kidsRoutineBody');
+  var h = '<div style="font-family:var(--fg);font-size:22px;color:var(--tx);margin-bottom:16px;text-align:center">What do you want to do, Lilly?</div>';
+  h += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:320px;margin:0 auto">';
+  LILLY_ACTIVITIES.forEach(function(a){
+    h += '<div style="background:var(--bg2);border:2px solid var(--border);border-radius:20px;padding:20px 10px;text-align:center;cursor:pointer;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform 0.15s" onclick="lillyActivity(\''+a.action+'\')" ontouchstart="this.style.transform=\'scale(0.92)\'" ontouchend="this.style.transform=\'\'">';
+    h += '<div style="font-size:42px;line-height:1">'+a.icon+'</div>';
+    h += '<div style="font-family:var(--fu);font-size:16px;color:var(--tx);font-weight:500">'+a.label+'</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+  
+  // Sticker board preview
+  h += '<div style="margin-top:20px;text-align:center"><div style="font-size:14px;color:var(--tx3)">⭐ Sticker board: '+getLillyStickerCount()+' stickers</div></div>';
+  
+  body.innerHTML = h;
+}
+
+function lillyActivity(action){
+  switch(action){
+    case 'draw':
+      gregSpeak('Let\'s draw! Here\'s a blank page for you.');
+      // Could launch a drawing app or show an HTML canvas
+      if(typeof Greg !== 'undefined' && Greg.launchApp) Greg.launchApp('com.google.android.apps.photos'); // placeholder
+      break;
+    case 'sing':
+      gregSpeak('Sing along time!');
+      if(typeof Greg !== 'undefined' && Greg.launchApp) Greg.launchApp('com.google.android.apps.youtube.kids');
+      break;
+    case 'story':
+      gregSpeak('Story time! Let me pick a good one.');
+      // Future: Greg reads a story via TTS
+      break;
+    case 'puzzle':
+      gregSpeak('Puzzle time!');
+      break;
+    case 'watch':
+      gregSpeak('What do you want to watch, Lilly?');
+      if(typeof Greg !== 'undefined' && Greg.launchApp) Greg.launchApp('com.google.android.apps.youtube.kids');
+      break;
+    case 'stickers':
+      addLillySticker();
+      break;
+  }
+}
+
+// Sticker board — simple counter in memory (persists to Supabase later)
+var lillyStickerCount = 0;
+function getLillyStickerCount(){ return lillyStickerCount; }
+function addLillySticker(){
+  lillyStickerCount++;
+  gregSpeak('You earned a sticker! That\'s ' + lillyStickerCount + ' sticker' + (lillyStickerCount!==1?'s':'') + '!');
+  // Re-render to show updated count
+  if(activeKid === 'lilly') renderLillyPlay();
 }
 
 // ═══════════════════════════════════════════
