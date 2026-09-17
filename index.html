@@ -415,6 +415,70 @@ var CFG = {
 </div>
 
 <!-- ═══ Mode tiles (WG-17 Stage 3) ═══ -->
+
+<!-- ═══ GTIA COMMUNITY SURFACES ═══ -->
+<div id="contextGreeting"></div>
+<div class="held-badge" id="heldCount"></div>
+
+<!-- HOUSEHOLD OPS (parents) -->
+<div class="community-surface" id="communityHousehold">
+  <div class="household-greeting">
+    <div class="greeting-text" id="householdGreeting"></div>
+    <div id="householdTime" style="font-family:var(--fu);font-size:14px;color:var(--tx3)"></div>
+  </div>
+  <div class="household-tile" id="householdCalendar">
+    <div class="tile-label">Today</div>
+    <div id="householdCalContent"></div>
+  </div>
+  <div class="household-tile" id="householdGrocery">
+    <div class="tile-label">Grocery</div>
+    <div id="householdGrocContent"></div>
+  </div>
+  <div class="household-tile" id="householdWeather">
+    <div class="tile-label">Weather</div>
+    <div id="householdWxContent"></div>
+  </div>
+  <div class="household-tile" id="householdGreg" style="grid-column:1/-1">
+    <div class="tile-label">Greg</div>
+    <div class="greg-voice" id="householdGregVoice"></div>
+  </div>
+</div>
+
+<!-- KIDS & ENGAGEMENT -->
+<div class="community-surface" id="communityKids">
+  <div class="kids-greeting">
+    <div class="greeting-text" id="kidsGreeting"></div>
+  </div>
+  <div id="dwightView" class="kid-section" style="display:none">
+    <div class="household-tile">
+      <div class="tile-label">Your routine</div>
+      <div class="chore-progress-bar"><div class="chore-progress-fill" id="dwightProgress" style="width:0%"></div></div>
+      <div id="dwightRoutineContent"></div>
+    </div>
+    <div class="household-tile" style="margin-top:16px">
+      <div class="tile-label">Earn more</div>
+      <div id="dwightExtrasContent"></div>
+    </div>
+    <div id="dwightReward" style="display:none;text-align:center;padding:32px;margin:16px 0;border-radius:16px;border:1px solid var(--son)">
+      <div style="font-size:48px;margin-bottom:8px">🎮</div>
+      <div style="font-family:var(--fg);font-size:20px;color:var(--son)">All done! TV unlocked.</div>
+    </div>
+    <div class="household-tile" style="margin-top:16px">
+      <div class="tile-label">Ask Greg</div>
+      <div id="dwightChatContent"></div>
+    </div>
+  </div>
+  <div id="lillyView" class="kid-section" style="display:none">
+    <div class="lilly-activities">
+      <div class="lilly-activity-card" onclick="startLillyActivity('story')"><div class="activity-emoji">📖</div><div class="activity-name">Story time</div></div>
+      <div class="lilly-activity-card" onclick="startLillyActivity('draw')"><div class="activity-emoji">🎨</div><div class="activity-name">Let's draw</div></div>
+      <div class="lilly-activity-card" onclick="startLillyActivity('music')"><div class="activity-emoji">🎵</div><div class="activity-name">Music</div></div>
+      <div class="lilly-activity-card" onclick="startLillyActivity('animals')"><div class="activity-emoji">🐾</div><div class="activity-name">Animals</div></div>
+    </div>
+  </div>
+</div>
+<!-- ═══ END GTIA COMMUNITY SURFACES ═══ -->
+
 <div class="nav-bar" id="navBar">
   <div class="mode-tile household" onclick="openMode('household')"><div class="tile-dot"></div>Household</div>
   <div class="mode-tile kids" onclick="openMode('kids')"><div class="tile-dot"></div>Kids</div>
@@ -2940,7 +3004,165 @@ function printGroceryList() {
     printHtml += '<div class="item"><div class="checkbox"></div>' + item + '</div>';
   });
   
-  printHtml += '</body></html>';
+  printHtml += '
+<script>
+// ═══ WALL GREG CONTEXT ENGINE ═══
+// GTIA v4: face-detected community switching
+(function(){
+  var COMMUNITY = {
+    david:'household', angela:'household', grammy:'household',
+    dwight:'kids', lilly:'kids'
+  };
+  var COLORS = {
+    angela:'#FBBF24', david:'#60A5FA', dwight:'#22C55E',
+    lilly:'#A78BFA', grammy:'#F472B6'
+  };
+  var currentPerson = null;
+  var currentCommunity = null;
+  var ambientTimer = null;
+  var AMBIENT_TIMEOUT = 120000;
+
+  function showEl(id, show) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.transition = 'opacity 0.8s ease';
+    el.style.opacity = show ? '1' : '0';
+    el.style.pointerEvents = show ? 'auto' : 'none';
+    if (!show) setTimeout(function(){ if(el.style.opacity==='0') el.style.display='none'; }, 800);
+    else el.style.display = '';
+  }
+
+  function setGreeting(person) {
+    var el = document.getElementById('contextGreeting');
+    if (!el) return;
+    if (!person) { el.style.opacity = '0'; return; }
+    var hour = new Date().getHours();
+    var color = COLORS[person] || '#A8A29E';
+    var greetings = {
+      david: function(){ return hour<12?'Morning.':hour<17?'Afternoon.':'Evening.'; },
+      angela: function(){ return hour<12?'Good morning, Angela.':'Hey, Angela.'; },
+      dwight: function(){ return 'Hey Davy!'; },
+      lilly: function(){ return 'Hi Lilly! 🌸'; },
+      grammy: function(){ return hour<12?'Good morning.':'Hi there.'; }
+    };
+    var fn = greetings[person] || function(){ return 'Hello.'; };
+    el.innerHTML = '<span style="color:'+color+'">'+fn()+'</span>';
+    el.style.opacity = '1';
+    // Also set household/kids greeting
+    var hg = document.getElementById('householdGreeting');
+    if (hg) hg.innerHTML = '<span style="color:'+color+'">'+fn()+'</span>';
+    var kg = document.getElementById('kidsGreeting');
+    if (kg) kg.innerHTML = '<span style="color:'+color+'">'+fn()+'</span>';
+  }
+
+  function setAmbient() {
+    currentPerson = null;
+    currentCommunity = null;
+    document.body.classList.remove('community-household','community-kids');
+    document.body.classList.add('community-ambient');
+    showEl('communityHousehold', false);
+    showEl('communityKids', false);
+    var pl = document.getElementById('photoLayer');
+    if (pl) { pl.style.opacity = '1'; pl.style.display = ''; }
+    var nav = document.getElementById('navBar');
+    if (nav) { nav.style.opacity = '0.15'; nav.style.pointerEvents = 'auto'; }
+    setGreeting(null);
+    var hb = document.getElementById('heldCount');
+    if (hb) hb.style.display = 'none';
+  }
+
+  function setCommunity(person) {
+    if (!person) return setAmbient();
+    var community = COMMUNITY[person.toLowerCase()];
+    if (!community) return setAmbient();
+    currentPerson = person.toLowerCase();
+    currentCommunity = community;
+    if (ambientTimer) clearTimeout(ambientTimer);
+    ambientTimer = setTimeout(setAmbient, AMBIENT_TIMEOUT);
+    document.body.classList.remove('community-ambient','community-household','community-kids');
+    document.body.classList.add('community-'+community);
+    document.documentElement.style.setProperty('--person-color', COLORS[currentPerson]||'#A8A29E');
+    var nav = document.getElementById('navBar');
+    if (nav) { nav.style.opacity = '0'; nav.style.pointerEvents = 'none'; }
+    setGreeting(currentPerson);
+
+    if (community === 'household') {
+      showEl('communityHousehold', true);
+      showEl('communityKids', false);
+      if (currentPerson==='grammy') document.body.classList.add('grammy-mode');
+      else document.body.classList.remove('grammy-mode');
+      if (currentPerson==='david') {
+        var hb = document.getElementById('heldCount');
+        if (hb && typeof sbGet==='function') {
+          sbGet('ganglion_dispatch?status=eq.held_for_confirmation&select=id')
+            .then(function(rows){
+              var c = (rows||[]).length;
+              if(c>0){ hb.textContent=c+' held'; hb.style.display='block'; }
+              else hb.style.display='none';
+            });
+        }
+      }
+      if (typeof fetchCalendar==='function') fetchCalendar();
+      if (typeof fetchGrocery==='function') fetchGrocery();
+    } else if (community === 'kids') {
+      showEl('communityHousehold', false);
+      showEl('communityKids', true);
+      // Show the right kid view
+      var dv = document.getElementById('dwightView');
+      var lv = document.getElementById('lillyView');
+      if (dv) dv.style.display = currentPerson==='dwight' ? '' : 'none';
+      if (lv) lv.style.display = currentPerson==='lilly' ? '' : 'none';
+      if (typeof switchKid==='function') switchKid(currentPerson);
+      if (typeof fetchKidData==='function') fetchKidData();
+    }
+  }
+
+  function handleIdentity(data) {
+    if (!data || !data.person) return;
+    var person = data.person.toLowerCase();
+    if (person === currentPerson) {
+      if (ambientTimer) clearTimeout(ambientTimer);
+      ambientTimer = setTimeout(setAmbient, AMBIENT_TIMEOUT);
+      return;
+    }
+    setCommunity(person);
+  }
+
+  // Hook CORTEX WebSocket for face/voice identity events
+  function hookWs() {
+    if (typeof cortexWs !== 'undefined' && cortexWs) {
+      var orig = cortexWs.onmessage;
+      cortexWs.onmessage = function(event) {
+        try {
+          var msg = JSON.parse(event.data);
+          if (msg.type==='face_identity' || msg.type==='voice_id') handleIdentity(msg);
+        } catch(e){}
+        if (orig) orig.call(cortexWs, event);
+      };
+    } else {
+      setTimeout(hookWs, 2000);
+    }
+  }
+
+  // Manual override
+  window.openModeManual = function(mode) {
+    if (mode==='household') setCommunity('david');
+    else if (mode==='kids') setCommunity('dwight');
+  };
+  window.gregIdentify = function(person) { handleIdentity({person:person}); };
+  window.gregContext = {
+    setCommunity:setCommunity, setAmbient:setAmbient,
+    identify:handleIdentity,
+    getState:function(){ return {person:currentPerson,community:currentCommunity}; }
+  };
+
+  // Init
+  setAmbient();
+  hookWs();
+})();
+</script>
+
+</body></html>';
   
   // Method 1: If on same LAN as printer, use Android print framework via GregBridge
   if (typeof Greg !== 'undefined' && Greg.printHtml) {
@@ -3164,6 +3386,109 @@ setTimeout(initCamera, 5000);
   .timer-ring circle{fill:none;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%}
   .timer-ring .bg{stroke:var(--bg3)}
   .timer-ring .fg{stroke:var(--greg);transition:stroke-dashoffset 1s linear}
+
+/* ═══ GTIA COMMUNITY SURFACES ═══ */
+/* Person color as dynamic accent — overridden by JS per detected person */
+:root { --person-color: #A8A29E; }
+
+/* Hide nav bar when face-detected */
+body.community-household .nav-bar,
+body.community-kids .nav-bar {
+  opacity: 0 !important; pointer-events: none !important;
+  transition: opacity 0.4s ease;
+}
+
+/* Community containers */
+.community-surface {
+  position: fixed; inset: 0; opacity: 0; pointer-events: none;
+  transition: opacity 0.8s ease; overflow-y: auto; z-index: 5;
+  background: var(--bg);
+}
+.community-surface.active { opacity: 1; pointer-events: auto; }
+
+/* When a community is active, photo layer fades */
+body.community-household .photo-layer,
+body.community-kids .photo-layer {
+  opacity: 0 !important; transition: opacity 0.8s ease;
+}
+
+/* Household Ops grid */
+#communityHousehold {
+  padding: 40px 48px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr; gap: 24px; align-content: start;
+}
+.household-greeting {
+  grid-column: 1 / -1; display: flex; align-items: baseline;
+  justify-content: space-between; padding-bottom: 16px;
+  border-bottom: 1px solid var(--border2);
+}
+.household-greeting .greeting-text {
+  font-family: var(--fg); font-size: 28px; font-weight: 400;
+  color: var(--person-color);
+}
+.household-tile {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 20px; min-height: 180px;
+}
+.household-tile .tile-label {
+  font-family: var(--fu); font-size: 11px; font-weight: 500;
+  color: var(--tx3); letter-spacing: 0.04em; margin-bottom: 12px;
+}
+
+/* Kids & Engagement */
+#communityKids { padding: 32px 40px; }
+.kids-greeting { text-align: center; margin-bottom: 24px; }
+.kids-greeting .greeting-text {
+  font-family: var(--fg); font-size: 36px; font-weight: 400;
+  color: var(--person-color);
+}
+.chore-progress-bar {
+  height: 8px; background: var(--bg3); border-radius: 4px;
+  overflow: hidden; margin: 8px 0;
+}
+.chore-progress-fill {
+  height: 100%; background: var(--person-color);
+  border-radius: 4px; transition: width 0.4s ease;
+}
+.lilly-activities {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.lilly-activity-card {
+  background: var(--bg2); border: 2px solid transparent;
+  border-radius: 16px; padding: 24px; text-align: center;
+  min-height: 120px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; cursor: pointer;
+  transition: border-color 0.2s, transform 0.1s;
+}
+.lilly-activity-card:active {
+  border-color: var(--lilly); transform: scale(0.97);
+}
+.lilly-activity-card .activity-emoji { font-size: 40px; margin-bottom: 8px; }
+.lilly-activity-card .activity-name {
+  font-family: var(--fu); font-size: 14px; color: var(--tx);
+}
+
+/* Context greeting */
+#contextGreeting {
+  position: fixed; top: 32px; left: 40px; z-index: 20;
+  font-family: var(--fg); font-size: 24px; font-weight: 400;
+  opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
+  text-shadow: 0 2px 12px rgba(30,26,22,0.8);
+}
+
+/* Held count badge */
+.held-badge {
+  display: none; position: fixed; top: 40px; right: 48px; z-index: 20;
+  font-family: var(--fu); font-size: 12px; color: var(--tx3);
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: 100px; padding: 4px 12px;
+}
+
+/* Grammy mode — larger text */
+.grammy-mode .household-tile { font-size: 16px; }
+.grammy-mode .tile-label { font-size: 13px; }
+
 </style>
 
 <!-- Overlay shell -->
