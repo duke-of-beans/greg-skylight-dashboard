@@ -9,8 +9,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{font-family:'Inter',system-ui,sans-serif;color:var(--tx);overflow-x:hidden;user-select:none;-webkit-user-select:none;background:var(--bg) url('bg.jpg') center/cover fixed no-repeat}
-
-/* ═══ BOOT SPLASH ═══ */
 #splash{position:fixed;inset:0;background:linear-gradient(160deg,#2D1B4E,#1A1028);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s}
 #splash.out{opacity:0;pointer-events:none}
 .sp-name{font-size:56px;font-weight:900;background:linear-gradient(135deg,#FF69B4,#A78BFA,#FBBF24,#FF69B4);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:spGrad 2s ease infinite,spBounce 0.6s ease-in-out infinite alternate;filter:drop-shadow(0 0 20px rgba(236,72,153,0.4))}
@@ -23,8 +21,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--tx);overflow-x:hidden;
 @keyframes spGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes spBounce{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-10px) rotate(3deg)}}
 @keyframes spHeart{from{transform:scale(0.7);opacity:0.4}to{transform:scale(1.2);opacity:1}}
-
-/* ═══ HOME ═══ */
 .home{display:flex;flex-direction:column;align-items:center;padding:28px 20px 24px;min-height:100vh;background:rgba(26,16,40,0.3);animation:homeIn 0.5s ease-out}
 @keyframes homeIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:none}}
 .hero-name{font-size:52px;font-weight:900;text-align:center;margin-bottom:20px;background:linear-gradient(135deg,#FF69B4 0%,#C084FC 30%,#FBBF24 60%,#FF69B4 100%);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:nameGlow 3s ease-in-out infinite alternate;line-height:1.1;filter:drop-shadow(0 0 30px rgba(255,105,180,0.3))}
@@ -36,8 +32,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--tx);overflow-x:hidden;
 .app-icon svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .app-name{font-size:12px;color:rgba(255,255,255,0.7);text-align:center;line-height:1.2}
 @keyframes appBounce{from{opacity:0;transform:translateY(20px) scale(0.7)}to{opacity:1;transform:none}}
-
-/* ═══ DRAW ═══ */
 .act{position:fixed;inset:0;background:var(--bg);z-index:10;display:flex;flex-direction:column;padding:12px;animation:homeIn 0.3s ease-out}
 .act-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .act-back{display:flex;align-items:center;gap:4px;color:var(--tx3);font-size:14px;padding:8px;cursor:pointer;border-radius:8px}
@@ -46,90 +40,41 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--tx);overflow-x:hidden;
 .cdot{width:42px;height:42px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.15s;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
 .cdot.sel{border-color:#fff;transform:scale(1.15)}
 .cbtn{padding:8px 16px;border:1px solid var(--border);border-radius:100px;color:var(--tx3);font-size:13px;cursor:pointer}
+#adminOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+#adminOverlay.show{display:flex}
+.pin-title{color:#A78BFA;font-size:18px;font-weight:700}
+.pin-dots{display:flex;gap:12px;margin:8px 0}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid #555;background:transparent;transition:background 0.15s}
+.pin-dot.filled{background:#A78BFA;border-color:#A78BFA}
+.pin-pad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:240px}
+.pin-key{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.1);color:#fff;font-size:24px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;-webkit-tap-highlight-color:transparent}
+.pin-key:active{background:rgba(167,139,250,0.4)}
+.pin-cancel{color:#888;font-size:14px;margin-top:12px;cursor:pointer;padding:12px}
+.pin-error{color:#E74C3C;font-size:13px;min-height:20px}
 </style>
 </head>
 <body>
-<div id="splash">
-  <div class="sp-name">Lilly</div>
-  <div class="sp-hearts">
-    <div class="sp-heart">💖</div>
-    <div class="sp-heart">⭐</div>
-    <div class="sp-heart">🦋</div>
-    <div class="sp-heart">⭐</div>
-    <div class="sp-heart">💖</div>
-  </div>
-</div>
+<div id="splash"><div class="sp-name">Lilly</div><div class="sp-hearts"><div class="sp-heart">💖</div><div class="sp-heart">⭐</div><div class="sp-heart">🦋</div><div class="sp-heart">⭐</div><div class="sp-heart">💖</div></div></div>
 <div id="app"></div>
+<div id="adminOverlay"><div class="pin-title">Admin Access</div><div class="pin-dots" id="pinDots"></div><div class="pin-error" id="pinErr"></div><div class="pin-pad" id="pinPad"></div><div class="pin-cancel" onclick="closeAdmin()">Cancel</div></div>
 <script>
 function launch(pkg){if(typeof Greg!=='undefined'&&Greg.launchApp)Greg.launchApp(pkg);}
-
-// ═══ Real icons via Greg.getAppIcon() — with retry ═══
 var _iconCache={},_iconsLoaded=false,_iconRetries=0;
-function loadIcons(){
-  if(typeof Greg==='undefined'||!Greg.getAppIcon){
-    if(_iconRetries<10){_iconRetries++;setTimeout(loadIcons,500);} // retry every 500ms for 5s
-    return;
-  }
-  var pending=0;
-  document.querySelectorAll('[data-pkg]').forEach(function(el){
-    var pkg=el.getAttribute('data-pkg');if(!pkg)return;
-    if(_iconCache[pkg]){el.style.backgroundImage='url(data:image/png;base64,'+_iconCache[pkg]+')';el.innerHTML='';return;}
-    try{var b64=Greg.getAppIcon(pkg);if(b64&&b64.length>100){_iconCache[pkg]=b64;el.style.backgroundImage='url(data:image/png;base64,'+b64+')';el.innerHTML='';} else {pending++;}}catch(e){pending++;}
-  });
-  if(pending>0&&_iconRetries<10){_iconRetries++;setTimeout(loadIcons,1000);}
-  else{_iconsLoaded=true;}
-}
-
-var APPS=[
-  {pkg:'draw',name:'Draw',custom:true,bg:'linear-gradient(135deg,#FF69B4,#A78BFA)',ico:'<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/></svg>'},
-  {pkg:'music',name:'Music',custom:true,bg:'linear-gradient(135deg,#1DB954,#1ED760)',ico:'<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'},
-  {pkg:'com.google.android.apps.youtube.kids',name:'YouTube Kids'},
-  {pkg:'com.moonbug.ccml',name:'Cocomelon'},
-  {pkg:'org.pbskids.video',name:'PBS Kids'},
-  {pkg:'com.aofl.abcmouse',name:'ABCmouse'},
-  {pkg:'org.khankids.android',name:'Khan Kids'},
-  {pkg:'com.storytoys.lego.duplo.world.kids.play.free.friends.animals.android.googleplay',name:'DUPLO'},
-  {pkg:'com.netflix.NGP.WorldOfPeppaPig',name:'Peppa Pig'}
-];
-
-function goHome(){
-  var h='<div class="home"><div class="hero-name">Lilly</div><div class="grid">';
-  APPS.forEach(function(app,i){
-    var onclick=app.custom?(app.pkg==='draw'?'openDraw()':'openMusic()'):'launch(\''+app.pkg+'\')';
-    var icon=app.custom
-      ?'<div class="app-icon" style="background:'+app.bg+'">'+app.ico+'</div>'
-      :'<div class="app-icon" data-pkg="'+app.pkg+'"></div>';
-    h+='<div class="app" style="animation-delay:'+(i*0.06)+'s" onclick="'+onclick+'">'+icon+'<div class="app-name">'+app.name+'</div></div>';
-  });
-  h+='</div></div>';
-  document.getElementById('app').innerHTML=h;
-  _iconRetries=0;setTimeout(loadIcons,100);
-}
-
-// ═══ DRAW — full-screen canvas ═══
-var COLORS=['#FF69B4','#A78BFA','#3498DB','#2ECC71','#F1C40F','#E74C3C','#FF8C00','#F0EBE4'];
-var _clr='#FF69B4';
-function openDraw(){
-  document.getElementById('app').innerHTML='<div class="act"><div class="act-bar"><div class="act-back" onclick="goHome()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Back</div><div class="cbtn" onclick="clrC()">Clear</div></div><canvas id="dc" style="flex:1;background:rgba(40,30,60,0.9);border-radius:12px;touch-action:none"></canvas><div class="colors" id="cbar"></div></div>';
-  var bar=document.getElementById('cbar');
-  COLORS.forEach(function(c){var d=document.createElement('div');d.className='cdot'+(c===_clr?' sel':'');d.style.background=c;d.onclick=function(){_clr=c;document.querySelectorAll('.cdot').forEach(function(x){x.classList.remove('sel')});d.classList.add('sel');};bar.appendChild(d);});
-  setTimeout(function(){var c=document.getElementById('dc');if(!c)return;c.width=c.offsetWidth;c.height=c.offsetHeight;var x=c.getContext('2d');x.lineWidth=12;x.lineCap='round';x.lineJoin='round';var dr=false;function pos(e){var t=e.touches?e.touches[0]:e;var r=c.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};}c.addEventListener('touchstart',function(e){e.preventDefault();dr=true;x.strokeStyle=_clr;x.beginPath();var p=pos(e);x.moveTo(p.x,p.y);},{passive:false});c.addEventListener('touchmove',function(e){e.preventDefault();if(!dr)return;var p=pos(e);x.lineTo(p.x,p.y);x.stroke();},{passive:false});c.addEventListener('touchend',function(){dr=false;});},80);
-}
+function loadIcons(){if(typeof Greg==='undefined'||!Greg.getAppIcon){if(_iconRetries<10){_iconRetries++;setTimeout(loadIcons,500);}return;}var pending=0;document.querySelectorAll('[data-pkg]').forEach(function(el){var pkg=el.getAttribute('data-pkg');if(!pkg)return;if(_iconCache[pkg]){el.style.backgroundImage='url(data:image/png;base64,'+_iconCache[pkg]+')';el.innerHTML='';return;}try{var b64=Greg.getAppIcon(pkg);if(b64&&b64.length>100){_iconCache[pkg]=b64;el.style.backgroundImage='url(data:image/png;base64,'+b64+')';el.innerHTML='';} else {pending++;}}catch(e){pending++;}});if(pending>0&&_iconRetries<10){_iconRetries++;setTimeout(loadIcons,1000);}else{_iconsLoaded=true;}}
+var APPS=[{pkg:'draw',name:'Draw',custom:true,bg:'linear-gradient(135deg,#FF69B4,#A78BFA)',ico:'<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/></svg>'},{pkg:'com.google.android.apps.youtube.kids',name:'YouTube Kids'},{pkg:'com.moonbug.ccml',name:'Cocomelon'},{pkg:'com.orange.kidspiano.music.songs',name:'Piano Kids'},{pkg:'com.tocaboca.tocakitchen2',name:'Toca Kitchen'},{pkg:'com.sagosago.World.googleplay',name:'Sago Mini'},{pkg:'se.appfamily.balloonpopfree',name:'Balloon Pop'},{pkg:'com.rvappstudios.baby.games.piano.phone.kids',name:'Baby Games'},{pkg:'org.pbskids.video',name:'PBS Kids'},{pkg:'org.pbskids.gamesapp',name:'PBS Games'},{pkg:'com.aofl.abcmouse',name:'ABCmouse'},{pkg:'org.khankids.android',name:'Khan Kids'},{pkg:'com.storytoys.lego.duplo.world.kids.play.free.friends.animals.android.googleplay',name:'DUPLO'},{pkg:'com.sagosago.School.googleplay',name:'Sago School'},{pkg:'com.sagosago.FirstWords.googleplay',name:'First Words'}];
+function goHome(){var h='<div class="home"><div class="hero-name">Lilly</div><div class="grid">';APPS.forEach(function(app,i){var onclick=app.custom?(app.pkg==='draw'?'openDraw()':''):'launch(\''+app.pkg+'\')',icon=app.custom?'<div class="app-icon" style="background:'+app.bg+'">'+app.ico+'</div>':'<div class="app-icon" data-pkg="'+app.pkg+'"></div>';h+='<div class="app" style="animation-delay:'+(i*0.06)+'s" onclick="'+onclick+'">'+icon+'<div class="app-name">'+app.name+'</div></div>';});h+='</div></div>';document.getElementById('app').innerHTML=h;_iconRetries=0;setTimeout(loadIcons,100);}
+var COLORS=['#FF69B4','#A78BFA','#3498DB','#2ECC71','#F1C40F','#E74C3C','#FF8C00','#F0EBE4'],_clr='#FF69B4';
+function openDraw(){document.getElementById('app').innerHTML='<div class="act"><div class="act-bar"><div class="act-back" onclick="goHome()"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Back</div><div class="cbtn" onclick="clrC()">Clear</div></div><canvas id="dc" style="flex:1;background:rgba(40,30,60,0.9);border-radius:12px;touch-action:none"></canvas><div class="colors" id="cbar"></div></div>';var bar=document.getElementById('cbar');COLORS.forEach(function(c){var d=document.createElement('div');d.className='cdot'+(c===_clr?' sel':'');d.style.background=c;d.onclick=function(){_clr=c;document.querySelectorAll('.cdot').forEach(function(x){x.classList.remove('sel')});d.classList.add('sel');};bar.appendChild(d);});setTimeout(function(){var c=document.getElementById('dc');if(!c)return;c.width=c.offsetWidth;c.height=c.offsetHeight;var x=c.getContext('2d');x.lineWidth=12;x.lineCap='round';x.lineJoin='round';var dr=false;function pos(e){var t=e.touches?e.touches[0]:e;var r=c.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};}c.addEventListener('touchstart',function(e){e.preventDefault();dr=true;x.strokeStyle=_clr;x.beginPath();var p=pos(e);x.moveTo(p.x,p.y);},{passive:false});c.addEventListener('touchmove',function(e){e.preventDefault();if(!dr)return;var p=pos(e);x.lineTo(p.x,p.y);x.stroke();},{passive:false});c.addEventListener('touchend',function(){dr=false;});},80);}
 function clrC(){var c=document.getElementById('dc');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
-
-// ═══ MUSIC — launch Spotify to kids playlist ═══
-function openMusic(){
-  if(typeof Greg!=='undefined'&&Greg.launchUrl){
-    Greg.launchUrl('spotify:playlist:37i9dQZF1DWYGcF1LYqhJG');
-  } else if(typeof Greg!=='undefined'&&Greg.launchApp){
-    Greg.launchApp('com.spotify.music');
-  }
-}
-
-// ═══ Boot ═══
 goHome();
 setTimeout(function(){var s=document.getElementById('splash');if(s){s.classList.add('out');setTimeout(function(){s.remove();},800);}},2200);
 var gone=false;document.addEventListener('touchstart',function(){if(!gone){gone=true;var d=document.documentElement;(d.requestFullscreen||d.webkitRequestFullscreen).call(d);}},{once:true,passive:true});
+var _adminPin='',_cornerTaps=0,_cornerTimer=null;
+document.addEventListener('touchstart',function(e){var t=e.touches[0],w=window.innerWidth,h=window.innerHeight;if(t.clientX>w-80&&t.clientY>h-80){_cornerTaps++;clearTimeout(_cornerTimer);_cornerTimer=setTimeout(function(){_cornerTaps=0;},600);if(_cornerTaps>=5){_cornerTaps=0;clearTimeout(_cornerTimer);showAdminPin();}}},{passive:true});
+function showAdminPin(){_adminPin='';document.getElementById('adminOverlay').classList.add('show');renderPinPad();renderPinDots();document.getElementById('pinErr').textContent='';}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('show');_adminPin='';}
+function renderPinDots(){var d=document.getElementById('pinDots');d.innerHTML='';for(var i=0;i<4;i++){var dot=document.createElement('div');dot.className='pin-dot'+(i<_adminPin.length?' filled':'');d.appendChild(dot);}}
+function renderPinPad(){var pad=document.getElementById('pinPad');pad.innerHTML='';[1,2,3,4,5,6,7,8,9,'',0,'⌫'].forEach(function(k){var btn=document.createElement('div');btn.className='pin-key';if(k==='')btn.style.visibility='hidden';btn.textContent=k;if(k!==''){btn.onclick=function(){if(k==='⌫'){_adminPin=_adminPin.slice(0,-1);}else if(_adminPin.length<4){_adminPin+=k;}renderPinDots();if(_adminPin.length===4){if(typeof Greg!=='undefined'&&Greg.adminExit){var ok=Greg.adminExit(_adminPin);if(!ok){document.getElementById('pinErr').textContent='Wrong PIN';_adminPin='';setTimeout(function(){renderPinDots();document.getElementById('pinErr').textContent='';},800);}}else{document.getElementById('pinErr').textContent='Bridge unavailable';_adminPin='';setTimeout(function(){renderPinDots();},800);}}};} pad.appendChild(btn);});}
 </script>
 </body>
 </html>
